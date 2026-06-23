@@ -1,87 +1,108 @@
-# Welcome to React Router!
+# Portal Migrante Euskadi
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Plataforma digital de Zubia Social Euskadi para facilitar informacion clara, acceso a servicios, comunidad y coordinacion interna de la asociacion.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Areas principales
 
-## Features
+- Portal publico: servicios, ayuntamientos, asociaciones, cultura vasca, contacto y pagina del proyecto.
+- Comunidad: foro migrante con registro, inicio de sesion y verificacion telefonica.
+- Oficina interna: espacio protegido para organizar el trabajo de la asociacion.
+- Futuro crecimiento: perfiles de usuarios, entidades colaboradoras, estadisticas y herramientas de gestion.
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## Primera fase de Oficina Zubia
 
-## Getting Started
+La ruta interna empieza en:
 
-### Installation
+```txt
+/office
+```
 
-Install the dependencies:
+Y redirige a:
+
+```txt
+/office/dashboard
+```
+
+Rutas creadas:
+
+- `/login`
+- `/unauthorized`
+- `/office/dashboard`
+- `/office/tasks`
+- `/office/meetings`
+- `/office/projects`
+- `/office/funding`
+- `/office/documents`
+- `/office/members`
+- `/office/volunteers`
+- `/office/finance`
+- `/office/contacts`
+- `/office/activities`
+- `/office/reports`
+- `/office/settings`
+
+## Proteccion y roles
+
+El acceso a `/office/*` usa el usuario actual guardado por `users.service.ts`.
+
+- Sin usuario: redireccion a `/login`.
+- Usuario sin permiso: redireccion a `/unauthorized`.
+- `admin` y `super_admin`: acceso completo.
+- `organization_manager`: acceso limitado como perfil colaborador.
+- `community_user`: sin acceso a oficina interna.
+
+La tabla de permisos esta en:
+
+```txt
+frontend/app/services/office.service.ts
+```
+
+## Datos iniciales
+
+La primera version usa datos mock centralizados para:
+
+- estadisticas del panel
+- tareas
+- reuniones
+- proyectos
+- solicitudes de financiacion
+- documentos
+
+Esto permite presentar el flujo de trabajo ahora y conectar luego cada modulo al backend sin redisenar la interfaz.
+
+## Desarrollo local
+
+Instalar dependencias:
 
 ```bash
 npm install
 ```
 
-### Development
-
-Start the development server with HMR:
+Frontend:
 
 ```bash
-npm run dev
+npm --prefix frontend run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
+Backend:
 
 ```bash
-npm run build
+npm --prefix backend run dev
 ```
 
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
+Comprobaciones usadas:
 
 ```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
+npm --prefix frontend run typecheck
+npm --prefix frontend run build
 ```
 
-The containerized application can be deployed to any platform that supports Docker, including:
+## Render
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
+Para el frontend desplegado, configurar:
 
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
+```env
+VITE_API_URL=https://portal-migrante.onrender.com
 ```
 
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+El frontend anade internamente `/api` cuando llama al backend.

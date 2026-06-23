@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useI18n } from "../i18n";
@@ -6,6 +6,7 @@ import { usersService } from "../services/users.service";
 
 export default function LoginUserPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useI18n();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [saving, setSaving] = useState(false);
@@ -30,7 +31,8 @@ export default function LoginUserPage() {
         password: formData.password,
       });
       setSuccess(t("login_success"));
-      setTimeout(() => navigate("/foro"), 700);
+      const from = (location.state as { from?: string } | null)?.from || "/foro";
+      setTimeout(() => navigate(from), 700);
     } catch (err: any) {
       setError(err.message || t("login_error"));
     } finally {
