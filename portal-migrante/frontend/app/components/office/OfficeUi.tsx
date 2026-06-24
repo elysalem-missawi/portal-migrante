@@ -37,7 +37,7 @@ export function OfficeCard({
   className?: string;
 }) {
   return (
-    <div className={`rounded-2xl border border-slate-200 bg-white p-5 shadow-sm ${className}`}>
+    <div className={`rounded-xl border border-slate-200 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.06)] ${className}`}>
       {children}
     </div>
   );
@@ -59,9 +59,9 @@ export function StatusBadge({ children, tone = "slate" }: { children: ReactNode;
   );
 }
 
-export function ProgressBar({ value }: { value: number }) {
+export function ProgressBar({ value, className = "" }: { value: number; className?: string }) {
   return (
-    <div className="h-3 overflow-hidden rounded-full bg-slate-100">
+    <div className={`h-2.5 w-full overflow-hidden rounded-full bg-slate-100 ${className}`}>
       <div className="h-full rounded-full bg-emerald-600" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
     </div>
   );
