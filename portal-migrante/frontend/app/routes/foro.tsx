@@ -483,7 +483,6 @@ export default function ForoMigrantesPage() {
   return (
     <main className="min-h-screen bg-slate-50">
       <section className="relative overflow-hidden bg-[radial-gradient(circle_at_88%_78%,rgba(0,151,57,0.82)_0%,rgba(0,151,57,0.42)_24%,transparent_48%),linear-gradient(135deg,#2448ad_0%,#284fb8_46%,#173f89_100%)] text-white">
-        <div className="absolute inset-x-0 top-0 h-3 bg-[linear-gradient(90deg,#009739_0_33%,#ffffff_33%_66%,#d52b1e_66%_100%)]" />
         <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_0.9fr] lg:px-8 lg:py-24">
           <div>
             <p className="mb-8 inline-flex items-center gap-3 rounded-full border border-white/70 px-5 py-2 text-sm font-black text-white">
