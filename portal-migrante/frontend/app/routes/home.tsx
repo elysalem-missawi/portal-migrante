@@ -236,13 +236,10 @@ export default function Home() {
   return (
     <main className="bg-white">
       <section className="relative overflow-hidden bg-[radial-gradient(circle_at_88%_78%,rgba(0,151,57,0.82)_0%,rgba(0,151,57,0.42)_24%,transparent_48%),linear-gradient(135deg,#2448ad_0%,#284fb8_46%,#173f89_100%)] text-white">
-        <div className="absolute inset-x-0 top-0 h-3 bg-[linear-gradient(90deg,#009739_0_33%,#ffffff_33%_66%,#d52b1e_66%_100%)]" />
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="grid w-full gap-12 lg:grid-cols-[1fr_0.9fr] lg:items-center">
             <div>
-              <p className="mb-8 inline-flex rounded-full border border-white/70 px-5 py-2 text-sm font-black text-white">
-                {t("home_badge")}
-              </p>
+              
               <h1 className="max-w-5xl text-5xl font-black leading-tight tracking-normal text-white sm:text-6xl lg:text-7xl">
                 {t("home_hero_title")}
               </h1>
@@ -259,13 +256,13 @@ export default function Home() {
                 </Link>
                 <Link
                   to="/foro"
-                  className="inline-flex items-center justify-center rounded-lg border border-white/70 px-7 py-4 text-lg font-black text-white transition hover:bg-white hover:text-slate-950"
+                  className="inline-flex items-center justify-center rounded-lg border border-white/70 px-7 py-4 text-lg font-black text-white transition hover:bg-green-700 hover:text-slate-950"
                 >
                   {t("home_join_forum")}
                 </Link>
                 <Link
                   to="/sobre"
-                  className="inline-flex items-center justify-center rounded-lg border border-white/70 px-7 py-4 text-lg font-black text-white transition hover:bg-white hover:text-slate-950"
+                  className="inline-flex items-center justify-center rounded-lg border border-white/70 px-7 py-4 text-lg font-black text-white transition hover:bg-green-700 hover:text-slate-950"
                 >
                   {t("home_project_info")}
                 </Link>
