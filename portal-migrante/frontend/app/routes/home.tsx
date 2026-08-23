@@ -236,86 +236,88 @@ export default function Home() {
   return (
     <main className="bg-white">
       <section className="relative overflow-hidden bg-[radial-gradient(circle_at_88%_78%,rgba(0,151,57,0.82)_0%,rgba(0,151,57,0.42)_24%,transparent_48%),linear-gradient(135deg,#2448ad_0%,#284fb8_46%,#173f89_100%)] text-white">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <div className="grid w-full gap-12 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-            <div>
-              
-              <h1 className="max-w-5xl text-5xl font-black leading-tight tracking-normal text-white sm:text-6xl lg:text-7xl">
-                {t("home_hero_title")}
-              </h1>
-              <p className="mt-7 max-w-3xl text-xl leading-relaxed text-slate-200 sm:text-2xl">
-                {t("home_hero_subtitle")}
-              </p>
+  {/* Imagen de fondo exclusiva para pantallas grandes (lg+) */}
+  <div className="absolute inset-0 hidden lg:block">
+    <img
+      src="/images/registration-migrant-travel-hero.png"
+      alt=""
+      aria-hidden="true"
+      className="h-full w-full object-cover object-center"
+    />
+    {/* Capa de degradado sobre la imagen para asegurar legibilidad del texto */}
+    <div className="absolute inset-0 bg-gradient-to-r from-[#173f89]/95 via-[#2448ad]/85 to-transparent" />
+  </div>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Link
-                  to="/servicios"
-                  className="inline-flex items-center justify-center rounded-lg bg-vitoria-green px-7 py-4 text-lg font-black text-white shadow-lg shadow-black/20 transition hover:bg-green-700"
-                >
-                  {t("btn_start")}
-                </Link>
-                <Link
-                  to="/foro"
-                  className="inline-flex items-center justify-center rounded-lg border border-white/70 px-7 py-4 text-lg font-black text-white transition hover:bg-green-700 hover:text-slate-950"
-                >
-                  {t("home_join_forum")}
-                </Link>
-                <Link
-                  to="/sobre"
-                  className="inline-flex items-center justify-center rounded-lg border border-white/70 px-7 py-4 text-lg font-black text-white transition hover:bg-green-700 hover:text-slate-950"
-                >
-                  {t("home_project_info")}
-                </Link>
-              </div>
+  <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+    <div className="grid w-full gap-12 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+      <div>
+        <h1 className="max-w-5xl text-5xl font-black leading-tight tracking-normal text-white sm:text-6xl lg:text-7xl">
+          {t("home_hero_title")}
+        </h1>
+        <p className="mt-7 max-w-3xl text-xl leading-relaxed text-slate-200 sm:text-2xl">
+          {t("home_hero_subtitle")}
+        </p>
 
-              <div className="hidden">
-                {sections.slice(0, 4).map((section) => (
-                  <Link
-                    key={section.to}
-                    to={section.to}
-                    className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 text-sm font-black text-slate-800 shadow-sm transition hover:border-emerald-300 hover:text-emerald-800"
-                  >
-                    <span className="grid h-9 w-9 place-items-center rounded-lg bg-emerald-50 text-emerald-700">
-                      <Icon name={section.icon} className="h-5 w-5" />
-                    </span>
-                    <span>{t(section.key)}</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <Link
+            to="/servicios"
+            className="inline-flex items-center justify-center rounded-lg bg-vitoria-green px-7 py-4 text-lg font-black text-white shadow-lg shadow-black/20 transition hover:bg-green-700"
+          >
+            {t("btn_start")}
+          </Link>
+          <Link
+            to="/foro"
+            className="inline-flex items-center justify-center rounded-lg border border-white/70 px-7 py-4 text-lg font-black text-white transition hover:bg-green-700 hover:text-slate-950"
+          >
+            {t("home_join_forum")}
+          </Link>
+          <Link
+            to="/sobre"
+            className="inline-flex items-center justify-center rounded-lg border border-white/70 px-7 py-4 text-lg font-black text-white transition hover:bg-green-700 hover:text-slate-950"
+          >
+            {t("home_project_info")}
+          </Link>
+        </div>
+      </div>
 
-            <div className="overflow-hidden rounded-lg border border-white/70 bg-white/10 backdrop-blur">
-              <div className="hidden" />
-              <div className="relative">
-                <img
-                  src="/images/registration-migrant-travel-hero.png"
-                  alt=""
-                  className="h-64 w-full object-cover sm:h-80"
-                  style={{ objectPosition: "center 35%" }}
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/85 to-transparent p-5 text-lg font-black text-white">
-                  Euskadi · Portal Migrante
-                </div>
-              </div>
-              <div className="grid gap-3 p-5 sm:grid-cols-2">
-                {[
-                  "home_pillar_info",
-                  "home_pillar_directory",
-                  "home_pillar_forum",
-                  "home_pillar_languages",
-                ].map((key, index) => (
-                  <div key={key} className="flex items-center gap-4 rounded-lg bg-white/15 p-4">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-sm font-black text-green-200">
-                      0{index + 1}
-                    </span>
-                    <span className="text-lg font-bold leading-relaxed text-white">{t(key)}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+      <div className="overflow-hidden rounded-lg border border-white/70 bg-white/10 backdrop-blur">
+        {/* En pantallas móviles se mantiene la imagen dentro de la tarjeta */}
+        <div className="relative lg:hidden">
+          <img
+            src="/images/registration-migrant-travel-hero.png"
+            alt="Euskadi Portal Migrante"
+            className="h-64 w-full object-cover sm:h-80"
+            style={{ objectPosition: "center 35%" }}
+          />
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/85 to-transparent p-5 text-lg font-black text-white">
+            Euskadi · Portal Migrante
           </div>
         </div>
-      </section>
+
+        {/* Título interno visible únicamente en pantallas grandes */}
+        <div className="hidden border-b border-white/20 p-5 text-lg font-black text-white lg:block">
+          Euskadi · Portal Migrante
+        </div>
+
+        <div className="grid gap-3 p-5 sm:grid-cols-2">
+          {[
+            "home_pillar_info",
+            "home_pillar_directory",
+            "home_pillar_forum",
+            "home_pillar_languages",
+          ].map((key, index) => (
+            <div key={key} className="flex items-center gap-4 rounded-lg bg-white/15 p-4 backdrop-blur-sm">
+              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-sm font-black text-green-200">
+                0{index + 1}
+              </span>
+              <span className="text-lg font-bold leading-relaxed text-white">{t(key)}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
