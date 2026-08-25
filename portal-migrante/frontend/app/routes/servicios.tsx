@@ -135,14 +135,7 @@ export default function Servicios() {
             </p>
           </div>
 
-          <div className="overflow-hidden rounded-lg border border-slate-200 bg-slate-100 shadow-sm">
-            <img
-              src="/images/registration-migrant-travel-hero.png"
-              alt=""
-              className="h-56 w-full object-cover"
-              style={{ objectPosition: "center 35%" }}
-            />
-          </div>
+           
         </div>
       </section>
 
