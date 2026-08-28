@@ -1,0 +1,13 @@
+// src/config/db.ts
+import mongoose from "mongoose";
+
+export async function connectDB(uri: string): Promise<void> {
+  mongoose.set("strictQuery", true);
+  await mongoose.connect(uri);
+  console.log("✅ MongoDB connected");
+}
+
+export async function disconnectDB(): Promise<void> {
+  await mongoose.disconnect();
+  console.log("🛑 MongoDB disconnected");
+}

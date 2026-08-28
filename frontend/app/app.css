@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================
+   Buttons & Links (components)
+   ========================= */
+@layer components {
+  /* Base button */
+  .btn {
+    @apply inline-flex items-center justify-center
+           rounded-lg px-4 py-2 text-sm font-medium
+           transition focus:outline-none
+           focus-visible:ring-2 focus-visible:ring-offset-2;
+  }
+
+  /* Primary button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center
+           rounded-lg px-4 py-2 text-sm font-medium
+           transition focus:outline-none
+           focus-visible:ring-2 focus-visible:ring-offset-2
+           bg-vitoria-green text-vitoria-white
+           hover:bg-vitoria-black active:bg-vitoria-gray;
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center
+           rounded-lg px-3 py-2 text-sm font-medium
+           transition text-vitoria-black hover:bg-neutral-100;
+  }
+
+  /* Navigation links */
+  .link-nav {
+    @apply inline-flex items-center gap-1 px-3 py-2 rounded-md
+           text-sm text-vitoria-black hover:text-vitoria-white
+           hover:bg-vitoria-green;
+  }
+
+  /* Active navigation state */
+  .link-nav-active {
+    @apply bg-vitoria-green text-vitoria-white;
+  }
+
+  /* Language badge */
+  .lang-badge {
+    @apply rounded-md border px-2 py-1 text-sm border-vitoria-green text-vitoria-green;
+  }
+}
+
+/* =========================
+   Header Animations
+   ========================= */
+@keyframes slideInFromRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Backdrop blur support */
+@supports (backdrop-filter: blur(10px)) {
+  .backdrop-blur-md {
+    backdrop-filter: blur(12px);
+  }
+  .backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* Glass effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Smooth transitions */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #009739;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #007A3D;
+}

@@ -1,0 +1,21 @@
+{
+  "name": "portal-migrante",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n FRONTEND,BACKEND -c cyan,green \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "npm --prefix ./frontend run dev",
+    "dev:backend": "npm --prefix ./backend run dev",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "npm --prefix ./frontend run build",
+    "build:backend": "npm --prefix ./backend run build",
+    "start": "concurrently -n FRONTEND,BACKEND -c cyan,green \"npm --prefix ./frontend run preview\" \"npm --prefix ./backend run start\"",
+    "typecheck": "npm --prefix ./frontend run typecheck && npm --prefix ./backend run typecheck"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "dependencies": {
+    "@react-router/dev": "^7.0.0"
+  }
+}
