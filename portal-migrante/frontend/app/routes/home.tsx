@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import type { ReactNode } from "react";
 import { useI18n } from "../i18n";
 
@@ -183,11 +183,11 @@ function SectionHeading({
         <span>{eyebrow}</span>
         <span className="h-2 w-8 rounded-full bg-vitoria-green" />
       </div>
-      <h2 className={`text-4xl font-black leading-tight sm:text-5xl ${dark ? "text-white" : "text-slate-950"}`}>
+      <h2 className={`text-3xl font-black leading-tight sm:text-4xl lg:text-5xl ${dark ? "text-white" : "text-slate-950"}`}>
         {title}
       </h2>
       {description && (
-        <p className={`mt-5 text-lg leading-relaxed sm:text-xl ${dark ? "text-slate-200" : "text-slate-600"}`}>
+        <p className={`mt-5 text-lg leading-relaxed ${dark ? "text-slate-200" : "text-slate-600"}`}>
           {description}
         </p>
       )}
@@ -196,7 +196,8 @@ function SectionHeading({
 }
 
 export default function Home() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
+  const isRtl = lang === "ar";
 
   const problems: { key: string; icon: IconName }[] = [
     { key: "home_problem_language", icon: "language" },
@@ -234,92 +235,106 @@ export default function Home() {
   ];
 
   return (
-    <main className="bg-white">
-      <section className="relative overflow-hidden bg-[radial-gradient(circle_at_88%_78%,rgba(0,151,57,0.82)_0%,rgba(0,151,57,0.42)_24%,transparent_48%),linear-gradient(135deg,#2448ad_0%,#284fb8_46%,#173f89_100%)] text-white">
-        <div className="absolute inset-x-0 top-0 h-3 bg-[linear-gradient(90deg,#009739_0_33%,#ffffff_33%_66%,#d52b1e_66%_100%)]" />
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <div className="grid w-full gap-12 lg:grid-cols-[1fr_0.9fr] lg:items-center">
-            <div>
-              <p className="mb-8 inline-flex rounded-full border border-white/70 px-5 py-2 text-sm font-black text-white">
+    <main className="bg-white" dir={isRtl ? "rtl" : "ltr"}>
+      {/* Hero Section - مع الحفاظ الكامل على خلفية الصورة الأصلية */}
+      <section 
+        className="relative min-h-[88vh] bg-cover bg-center bg-no-repeat flex items-center text-white overflow-hidden"
+        style={{ backgroundImage: `url('/images/registration-migrant-travel-hero.jpg')` }}
+      >
+        {/* تدرج مظلل ديناميكي يتكيف حسب اتجاه اللغة لضمان القراءة بوضوح */}
+        <div 
+          className={`absolute inset-0 bg-gradient-to-r ${
+            isRtl 
+              ? "from-slate-950/20 via-slate-950/80 to-slate-950/95" 
+              : "from-slate-950/95 via-slate-950/80 to-slate-950/20"
+          } z-0`} 
+        />
+
+        {/* الشريط العلوي الملون لعلم الباسك */}
+        <div className="absolute inset-x-0 top-0 h-2 bg-[linear-gradient(90deg,#009739_0_33%,#ffffff_33%_66%,#d52b1e_66%_100%)] z-10" />
+
+        <div className="relative z-10 mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 w-full">
+          <div className="grid w-full gap-10 lg:grid-cols-12 lg:items-center">
+            
+            {/* قسم العنوان والنصوص الرئيسية */}
+            <div className={`lg:col-span-7 ${isRtl ? "text-right" : "text-left"}`}>
+              <p className="mb-4 inline-flex items-center rounded-full border border-emerald-400/30 bg-emerald-950/60 backdrop-blur-md px-4 py-1.5 text-sm font-bold text-emerald-300">
                 {t("home_badge")}
               </p>
-              <h1 className="max-w-5xl text-5xl font-black leading-tight tracking-normal text-white sm:text-6xl lg:text-7xl">
+              
+              <h1 className="text-3xl font-black leading-tight text-white sm:text-5xl lg:text-6xl drop-shadow-md">
                 {t("home_hero_title")}
               </h1>
-              <p className="mt-7 max-w-3xl text-xl leading-relaxed text-slate-200 sm:text-2xl">
+              
+              <p className="mt-5 max-w-2xl text-base leading-relaxed text-slate-200 sm:text-xl drop-shadow">
                 {t("home_hero_subtitle")}
               </p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              {/* أزرار الإجراءات الرئيسية */}
+              <div className="mt-8 flex flex-wrap gap-3">
                 <Link
                   to="/servicios"
-                  className="inline-flex items-center justify-center rounded-lg bg-vitoria-green px-7 py-4 text-lg font-black text-white shadow-lg shadow-black/20 transition hover:bg-green-700"
+                  className="inline-flex items-center justify-center rounded-xl bg-vitoria-green px-7 py-3.5 text-base font-bold text-white shadow-lg transition hover:bg-emerald-700"
                 >
                   {t("btn_start")}
                 </Link>
                 <Link
                   to="/foro"
-                  className="inline-flex items-center justify-center rounded-lg border border-white/70 px-7 py-4 text-lg font-black text-white transition hover:bg-white hover:text-slate-950"
+                  className="inline-flex items-center justify-center rounded-xl border border-white/40 bg-slate-900/40 backdrop-blur-md px-6 py-3.5 text-base font-bold text-white transition hover:bg-white hover:text-slate-950"
                 >
                   {t("home_join_forum")}
                 </Link>
                 <Link
                   to="/sobre"
-                  className="inline-flex items-center justify-center rounded-lg border border-white/70 px-7 py-4 text-lg font-black text-white transition hover:bg-white hover:text-slate-950"
+                  className="inline-flex items-center justify-center rounded-xl border border-white/40 bg-slate-900/40 backdrop-blur-md px-6 py-3.5 text-base font-bold text-white transition hover:bg-white hover:text-slate-950"
                 >
                   {t("home_project_info")}
                 </Link>
               </div>
-
-              <div className="hidden">
-                {sections.slice(0, 4).map((section) => (
-                  <Link
-                    key={section.to}
-                    to={section.to}
-                    className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 text-sm font-black text-slate-800 shadow-sm transition hover:border-emerald-300 hover:text-emerald-800"
-                  >
-                    <span className="grid h-9 w-9 place-items-center rounded-lg bg-emerald-50 text-emerald-700">
-                      <Icon name={section.icon} className="h-5 w-5" />
-                    </span>
-                    <span>{t(section.key)}</span>
-                  </Link>
-                ))}
-              </div>
             </div>
 
-            <div className="overflow-hidden rounded-lg border border-white/70 bg-white/10 backdrop-blur">
-              <div className="hidden" />
-              <div className="relative">
-                <img
-                  src="/images/registration-migrant-travel-hero.png"
-                  alt=""
-                  className="h-64 w-full object-cover sm:h-80"
-                  style={{ objectPosition: "center 35%" }}
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950/85 to-transparent p-5 text-lg font-black text-white">
+            {/* البطاقة الزجاجية الجانبية - منسقة تلقائياً للاتجاهين LTR / RTL */}
+            <div className="lg:col-span-5">
+              <div className="rounded-2xl border border-white/20 bg-slate-950/60 p-6 backdrop-blur-xl shadow-2xl">
+                <div
+                  className={`mb-5 text-lg font-black text-white border-b border-white/15 pb-3 ${
+                    isRtl ? "text-right" : "text-left"
+                  }`}
+                >
                   Euskadi · Portal Migrante
                 </div>
-              </div>
-              <div className="grid gap-3 p-5 sm:grid-cols-2">
-                {[
-                  "home_pillar_info",
-                  "home_pillar_directory",
-                  "home_pillar_forum",
-                  "home_pillar_languages",
-                ].map((key, index) => (
-                  <div key={key} className="flex items-center gap-4 rounded-lg bg-white/15 p-4">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10 text-sm font-black text-green-200">
-                      0{index + 1}
-                    </span>
-                    <span className="text-lg font-bold leading-relaxed text-white">{t(key)}</span>
-                  </div>
-                ))}
+                <div className="grid gap-3">
+                  {[
+                    "home_pillar_info",
+                    "home_pillar_directory",
+                    "home_pillar_forum",
+                    "home_pillar_languages",
+                  ].map((key, index) => (
+                    <div
+                      key={key}
+                      className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/10 p-3.5 backdrop-blur-md transition hover:bg-white/20"
+                    >
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-vitoria-green text-xs font-black text-white shadow">
+                        0{index + 1}
+                      </span>
+                      <span
+                        className={`text-sm font-bold text-white w-full ${
+                          isRtl ? "text-right" : "text-left"
+                        }`}
+                      >
+                        {t(key)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>
 
+      {/* قسم المشاكل والتحديات */}
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
@@ -333,15 +348,15 @@ export default function Home() {
               {problems.map((problem, index) => (
                 <div
                   key={problem.key}
-                  className="group rounded-lg border border-slate-200 bg-white p-6 shadow-sm transition hover:border-emerald-200 hover:shadow-md"
+                  className="group rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-emerald-300 hover:shadow-md"
                 >
-                  <div className="mb-8 flex items-center justify-between">
-                    <span className="text-sm font-black text-emerald-700">0{index + 1}</span>
-                    <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700 transition group-hover:bg-emerald-600 group-hover:text-white">
+                  <div className="mb-6 flex items-center justify-between">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-vitoria-green transition group-hover:bg-vitoria-green group-hover:text-white">
                       <Icon name={problem.icon} />
                     </span>
+                    <span className="text-sm font-black text-emerald-800">0{index + 1}</span>
                   </div>
-                  <p className="text-xl font-bold leading-relaxed text-slate-950">{t(problem.key)}</p>
+                  <p className="text-lg font-bold leading-relaxed text-slate-900">{t(problem.key)}</p>
                 </div>
               ))}
             </div>
@@ -349,6 +364,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* قسم الحلول والأعمدة الأساسية */}
       <section className="bg-slate-50 py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto flex max-w-4xl justify-center text-center">
@@ -361,23 +377,24 @@ export default function Home() {
 
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {pillars.map((pillar) => (
-              <div key={pillar.key} className="rounded-lg border border-slate-200 bg-white p-7 shadow-sm">
-                <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-lg bg-vitoria-green text-white">
-                  <Icon name={pillar.icon} className="h-7 w-7" />
+              <div key={pillar.key} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-vitoria-green text-white">
+                  <Icon name={pillar.icon} className="h-6 w-6" />
                 </div>
-                <h3 className="text-2xl font-black text-slate-950">{t(pillar.key)}</h3>
-                <p className="mt-4 text-lg leading-relaxed text-slate-600">{t(pillar.desc)}</p>
+                <h3 className="text-xl font-black text-slate-950">{t(pillar.key)}</h3>
+                <p className="mt-3 text-base leading-relaxed text-slate-600">{t(pillar.desc)}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* قسم الخدمات والقطاعات */}
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <SectionHeading eyebrow={t("home_sections_label")} title={t("home_sections_title")} />
-            <Link to="/servicios" className="text-lg font-black text-vitoria-green hover:underline">
+            <Link to="/servicios" className="text-base font-bold text-vitoria-green hover:underline">
               {t("explore_services")}
             </Link>
           </div>
@@ -387,102 +404,23 @@ export default function Home() {
               <Link
                 key={section.to}
                 to={section.to}
-                className="group rounded-lg border border-slate-200 bg-white p-6 shadow-sm transition hover:border-vitoria-green hover:shadow-xl"
+                className="group rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-vitoria-green hover:shadow-lg"
               >
-                <div className="flex items-start gap-5">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-vitoria-green transition group-hover:bg-vitoria-green group-hover:text-white">
-                    <Icon name={section.icon} className="h-7 w-7" />
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-vitoria-green transition group-hover:bg-vitoria-green group-hover:text-white">
+                    <Icon name={section.icon} className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-black text-slate-950 group-hover:text-vitoria-green">
+                    <h3 className="text-xl font-black text-slate-950 group-hover:text-vitoria-green">
                       {t(section.key)}
                     </h3>
-                    <p className="mt-2 text-lg leading-relaxed text-slate-600">
+                    <p className="mt-2 text-sm leading-relaxed text-slate-600">
                       {t("home_section_card_desc")}
                     </p>
                   </div>
                 </div>
               </Link>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-white py-20 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-            <SectionHeading
-              eyebrow={t("home_impact_label")}
-              title={t("home_impact_title")}
-              description={t("home_impact_desc")}
-            />
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              {impacts.map((impact) => (
-                <div key={impact.key} className="rounded-lg border border-slate-200 bg-slate-50 p-6 shadow-sm">
-                  <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
-                    <Icon name={impact.icon} />
-                  </div>
-                  <p className="text-xl font-bold leading-relaxed text-slate-800">{t(impact.key)}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-            <div>
-              <SectionHeading
-                eyebrow={t("home_phase_label")}
-                title={t("home_phase_title")}
-                description={t("home_phase_desc")}
-              />
-              <p className="mt-6 rounded-lg border border-vitoria-green/25 bg-green-50 p-5 text-lg font-bold leading-relaxed text-slate-800">
-                {t("home_lived_experience")}
-              </p>
-            </div>
-
-            <div className="rounded-lg border border-slate-200 bg-slate-50 p-6">
-              <div className="grid gap-4 sm:grid-cols-2">
-                {[
-                  "home_phase_item_association",
-                  "home_phase_item_proposal",
-                  "home_phase_item_platform",
-                  "home_phase_item_partners",
-                ].map((key) => (
-                  <div key={key} className="rounded-lg bg-white p-5 shadow-sm">
-                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-red-700">
-                      <Icon name="check" className="h-5 w-5" />
-                    </div>
-                    <p className="text-lg font-bold leading-relaxed text-slate-900">{t(key)}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-14 rounded-lg bg-vitoria-green p-8 text-white sm:flex sm:items-center sm:justify-between">
-            <div>
-              <h2 className="text-3xl font-black">{t("home_final_cta_title")}</h2>
-              <p className="mt-3 text-lg text-white/90">{t("home_final_cta_desc")}</p>
-            </div>
-            <div className="mt-6 flex flex-col gap-3 sm:mt-0 sm:flex-row">
-              <Link
-                to="/users/new"
-                className="rounded-lg bg-white px-6 py-4 text-center text-lg font-black text-vitoria-green"
-              >
-                {t("create_account_link")}
-              </Link>
-              <Link
-                to="/contacto"
-                className="rounded-lg border border-white px-6 py-4 text-center text-lg font-black text-white"
-              >
-                {t("contact_us")}
-              </Link>
-            </div>
           </div>
         </div>
       </section>

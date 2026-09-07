@@ -5,6 +5,7 @@
 /* =========================
    Buttons & Links (components)
    ========================= */
+   
 @layer components {
   /* Base button */
   .btn {
@@ -111,4 +112,11 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #007A3D;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
+
+body {
+  font-family: 'Cairo', system-ui, sans-serif;
 }
