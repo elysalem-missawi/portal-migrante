@@ -4,12 +4,12 @@ import {
   createPublicationAttachment,
   getPublicationAttachments,
 } from "../controllers/publicationAttachment.controller";
-import requireWriteAccess from "../middlewares/requireWriteAccess";
+import { requireAuth } from "../middlewares/requireAuth";
 
 const router = Router();
 
 router.get("/publication/:publicationId", getPublicationAttachments);
-router.post("/", requireWriteAccess, createPublicationAttachment);
-router.delete("/:id", requireWriteAccess, archivePublicationAttachment);
+router.post("/", requireAuth, createPublicationAttachment);
+router.delete("/:id", requireAuth, archivePublicationAttachment);
 
 export default router;

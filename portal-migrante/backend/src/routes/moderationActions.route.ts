@@ -3,11 +3,14 @@ import {
   createModerationAction,
   getModerationActions,
 } from "../controllers/moderationAction.controller";
-import requireWriteAccess from "../middlewares/requireWriteAccess";
+import { requireAuth, requirePlatformRoles } from "../middlewares/requireAuth";
 
 const router = Router();
 
-router.use(requireWriteAccess);
+router.use(
+  requireAuth,
+  requirePlatformRoles("moderator", "admin", "super_admin")
+);
 router.post("/", createModerationAction);
 router.get("/publication/:publicationId", getModerationActions);
 

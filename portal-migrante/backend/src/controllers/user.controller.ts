@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
 import User from "../models/user.model";
+import AuthSession from "../models/authSession.model";
 import {
   checkPhoneVerification,
   isTwilioVerifyConfigured,
@@ -182,7 +183,24 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
 
 export const updateUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    const data = { ...req.body };
+    if (
+      req.auth?.platformRole !== "admin" &&
+      req.auth?.platformRole !== "super_admin"
+    ) {
+      for (const field of [
+        "platformRole",
+        "role",
+        "status",
+        "isVerified",
+        "organizationId",
+        "passwordHash",
+      ]) {
+        delete data[field];
+      }
+    }
+
+    const user = await User.findByIdAndUpdate(req.params.id, data, {
       new: true,
       runValidators: true,
     })
@@ -205,14 +223,23 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
 
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { status: "inactive" },
+      { new: true, runValidators: true }
+    );
 
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
     }
 
-    res.status(200).json({ message: "User deleted successfully" });
+    await AuthSession.updateMany(
+      { userId: user._id, revokedAt: null },
+      { $set: { revokedAt: new Date() } }
+    );
+
+    res.status(200).json({ message: "User deactivated successfully" });
   } catch (error: any) {
     res.status(500).json({
       message: "Failed to delete user",

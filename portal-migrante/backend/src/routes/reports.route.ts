@@ -1,11 +1,21 @@
 import { Router } from "express";
 import { createReport, getReports, updateReport } from "../controllers/report.controller";
-import requireWriteAccess from "../middlewares/requireWriteAccess";
+import { requireAuth, requirePlatformRoles } from "../middlewares/requireAuth";
 
 const router = Router();
 
-router.use(requireWriteAccess);
-router.route("/").get(getReports).post(createReport);
-router.put("/:id", updateReport);
+router.post("/", requireAuth, createReport);
+router.get(
+  "/",
+  requireAuth,
+  requirePlatformRoles("moderator", "admin", "super_admin"),
+  getReports
+);
+router.put(
+  "/:id",
+  requireAuth,
+  requirePlatformRoles("moderator", "admin", "super_admin"),
+  updateReport
+);
 
 export default router;

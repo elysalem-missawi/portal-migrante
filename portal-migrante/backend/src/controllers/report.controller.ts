@@ -8,8 +8,8 @@ const validId = (value: unknown): value is string =>
 
 export const createReport = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!validId(req.body.publicationId) || !validId(req.body.reporterUserId)) {
-      res.status(400).json({ message: "Valid publicationId and reporterUserId are required" });
+    if (!validId(req.body.publicationId) || !req.auth?.userId) {
+      res.status(400).json({ message: "A valid publicationId and authenticated user are required" });
       return;
     }
     if (!(await Publication.exists({ _id: req.body.publicationId }))) {
@@ -18,14 +18,21 @@ export const createReport = async (req: Request, res: Response): Promise<void> =
     }
     const existing = await Report.exists({
       publicationId: req.body.publicationId,
-      reporterUserId: req.body.reporterUserId,
+      reporterUserId: req.auth.userId,
       status: { $in: ["open", "under_review"] },
     });
     if (existing) {
       res.status(409).json({ message: "An active report already exists for this user" });
       return;
     }
-    const report = await Report.create(req.body);
+    const report = await Report.create({
+      ...req.body,
+      reporterUserId: req.auth.userId,
+      status: "open",
+      assignedToUserId: null,
+      resolutionNote: undefined,
+      resolvedAt: undefined,
+    });
     res.status(201).json(report);
   } catch (error: any) {
     res.status(400).json({ message: "Failed to create report", error: error.message });

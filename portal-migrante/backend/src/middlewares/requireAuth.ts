@@ -43,7 +43,13 @@ export async function requireAuth(
     req.auth = {
       userId: String(user._id),
       sessionId: String(session._id),
-      platformRole: user.platformRole,
+      platformRole:
+        user.platformRole ||
+        (user.role === "super_admin"
+          ? "super_admin"
+          : user.role === "admin"
+            ? "admin"
+            : "user"),
       phoneVerified: user.phoneVerified,
       isVerified: user.isVerified,
     };

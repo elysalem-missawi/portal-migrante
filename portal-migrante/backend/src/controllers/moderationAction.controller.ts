@@ -19,8 +19,8 @@ const transitions: Record<string, { status?: string; verificationStatus?: string
 
 export const createModerationAction = async (req: Request, res: Response): Promise<void> => {
   try {
-    if (!validId(req.body.publicationId) || !validId(req.body.moderatorUserId)) {
-      res.status(400).json({ message: "Valid publicationId and moderatorUserId are required" });
+    if (!validId(req.body.publicationId) || !req.auth?.userId) {
+      res.status(400).json({ message: "A valid publicationId and authenticated moderator are required" });
       return;
     }
     const change = transitions[req.body.action];
@@ -35,7 +35,7 @@ export const createModerationAction = async (req: Request, res: Response): Promi
     }
     const previousStatus = publication.status;
     Object.assign(publication, change, {
-      reviewedByUserId: req.body.moderatorUserId,
+      reviewedByUserId: req.auth.userId,
       reviewedAt: new Date(),
     });
     if (req.body.action === "approve" && !publication.publishedAt) {
@@ -45,6 +45,7 @@ export const createModerationAction = async (req: Request, res: Response): Promi
 
     const action = await ModerationAction.create({
       ...req.body,
+      moderatorUserId: req.auth.userId,
       previousStatus,
       newStatus: publication.status,
     });

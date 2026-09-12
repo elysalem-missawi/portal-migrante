@@ -6,6 +6,10 @@ import Publication from "../models/publication.model";
 import PublicationAttachment from "../models/publicationAttachment.model";
 import PublicationCategory from "../models/publicationCategory.model";
 import User from "../models/user.model";
+import {
+  canManageOrganization,
+  isPlatformStaff,
+} from "../services/authorization.service";
 
 const validId = (value: unknown): value is string =>
   typeof value === "string" && mongoose.Types.ObjectId.isValid(value);
@@ -17,6 +21,20 @@ const populatePublication = (query: any) =>
     .populate("municipalityId", "name slug territory")
     .populate("categoryId", "code name allowedTypes status")
     .populate("reviewedByUserId", "fullName displayName");
+
+async function canManagePublication(req: Request, publication: any): Promise<boolean> {
+  if (!req.auth) return false;
+  if (isPlatformStaff(req.auth.platformRole)) return true;
+  if (String(publication.authorUserId || "") === req.auth.userId) return true;
+  if (publication.organizationId) {
+    return canManageOrganization(
+      req.auth.userId,
+      req.auth.platformRole,
+      String(publication.organizationId)
+    );
+  }
+  return false;
+}
 
 async function validatePublication(data: any): Promise<string | null> {
   if (!validId(data.authorUserId) && !validId(data.organizationId)) {
@@ -58,14 +76,34 @@ async function validatePublication(data: any): Promise<string | null> {
 
 export const createPublication = async (req: Request, res: Response): Promise<void> => {
   try {
-    const errorMessage = await validatePublication(req.body);
+    const data = {
+      ...req.body,
+      authorUserId: req.auth?.userId,
+      status: "pending_review",
+      verificationStatus: "pending",
+      publishedAt: undefined,
+      reviewedByUserId: undefined,
+      reviewedAt: undefined,
+    };
+
+    if (
+      data.organizationId &&
+      !(await canManageOrganization(
+        req.auth!.userId,
+        req.auth!.platformRole,
+        String(data.organizationId)
+      ))
+    ) {
+      res.status(403).json({ message: "You cannot publish for this organization" });
+      return;
+    }
+
+    const errorMessage = await validatePublication(data);
     if (errorMessage) {
       res.status(400).json({ message: errorMessage });
       return;
     }
 
-    const data = { ...req.body };
-    if (data.status === "published" && !data.publishedAt) data.publishedAt = new Date();
     const created = await Publication.create(data);
     res.status(201).json(await populatePublication(Publication.findById(created._id)));
   } catch (error: any) {
@@ -155,17 +193,39 @@ export const updatePublication = async (req: Request, res: Response): Promise<vo
       res.status(404).json({ message: "Publication not found" });
       return;
     }
-    const candidate = { ...current, ...req.body };
+    if (!(await canManagePublication(req, current))) {
+      res.status(403).json({ message: "You cannot update this publication" });
+      return;
+    }
+
+    const allowed = [
+      "municipalityId",
+      "categoryId",
+      "type",
+      "title",
+      "description",
+      "sourceLanguage",
+      "urgency",
+      "contactMethod",
+      "contactValue",
+      "expiresAt",
+    ];
+    const updates = Object.fromEntries(
+      Object.entries(req.body).filter(([key]) => allowed.includes(key))
+    );
+    if (!isPlatformStaff(req.auth?.platformRole)) {
+      updates.status = "pending_review";
+      updates.verificationStatus = "pending";
+    }
+
+    const candidate = { ...current, ...updates };
     const errorMessage = await validatePublication(candidate);
     if (errorMessage) {
       res.status(400).json({ message: errorMessage });
       return;
     }
-    if (req.body.status === "published" && !current.publishedAt) {
-      req.body.publishedAt = new Date();
-    }
     const updated = await populatePublication(
-      Publication.findByIdAndUpdate(req.params.id, req.body, {
+      Publication.findByIdAndUpdate(req.params.id, updates, {
         new: true,
         runValidators: true,
       })
@@ -180,6 +240,15 @@ export const archivePublication = async (req: Request, res: Response): Promise<v
   try {
     if (!validId(req.params.id)) {
       res.status(400).json({ message: "Invalid publication id" });
+      return;
+    }
+    const current = await Publication.findById(req.params.id);
+    if (!current) {
+      res.status(404).json({ message: "Publication not found" });
+      return;
+    }
+    if (!(await canManagePublication(req, current))) {
+      res.status(403).json({ message: "You cannot archive this publication" });
       return;
     }
     const publication = await Publication.findByIdAndUpdate(
