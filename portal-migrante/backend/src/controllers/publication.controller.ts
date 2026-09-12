@@ -75,9 +75,15 @@ export const createPublication = async (req: Request, res: Response): Promise<vo
 
 export const getPublications = async (req: Request, res: Response): Promise<void> => {
   try {
+    const now = new Date();
+    await Publication.updateMany(
+      { status: "published", expiresAt: { $ne: null, $lte: now } },
+      { $set: { status: "expired" } }
+    );
+
     const conditions: Record<string, unknown>[] = [
       { status: "published" },
-      { $or: [{ expiresAt: null }, { expiresAt: { $gt: new Date() } }] },
+      { $or: [{ expiresAt: null }, { expiresAt: { $gt: now } }] },
     ];
 
     for (const key of ["municipalityId", "categoryId", "organizationId", "authorUserId"] as const) {
