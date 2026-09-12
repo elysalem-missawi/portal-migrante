@@ -87,7 +87,7 @@ export const getServices = async (
   res: Response
 ): Promise<void> => {
   try {
-    const filter: Record<string, unknown> = {};
+    const conditions: Record<string, unknown>[] = [];
     const { organizationId, categoryId, locationId, status, q } = req.query;
 
     if (organizationId) {
@@ -95,7 +95,7 @@ export const getServices = async (
         res.status(400).json({ message: "Invalid organizationId" });
         return;
       }
-      filter.organizationId = organizationId;
+      conditions.push({ organizationId });
     }
 
     if (categoryId) {
@@ -103,7 +103,7 @@ export const getServices = async (
         res.status(400).json({ message: "Invalid categoryId" });
         return;
       }
-      filter.categoryId = categoryId;
+      conditions.push({ categoryId });
     }
 
     if (locationId) {
@@ -111,19 +111,26 @@ export const getServices = async (
         res.status(400).json({ message: "Invalid locationId" });
         return;
       }
-      filter.locationIds = locationId;
+      conditions.push({ locationIds: locationId });
     }
 
-    filter.status =
+    if (
       typeof status === "string" &&
       ["draft", "active", "inactive", "archived"].includes(status)
-        ? status
-        : "active";
-
-    if (typeof q === "string" && q.trim()) {
-      filter.$text = { $search: q.trim() };
+    ) {
+      conditions.push({ status });
+    } else {
+      // Existing records created before the redesign have no status yet.
+      conditions.push({
+        $or: [{ status: "active" }, { status: { $exists: false } }],
+      });
     }
 
+    if (typeof q === "string" && q.trim()) {
+      conditions.push({ $text: { $search: q.trim() } });
+    }
+
+    const filter = conditions.length > 0 ? { $and: conditions } : {};
     const services = await populateService(
       Service.find(filter).sort({ createdAt: -1 })
     );
