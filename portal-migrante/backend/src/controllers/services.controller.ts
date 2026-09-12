@@ -1,11 +1,79 @@
-// src/controllers/services.controller.ts
 import { Request, Response } from "express";
+import mongoose, { Types } from "mongoose";
+import Organization from "../models/organization.model";
+import OrganizationLocation from "../models/organizationLocation.model";
 import Service from "../models/service.model";
+import ServiceCategory from "../models/serviceCategory.model";
 
-export const createService = async (req: Request, res: Response): Promise<void> => {
+const isObjectId = (value: unknown): value is string =>
+  typeof value === "string" && mongoose.Types.ObjectId.isValid(value);
+
+async function validateServiceRelations(data: any): Promise<string | null> {
+  if (!isObjectId(data.organizationId)) {
+    return "A valid organizationId is required";
+  }
+
+  if (!isObjectId(data.categoryId)) {
+    return "A valid categoryId is required";
+  }
+
+  const [organization, category] = await Promise.all([
+    Organization.findById(data.organizationId).select("_id status"),
+    ServiceCategory.findById(data.categoryId).select("_id status"),
+  ]);
+
+  if (!organization || organization.status === "archived") {
+    return "Organization not found or archived";
+  }
+
+  if (!category || category.status !== "active") {
+    return "Service category not found or inactive";
+  }
+
+  const locationIds = Array.isArray(data.locationIds) ? data.locationIds : [];
+  if (locationIds.some((id: unknown) => !isObjectId(id))) {
+    return "Every locationIds value must be a valid id";
+  }
+
+  if (locationIds.length > 0) {
+    const uniqueIds = [...new Set(locationIds.map(String))];
+    const matchingLocations = await OrganizationLocation.countDocuments({
+      _id: { $in: uniqueIds.map((id) => new Types.ObjectId(id)) },
+      organizationId: data.organizationId,
+      status: { $ne: "archived" },
+    });
+
+    if (matchingLocations !== uniqueIds.length) {
+      return "Every location must belong to the selected organization";
+    }
+  }
+
+  return null;
+}
+
+const populateService = (query: any) =>
+  query
+    .populate("organizationId", "name slug type status verificationStatus")
+    .populate("categoryId", "code name parentCategoryId status")
+    .populate(
+      "locationIds",
+      "name slug municipalityId addressLine1 postalCode phone email isHeadOffice status"
+    );
+
+export const createService = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
+    const relationError = await validateServiceRelations(req.body);
+    if (relationError) {
+      res.status(400).json({ message: relationError });
+      return;
+    }
+
     const service = await Service.create(req.body);
-    res.status(201).json(service);
+    const populated = await populateService(Service.findById(service._id));
+    res.status(201).json(populated);
   } catch (error: any) {
     res.status(400).json({
       message: "Failed to create service",
@@ -14,9 +82,51 @@ export const createService = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-export const getServices = async (_req: Request, res: Response): Promise<void> => {
+export const getServices = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const services = await Service.find().sort({ createdAt: -1 });
+    const filter: Record<string, unknown> = {};
+    const { organizationId, categoryId, locationId, status, q } = req.query;
+
+    if (organizationId) {
+      if (!isObjectId(organizationId)) {
+        res.status(400).json({ message: "Invalid organizationId" });
+        return;
+      }
+      filter.organizationId = organizationId;
+    }
+
+    if (categoryId) {
+      if (!isObjectId(categoryId)) {
+        res.status(400).json({ message: "Invalid categoryId" });
+        return;
+      }
+      filter.categoryId = categoryId;
+    }
+
+    if (locationId) {
+      if (!isObjectId(locationId)) {
+        res.status(400).json({ message: "Invalid locationId" });
+        return;
+      }
+      filter.locationIds = locationId;
+    }
+
+    filter.status =
+      typeof status === "string" &&
+      ["draft", "active", "inactive", "archived"].includes(status)
+        ? status
+        : "active";
+
+    if (typeof q === "string" && q.trim()) {
+      filter.$text = { $search: q.trim() };
+    }
+
+    const services = await populateService(
+      Service.find(filter).sort({ createdAt: -1 })
+    );
     res.status(200).json(services);
   } catch (error: any) {
     res.status(500).json({
@@ -26,9 +136,17 @@ export const getServices = async (_req: Request, res: Response): Promise<void> =
   }
 };
 
-export const getServiceById = async (req: Request, res: Response): Promise<void> => {
+export const getServiceById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const service = await Service.findById(req.params.id);
+    if (!isObjectId(req.params.id)) {
+      res.status(400).json({ message: "Invalid service id" });
+      return;
+    }
+
+    const service = await populateService(Service.findById(req.params.id));
 
     if (!service) {
       res.status(404).json({ message: "Service not found" });
@@ -44,17 +162,35 @@ export const getServiceById = async (req: Request, res: Response): Promise<void>
   }
 };
 
-export const updateService = async (req: Request, res: Response): Promise<void> => {
+export const updateService = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const service = await Service.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    if (!isObjectId(req.params.id)) {
+      res.status(400).json({ message: "Invalid service id" });
+      return;
+    }
 
-    if (!service) {
+    const current = await Service.findById(req.params.id).lean();
+    if (!current) {
       res.status(404).json({ message: "Service not found" });
       return;
     }
+
+    const candidate = { ...current, ...req.body };
+    const relationError = await validateServiceRelations(candidate);
+    if (relationError) {
+      res.status(400).json({ message: relationError });
+      return;
+    }
+
+    const service = await populateService(
+      Service.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+      })
+    );
 
     res.status(200).json(service);
   } catch (error: any) {
@@ -65,19 +201,31 @@ export const updateService = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-export const deleteService = async (req: Request, res: Response): Promise<void> => {
+export const deleteService = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const service = await Service.findByIdAndDelete(req.params.id);
+    if (!isObjectId(req.params.id)) {
+      res.status(400).json({ message: "Invalid service id" });
+      return;
+    }
+
+    const service = await Service.findByIdAndUpdate(
+      req.params.id,
+      { status: "archived" },
+      { new: true, runValidators: true }
+    );
 
     if (!service) {
       res.status(404).json({ message: "Service not found" });
       return;
     }
 
-    res.status(200).json({ message: "Service deleted successfully" });
+    res.status(200).json(service);
   } catch (error: any) {
     res.status(500).json({
-      message: "Failed to delete service",
+      message: "Failed to archive service",
       error: error.message,
     });
   }
