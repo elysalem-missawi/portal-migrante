@@ -1,4 +1,5 @@
 import { Router } from "express";
+import authRoute from "./auth.route";
 import healthRoute from "./health.route";
 import usersRoute from "./users.route";
 import servicesRoute from "./services.route";
@@ -16,6 +17,7 @@ import forumRoute from "./forum.route";
 
 const router = Router();
 
+router.use("/auth", authRoute);
 router.use("/health", healthRoute);
 router.use("/users", usersRoute);
 router.use("/services", servicesRoute);

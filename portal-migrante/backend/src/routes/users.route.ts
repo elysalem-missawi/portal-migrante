@@ -1,9 +1,8 @@
-// src/routes/users.route.ts
 import { Router } from "express";
+import { login } from "../controllers/auth.controller";
 import {
   createUser,
   registerUser,
-  loginUser,
   sendPhoneVerificationCode,
   verifyPhoneCode,
   getUsers,
@@ -16,7 +15,8 @@ import requireWriteAccess from "../middlewares/requireWriteAccess";
 const router = Router();
 
 router.post("/register", registerUser);
-router.post("/login", loginUser);
+// Temporary compatibility alias. New clients must use POST /api/auth/login.
+router.post("/login", login);
 router.post("/:id/send-phone-code", sendPhoneVerificationCode);
 router.post("/:id/verify-phone", verifyPhoneCode);
 router.route("/").get(getUsers).post(requireWriteAccess, createUser);

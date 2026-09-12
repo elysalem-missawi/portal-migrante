@@ -248,7 +248,8 @@ export const registerUser = async (
 
     const user = await User.create({
       accountType: req.body.accountType || "individual",
-      role: req.body.role || "community_user",
+      platformRole: "user",
+      role: "community_user",
       fullName: req.body.fullName,
       displayName: req.body.displayName,
       email: req.body.email,
@@ -257,9 +258,10 @@ export const registerUser = async (
       preferredLanguage: req.body.preferredLanguage,
       originCountry: req.body.originCountry,
       nativeLanguage: req.body.nativeLanguage,
+      municipalityId: req.body.municipalityId || null,
       municipality: req.body.municipality,
       profileImage: req.body.profileImage,
-      organizationId: req.body.organizationId || null,
+      organizationId: null,
       status: "pending",
       isVerified: false,
       passwordHash: hashPassword(password),
