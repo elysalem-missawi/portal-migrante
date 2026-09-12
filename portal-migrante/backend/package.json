@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "seed:municipalities": "ts-node src/seedMunicipalities.ts",
     "seed:service-categories": "ts-node src/seedServiceCategories.ts",
-    "seed:publication-categories": "ts-node src/seedPublicationCategories.ts"
+    "seed:publication-categories": "ts-node src/seedPublicationCategories.ts",
+    "migrate:database": "ts-node src/migrations/migrateDatabaseRedesign.ts",
+    "migrate:database:apply": "ts-node src/migrations/migrateDatabaseRedesign.ts --apply"
   },
   "dependencies": {
     "compression": "^1.8.1",
