@@ -293,7 +293,6 @@ export default function NewUserPage() {
 
       const result = await usersService.register({
         accountType: "individual",
-        role: "community_user",
         fullName: formData.fullName.trim(),
         displayName: formData.displayName.trim() || undefined,
         email: formData.email.trim(),
@@ -303,8 +302,6 @@ export default function NewUserPage() {
         originCountry: formData.originCountry,
         nativeLanguage: formData.nativeLanguage,
         legalConsentAccepted: formData.legalConsentAccepted,
-        status: "pending",
-        isVerified: false,
       });
 
       setRegisteredUser(result.user);
