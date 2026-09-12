@@ -3,7 +3,7 @@ import Organization from "../models/organization.model";
 import OrganizationMember from "../models/organizationMember.model";
 import {
   canManageOrganization,
-  isPlatformStaff,
+  isPlatformAdmin,
 } from "../services/authorization.service";
 
 export const createOrganization = async (
@@ -92,7 +92,7 @@ export const updateOrganization = async (
     }
 
     const data = { ...req.body };
-    if (!isPlatformStaff(req.auth.platformRole)) {
+    if (!isPlatformAdmin(req.auth.platformRole)) {
       for (const field of [
         "status",
         "verificationStatus",

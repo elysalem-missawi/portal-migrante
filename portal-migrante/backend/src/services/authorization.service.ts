@@ -43,7 +43,7 @@ export async function canManageOrganization(
   platformRole: PlatformRole | undefined,
   organizationId: string
 ): Promise<boolean> {
-  if (isPlatformStaff(platformRole)) return true;
+  if (isPlatformAdmin(platformRole)) return true;
   return hasOrganizationRole(userId, organizationId, contentManagerRoles);
 }
 
