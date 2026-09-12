@@ -5,18 +5,15 @@ import {
   getServiceCategories,
   updateServiceCategory,
 } from "../controllers/serviceCategory.controller";
-import requireWriteAccess from "../middlewares/requireWriteAccess";
+import { requireAuth, requirePlatformRoles } from "../middlewares/requireAuth";
 
 const router = Router();
+const admins = requirePlatformRoles("admin", "super_admin");
 
-router
-  .route("/")
-  .get(getServiceCategories)
-  .post(requireWriteAccess, createServiceCategory);
-
+router.route("/").get(getServiceCategories).post(requireAuth, admins, createServiceCategory);
 router
   .route("/:id")
-  .put(requireWriteAccess, updateServiceCategory)
-  .delete(requireWriteAccess, archiveServiceCategory);
+  .put(requireAuth, admins, updateServiceCategory)
+  .delete(requireAuth, admins, archiveServiceCategory);
 
 export default router;

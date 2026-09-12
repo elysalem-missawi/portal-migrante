@@ -5,15 +5,12 @@ import {
   getOrganizationMembers,
   updateOrganizationMember,
 } from "../controllers/organizationMember.controller";
-import requireWriteAccess from "../middlewares/requireWriteAccess";
+import { requireAuth } from "../middlewares/requireAuth";
 
 const router = Router();
 
-router.use(requireWriteAccess);
+router.use(requireAuth);
 router.route("/").get(getOrganizationMembers).post(createOrganizationMember);
-router
-  .route("/:id")
-  .put(updateOrganizationMember)
-  .delete(endOrganizationMembership);
+router.route("/:id").put(updateOrganizationMember).delete(endOrganizationMembership);
 
 export default router;

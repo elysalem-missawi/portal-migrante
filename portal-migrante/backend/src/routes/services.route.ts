@@ -6,15 +6,15 @@ import {
   updateService,
   deleteService,
 } from "../controllers/services.controller";
-import requireWriteAccess from "../middlewares/requireWriteAccess";
+import { requireAuth } from "../middlewares/requireAuth";
 
 const router = Router();
 
-router.route("/").get(getServices).post(requireWriteAccess, createService);
+router.route("/").get(getServices).post(requireAuth, createService);
 router
   .route("/:id")
   .get(getServiceById)
-  .put(requireWriteAccess, updateService)
-  .delete(requireWriteAccess, deleteService);
+  .put(requireAuth, updateService)
+  .delete(requireAuth, deleteService);
 
 export default router;

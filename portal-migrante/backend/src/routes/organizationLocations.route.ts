@@ -6,19 +6,15 @@ import {
   getOrganizationLocations,
   updateOrganizationLocation,
 } from "../controllers/organizationLocation.controller";
-import requireWriteAccess from "../middlewares/requireWriteAccess";
+import { requireAuth } from "../middlewares/requireAuth";
 
 const router = Router();
 
-router
-  .route("/")
-  .get(getOrganizationLocations)
-  .post(requireWriteAccess, createOrganizationLocation);
-
+router.route("/").get(getOrganizationLocations).post(requireAuth, createOrganizationLocation);
 router
   .route("/:id")
   .get(getOrganizationLocationById)
-  .put(requireWriteAccess, updateOrganizationLocation)
-  .delete(requireWriteAccess, archiveOrganizationLocation);
+  .put(requireAuth, updateOrganizationLocation)
+  .delete(requireAuth, archiveOrganizationLocation);
 
 export default router;

@@ -4,6 +4,7 @@ import Organization from "../models/organization.model";
 import OrganizationLocation from "../models/organizationLocation.model";
 import Service from "../models/service.model";
 import ServiceCategory from "../models/serviceCategory.model";
+import { canManageOrganization } from "../services/authorization.service";
 
 const isObjectId = (value: unknown): value is string =>
   typeof value === "string" && mongoose.Types.ObjectId.isValid(value);
@@ -65,6 +66,18 @@ export const createService = async (
   res: Response
 ): Promise<void> => {
   try {
+    if (
+      !req.auth ||
+      !(await canManageOrganization(
+        req.auth.userId,
+        req.auth.platformRole,
+        String(req.body.organizationId || "")
+      ))
+    ) {
+      res.status(403).json({ message: "You cannot create services for this organization" });
+      return;
+    }
+
     const relationError = await validateServiceRelations(req.body);
     if (relationError) {
       res.status(400).json({ message: relationError });
@@ -185,7 +198,21 @@ export const updateService = async (
       return;
     }
 
-    const candidate = { ...current, ...req.body };
+    if (
+      !req.auth ||
+      !(await canManageOrganization(
+        req.auth.userId,
+        req.auth.platformRole,
+        String(current.organizationId)
+      ))
+    ) {
+      res.status(403).json({ message: "You cannot update this service" });
+      return;
+    }
+
+    const updates = { ...req.body };
+    delete updates.organizationId;
+    const candidate = { ...current, ...updates };
     const relationError = await validateServiceRelations(candidate);
     if (relationError) {
       res.status(400).json({ message: relationError });
@@ -193,7 +220,7 @@ export const updateService = async (
     }
 
     const service = await populateService(
-      Service.findByIdAndUpdate(req.params.id, req.body, {
+      Service.findByIdAndUpdate(req.params.id, updates, {
         new: true,
         runValidators: true,
       })
@@ -215,6 +242,23 @@ export const deleteService = async (
   try {
     if (!isObjectId(req.params.id)) {
       res.status(400).json({ message: "Invalid service id" });
+      return;
+    }
+
+    const current = await Service.findById(req.params.id);
+    if (!current) {
+      res.status(404).json({ message: "Service not found" });
+      return;
+    }
+    if (
+      !req.auth ||
+      !(await canManageOrganization(
+        req.auth.userId,
+        req.auth.platformRole,
+        String(current.organizationId)
+      ))
+    ) {
+      res.status(403).json({ message: "You cannot archive this service" });
       return;
     }
 
