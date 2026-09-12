@@ -37,7 +37,9 @@ async function validateServiceRelations(data: any): Promise<string | null> {
   }
 
   if (locationIds.length > 0) {
-    const uniqueIds = [...new Set(locationIds.map(String))];
+    const uniqueIds: string[] = Array.from(
+      new Set(locationIds.map((id: unknown) => String(id)))
+    );
     const matchingLocations = await OrganizationLocation.countDocuments({
       _id: { $in: uniqueIds.map((id) => new Types.ObjectId(id)) },
       organizationId: data.organizationId,

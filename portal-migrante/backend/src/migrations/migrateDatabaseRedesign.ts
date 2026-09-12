@@ -1,10 +1,10 @@
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import Municipality from "./models/municipality.model";
-import Organization from "./models/organization.model";
-import OrganizationMember from "./models/organizationMember.model";
-import Service from "./models/service.model";
-import User from "./models/user.model";
+import Municipality from "../models/municipality.model";
+import Organization from "../models/organization.model";
+import OrganizationMember from "../models/organizationMember.model";
+import Service from "../models/service.model";
+import User from "../models/user.model";
 
 dotenv.config();
 
