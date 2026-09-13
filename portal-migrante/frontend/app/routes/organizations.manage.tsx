@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { useI18n } from "../i18n";
 import {
   organizationsService,
@@ -18,6 +18,10 @@ import {
   municipalitiesService,
   type Municipality,
 } from "../services/municipalities.service";
+import {
+  servicesService,
+  type Service,
+} from "../services/services.service";
 
 type Locale = "eu" | "es" | "en" | "ar";
 type Day = OpeningHour["day"];
@@ -86,6 +90,71 @@ type PageCopy = {
   unverified: string;
   back: string;
   days: Record<Day, string>;
+};
+
+const serviceCopy: Record<
+  Locale,
+  {
+    title: string;
+    add: string;
+    edit: string;
+    empty: string;
+    saved: string;
+    draft: string;
+    active: string;
+    inactive: string;
+    pending: string;
+    verified: string;
+  }
+> = {
+  es: {
+    title: "Servicios",
+    add: "Añadir servicio",
+    edit: "Editar",
+    empty: "Esta organización todavía no tiene servicios.",
+    saved: "El servicio se guardó como borrador pendiente de revisión.",
+    draft: "Borrador",
+    active: "Activo",
+    inactive: "Inactivo",
+    pending: "Pendiente",
+    verified: "Verificado",
+  },
+  ar: {
+    title: "الخدمات",
+    add: "إضافة خدمة",
+    edit: "تعديل",
+    empty: "لا توجد خدمات لهذه المنظمة بعد.",
+    saved: "تم حفظ الخدمة كمسودة قيد المراجعة.",
+    draft: "مسودة",
+    active: "نشطة",
+    inactive: "غير نشطة",
+    pending: "قيد المراجعة",
+    verified: "موثّقة",
+  },
+  en: {
+    title: "Services",
+    add: "Add service",
+    edit: "Edit",
+    empty: "This organization has no services yet.",
+    saved: "The service was saved as a draft pending review.",
+    draft: "Draft",
+    active: "Active",
+    inactive: "Inactive",
+    pending: "Pending",
+    verified: "Verified",
+  },
+  eu: {
+    title: "Zerbitzuak",
+    add: "Gehitu zerbitzua",
+    edit: "Editatu",
+    empty: "Erakunde honek ez du zerbitzurik oraindik.",
+    saved: "Zerbitzua berrikusteko zain dagoen zirriborro gisa gorde da.",
+    draft: "Zirriborroa",
+    active: "Aktiboa",
+    inactive: "Inaktiboa",
+    pending: "Zain",
+    verified: "Egiaztatuta",
+  },
 };
 
 const days: Day[] = [
@@ -421,12 +490,15 @@ function openingHoursFromSchedule(
 
 export default function OrganizationManagePage() {
   const { id = "" } = useParams();
+  const [searchParams] = useSearchParams();
   const { t, locale } = useI18n();
   const activeLocale = (locale as Locale) in copy ? (locale as Locale) : "es";
   const page = copy[activeLocale];
+  const servicePage = serviceCopy[activeLocale];
 
   const [organization, setOrganization] = useState<Organization | null>(null);
   const [locations, setLocations] = useState<OrganizationLocation[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
   const [municipalities, setMunicipalities] = useState<Municipality[]>([]);
   const [form, setForm] = useState<LocationForm>(() =>
     emptyLocationForm()
@@ -482,14 +554,23 @@ export default function OrganizationManagePage() {
       organizationsService.getMineById(id),
       organizationLocationsService.listMine({ organizationId: id }),
       municipalitiesService.list(),
+      servicesService.listMine({ organizationId: id }),
     ])
-      .then(([organizationItem, locationItems, municipalityItems]) => {
+      .then(
+        ([
+          organizationItem,
+          locationItems,
+          municipalityItems,
+          serviceItems,
+        ]) => {
         if (!active) return;
         setOrganization(organizationItem);
         setLocations(locationItems);
         setMunicipalities(municipalityItems);
+        setServices(serviceItems);
         setForm(emptyLocationForm(locationItems.length === 0));
-      })
+        }
+      )
       .catch((caught: unknown) => {
         if (!active) return;
         const message = caught instanceof Error ? caught.message : "";
@@ -698,6 +779,102 @@ export default function OrganizationManagePage() {
             <div className="alert alert-info mt-4 mb-0">
               {page.reviewNotice}
             </div>
+          </div>
+        </section>
+
+        <section className="card border-0 shadow-sm mb-4">
+          <div className="card-body p-4">
+            <div className="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-3">
+              <h2 className="h4 fw-bold mb-0">
+                {servicePage.title} ({services.length})
+              </h2>
+              <Link
+                to={"/organizations/" + organization._id + "/services/new"}
+                className="btn btn-dark"
+              >
+                + {servicePage.add}
+              </Link>
+            </div>
+
+            {searchParams.get("service") === "saved" && (
+              <div className="alert alert-success">{servicePage.saved}</div>
+            )}
+
+            {services.length === 0 ? (
+              <p className="text-secondary mb-0">{servicePage.empty}</p>
+            ) : (
+              <div className="list-group list-group-flush">
+                {services.map((service) => {
+                  const category =
+                    service.categoryId &&
+                    typeof service.categoryId !== "string"
+                      ? service.categoryId
+                      : null;
+                  const statusLabel =
+                    service.status === "active"
+                      ? servicePage.active
+                      : service.status === "inactive"
+                        ? servicePage.inactive
+                        : servicePage.draft;
+
+                  return (
+                    <div
+                      className="list-group-item px-0 py-3"
+                      key={service._id}
+                    >
+                      <div className="d-flex flex-column flex-md-row justify-content-between gap-3">
+                        <div>
+                          <h3 className="h6 fw-bold mb-1">{service.title}</h3>
+                          {category?.name && (
+                            <div className="text-secondary small">
+                              {category.name}
+                            </div>
+                          )}
+                          <div className="d-flex flex-wrap gap-2 mt-2">
+                            <span
+                              className={
+                                "badge " +
+                                (service.status === "active"
+                                  ? "text-bg-success"
+                                  : "text-bg-secondary")
+                              }
+                            >
+                              {statusLabel}
+                            </span>
+                            <span
+                              className={
+                                "badge " +
+                                (service.verificationStatus === "verified"
+                                  ? "text-bg-primary"
+                                  : "text-bg-warning")
+                              }
+                            >
+                              {service.verificationStatus === "verified"
+                                ? servicePage.verified
+                                : servicePage.pending}
+                            </span>
+                          </div>
+                        </div>
+                        <div>
+                          <Link
+                            to={
+                              "/organizations/" +
+                              organization._id +
+                              "/services/" +
+                              service._id +
+                              "/edit"
+                            }
+                            className="btn btn-sm btn-outline-dark"
+                          >
+                            {servicePage.edit}
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </section>
 

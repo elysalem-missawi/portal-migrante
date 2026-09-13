@@ -166,6 +166,10 @@ export const servicesService = {
     );
   },
 
+  getMineById(id: string) {
+    return http<Service>("/services/mine/" + id);
+  },
+
   getById(id: string) {
     return http<Service>("/services/" + id);
   },

@@ -14,6 +14,7 @@ import AyuntamientosPage from "./routes/ayuntamientos";
 import OrganizationsPage from "./routes/organizations";
 import NewOrganizationPage from "./routes/organizations.new";
 import OrganizationManagePage from "./routes/organizations.manage";
+import OrganizationServiceFormPage from "./routes/organizations.service-form";
 import ServiceInfoPage from "./routes/service-info";
 import AsociacionesPage from "./routes/asociaciones";
 import ForoMigrantesPage from "./routes/foro";
@@ -94,6 +95,22 @@ const router = createBrowserRouter([
         element: (
           <ProtectedAuthenticatedRoute>
             <OrganizationManagePage />
+          </ProtectedAuthenticatedRoute>
+        ),
+      },
+      {
+        path: "organizations/:id/services/new",
+        element: (
+          <ProtectedAuthenticatedRoute>
+            <OrganizationServiceFormPage />
+          </ProtectedAuthenticatedRoute>
+        ),
+      },
+      {
+        path: "organizations/:id/services/:serviceId/edit",
+        element: (
+          <ProtectedAuthenticatedRoute>
+            <OrganizationServiceFormPage />
           </ProtectedAuthenticatedRoute>
         ),
       },
