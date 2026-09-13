@@ -3,6 +3,7 @@ import {
   createOrganization,
   getOrganizations,
   getMyOrganizations,
+  getMyOrganizationById,
   getOrganizationById,
   updateOrganization,
   deleteOrganization,
@@ -12,6 +13,7 @@ import { requireAuth } from "../middlewares/requireAuth";
 const router = Router();
 
 router.get("/mine", requireAuth, getMyOrganizations);
+router.get("/mine/:id", requireAuth, getMyOrganizationById);
 router.route("/").get(getOrganizations).post(requireAuth, createOrganization);
 router
   .route("/:id")

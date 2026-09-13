@@ -101,6 +101,53 @@ export const getMyOrganizations = async (
   }
 };
 
+export const getMyOrganizationById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    if (!req.auth) {
+      res.status(401).json({ message: "Authentication is required" });
+      return;
+    }
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      res.status(400).json({ message: "Invalid organization id" });
+      return;
+    }
+
+    const organization = await Organization.findOne({
+      _id: req.params.id,
+      status: { $ne: "archived" },
+    });
+    if (!organization) {
+      res.status(404).json({ message: "Organization not found" });
+      return;
+    }
+
+    const allowed = await canManageOrganization(
+      req.auth.userId,
+      req.auth.platformRole,
+      String(organization._id)
+    );
+    if (!allowed) {
+      res.status(403).json({
+        message: "You cannot access this organization",
+      });
+      return;
+    }
+
+    const populated = await populateOrganization(
+      Organization.findById(organization._id)
+    );
+    res.status(200).json(populated);
+  } catch (error: any) {
+    res.status(500).json({
+      message: "Failed to fetch managed organization",
+      error: error.message,
+    });
+  }
+};
+
 export const getOrganizationById = async (
   req: Request,
   res: Response

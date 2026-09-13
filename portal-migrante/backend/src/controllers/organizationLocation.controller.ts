@@ -290,12 +290,16 @@ export const createOrganizationLocation = async (
       organizationId: req.body.organizationId,
       status: { $ne: "archived" },
     });
+    const isHeadOffice =
+      existingLocations === 0 || Boolean(req.body.isHeadOffice);
 
     const location = await OrganizationLocation.create({
       ...req.body,
-      isHeadOffice:
-        existingLocations === 0 ? true : Boolean(req.body.isHeadOffice),
-      status: req.body.status === "inactive" ? "inactive" : "active",
+      isHeadOffice,
+      status:
+        isHeadOffice || req.body.status !== "inactive"
+          ? "active"
+          : "inactive",
     });
 
     if (location.isHeadOffice) {
@@ -338,6 +342,16 @@ export const updateOrganizationLocation = async (
     const data = { ...req.body };
     delete data.organizationId;
     if (data.status === "archived") delete data.status;
+
+    if (current.isHeadOffice && data.status === "inactive") {
+      res.status(400).json({
+        message: "The head office must remain active",
+      });
+      return;
+    }
+    if (data.isHeadOffice === true) {
+      data.status = "active";
+    }
 
     const municipalityId =
       data.municipalityId || String(current.municipalityId);
