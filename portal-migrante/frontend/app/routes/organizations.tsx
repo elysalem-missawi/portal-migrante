@@ -18,10 +18,15 @@ export default function OrganizationsPage() {
   const [error, setError] = useState("");
   const { t } = useI18n();
 
-  const getTypeLabel = (value: string) => t("organization_type_" + value);
-  const getStatusLabel = (value: string) => t("status_" + value);
+  const getTypeLabel = (value: string) =>
+    t("organization_type_" + value);
+  const getStatusLabel = (value: string) =>
+    t("status_" + value);
   const getVerificationLabel = (organization: Organization) => {
-    if (organization.verificationStatus === "verified" || organization.verified) {
+    if (
+      organization.verificationStatus === "verified" ||
+      organization.verified
+    ) {
       return t("yes");
     }
     if (organization.verificationStatus === "pending") {
@@ -34,8 +39,8 @@ export default function OrganizationsPage() {
     let active = true;
 
     Promise.all([
-      organizationsService.list(),
-      organizationLocationsService.list({ status: "active" }),
+      organizationsService.listMine(),
+      organizationLocationsService.listMine(),
     ])
       .then(([organizationItems, locationItems]) => {
         if (!active) return;
@@ -45,7 +50,9 @@ export default function OrganizationsPage() {
       .catch((err: unknown) => {
         if (!active) return;
         const message =
-          err instanceof Error ? err.message : t("organization_load_error");
+          err instanceof Error
+            ? err.message
+            : t("organization_load_error");
         setError(message || t("organization_load_error"));
       })
       .finally(() => {
@@ -61,7 +68,9 @@ export default function OrganizationsPage() {
     const result = new Map<string, OrganizationLocation>();
 
     locations.forEach((location) => {
-      const organizationId = referenceId(location.organizationId);
+      const organizationId = referenceId(
+        location.organizationId
+      );
       if (!organizationId) return;
 
       const current = result.get(organizationId);
@@ -101,27 +110,37 @@ export default function OrganizationsPage() {
             </thead>
             <tbody>
               {organizations.map((organization) => {
-                const primaryLocation = primaryLocationByOrganization.get(
-                  organization._id
-                );
+                const primaryLocation =
+                  primaryLocationByOrganization.get(
+                    organization._id
+                  );
 
                 return (
                   <tr key={organization._id}>
-                    <td className="fw-medium">{organization.name}</td>
-                    <td>
-                      {getTypeLabel(organization.type) || organization.type}
+                    <td className="fw-medium">
+                      {organization.name}
                     </td>
                     <td>
-                      {primaryLocation?.email || organization.email || "-"}
+                      {getTypeLabel(organization.type) ||
+                        organization.type}
                     </td>
                     <td>
-                      {primaryLocation?.phone || organization.phone || "-"}
+                      {primaryLocation?.email ||
+                        organization.email ||
+                        "-"}
+                    </td>
+                    <td>
+                      {primaryLocation?.phone ||
+                        organization.phone ||
+                        "-"}
                     </td>
                     <td>
                       {getStatusLabel(organization.status) ||
                         organization.status}
                     </td>
-                    <td>{getVerificationLabel(organization)}</td>
+                    <td>
+                      {getVerificationLabel(organization)}
+                    </td>
                   </tr>
                 );
               })}

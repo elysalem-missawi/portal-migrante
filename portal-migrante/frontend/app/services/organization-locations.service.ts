@@ -37,7 +37,10 @@ export type OpeningHour = {
   closed: boolean;
 };
 
-export type OrganizationLocationStatus = "active" | "inactive" | "archived";
+export type OrganizationLocationStatus =
+  | "active"
+  | "inactive"
+  | "archived";
 
 export type OrganizationLocation = {
   _id: string;
@@ -62,18 +65,36 @@ export type OrganizationLocation = {
 export type OrganizationLocationFilters = {
   organizationId?: string;
   municipalityId?: string;
-  status?: Extract<OrganizationLocationStatus, "active" | "inactive">;
+  status?: Extract<
+    OrganizationLocationStatus,
+    "active" | "inactive"
+  >;
 };
 
-export type CreateOrganizationLocationInput = Omit<
-  OrganizationLocation,
-  "_id" | "organizationId" | "municipalityId" | "createdAt" | "updatedAt"
-> & {
+export type CreateOrganizationLocationInput = {
   organizationId: string;
   municipalityId: string;
+  name: string;
+  slug: string;
+  addressLine1: string;
+  addressLine2?: string;
+  postalCode?: string;
+  phone?: string;
+  email?: string;
+  latitude?: number;
+  longitude?: number;
+  openingHours?: OpeningHour[];
+  isHeadOffice?: boolean;
+  status?: Extract<
+    OrganizationLocationStatus,
+    "active" | "inactive"
+  >;
 };
 
-function listPath(filters: OrganizationLocationFilters = {}) {
+function listPath(
+  basePath: string,
+  filters: OrganizationLocationFilters = {}
+) {
   const search = new URLSearchParams();
 
   Object.entries(filters).forEach(([key, value]) => {
@@ -81,7 +102,7 @@ function listPath(filters: OrganizationLocationFilters = {}) {
   });
 
   const query = search.toString();
-  return query ? "/organization-locations?" + query : "/organization-locations";
+  return query ? basePath + "?" + query : basePath;
 }
 
 export function referenceId<T extends { _id: string }>(
@@ -93,11 +114,21 @@ export function referenceId<T extends { _id: string }>(
 
 export const organizationLocationsService = {
   list(filters: OrganizationLocationFilters = {}) {
-    return http<OrganizationLocation[]>(listPath(filters));
+    return http<OrganizationLocation[]>(
+      listPath("/organization-locations", filters)
+    );
+  },
+
+  listMine(filters: OrganizationLocationFilters = {}) {
+    return http<OrganizationLocation[]>(
+      listPath("/organization-locations/mine", filters)
+    );
   },
 
   getById(id: string) {
-    return http<OrganizationLocation>("/organization-locations/" + id);
+    return http<OrganizationLocation>(
+      "/organization-locations/" + id
+    );
   },
 
   create(data: CreateOrganizationLocationInput) {
@@ -107,16 +138,23 @@ export const organizationLocationsService = {
     });
   },
 
-  update(id: string, data: Partial<CreateOrganizationLocationInput>) {
-    return http<OrganizationLocation>("/organization-locations/" + id, {
-      method: "PUT",
-      body: JSON.stringify(data),
-    });
+  update(
+    id: string,
+    data: Partial<CreateOrganizationLocationInput>
+  ) {
+    return http<OrganizationLocation>(
+      "/organization-locations/" + id,
+      {
+        method: "PUT",
+        body: JSON.stringify(data),
+      }
+    );
   },
 
   remove(id: string) {
-    return http<OrganizationLocation>("/organization-locations/" + id, {
-      method: "DELETE",
-    });
+    return http<OrganizationLocation>(
+      "/organization-locations/" + id,
+      { method: "DELETE" }
+    );
   },
 };

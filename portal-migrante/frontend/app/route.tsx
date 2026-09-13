@@ -18,6 +18,7 @@ import AsociacionesPage from "./routes/asociaciones";
 import ForoMigrantesPage from "./routes/foro";
 import CulturaVascaPage from "./routes/cultura-vasca";
 import LegalTermsPage from "./routes/legal-terms";
+import ProtectedAuthenticatedRoute from "./routes/guards/ProtectedAuthenticatedRoute";
 import ProtectedOfficeRoute from "./routes/guards/ProtectedOfficeRoute";
 import OfficeDashboard from "./routes/office/OfficeDashboard";
 import OfficeTasks from "./routes/office/OfficeTasks";
@@ -35,12 +36,30 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "servicios", element: <Servicios /> },
-      { path: "servicios/salud", element: <ServiceInfoPage serviceId="salud" /> },
-      { path: "servicios/vivienda", element: <ServiceInfoPage serviceId="vivienda" /> },
-      { path: "servicios/empleo", element: <ServiceInfoPage serviceId="empleo" /> },
-      { path: "servicios/educacion", element: <ServiceInfoPage serviceId="educacion" /> },
-      { path: "servicios/legal", element: <ServiceInfoPage serviceId="legal" /> },
-      { path: "servicios/asociaciones", element: <AsociacionesPage /> },
+      {
+        path: "servicios/salud",
+        element: <ServiceInfoPage serviceId="salud" />,
+      },
+      {
+        path: "servicios/vivienda",
+        element: <ServiceInfoPage serviceId="vivienda" />,
+      },
+      {
+        path: "servicios/empleo",
+        element: <ServiceInfoPage serviceId="empleo" />,
+      },
+      {
+        path: "servicios/educacion",
+        element: <ServiceInfoPage serviceId="educacion" />,
+      },
+      {
+        path: "servicios/legal",
+        element: <ServiceInfoPage serviceId="legal" />,
+      },
+      {
+        path: "servicios/asociaciones",
+        element: <AsociacionesPage />,
+      },
       { path: "foro", element: <ForoMigrantesPage /> },
       { path: "cultura-vasca", element: <CulturaVascaPage /> },
       { path: "anuncios", element: <Anuncios /> },
@@ -53,9 +72,26 @@ const router = createBrowserRouter([
       { path: "users/login", element: <LoginUser /> },
       { path: "login", element: <LoginUser /> },
       { path: "unauthorized", element: <UnauthorizedPage /> },
-      { path: "organizations", element: <OrganizationsPage /> },
-      { path: "organizations/new", element: <NewOrganizationPage /> },
-      { path: "ayuntamientos", element: <AyuntamientosPage /> },
+      {
+        path: "organizations",
+        element: (
+          <ProtectedAuthenticatedRoute>
+            <OrganizationsPage />
+          </ProtectedAuthenticatedRoute>
+        ),
+      },
+      {
+        path: "organizations/new",
+        element: (
+          <ProtectedAuthenticatedRoute>
+            <NewOrganizationPage />
+          </ProtectedAuthenticatedRoute>
+        ),
+      },
+      {
+        path: "ayuntamientos",
+        element: <AyuntamientosPage />,
+      },
     ],
   },
   {
@@ -66,20 +102,67 @@ const router = createBrowserRouter([
       </ProtectedOfficeRoute>
     ),
     children: [
-      { index: true, element: <Navigate to="/office/dashboard" replace /> },
+      {
+        index: true,
+        element: <Navigate to="/office/dashboard" replace />,
+      },
       { path: "dashboard", element: <OfficeDashboard /> },
       { path: "tasks", element: <OfficeTasks /> },
       { path: "meetings", element: <OfficeMeetings /> },
       { path: "projects", element: <OfficeProjects /> },
       { path: "funding", element: <OfficeFunding /> },
       { path: "documents", element: <OfficeDocuments /> },
-      { path: "members", element: <OfficePlaceholder titleEs="Miembros" titleAr="الأعضاء" /> },
-      { path: "volunteers", element: <OfficePlaceholder titleEs="Voluntariado" titleAr="المتطوعون" /> },
-      { path: "finance", element: <OfficePlaceholder titleEs="Finanzas" titleAr="المالية" /> },
-      { path: "contacts", element: <OfficePlaceholder titleEs="Contactos" titleAr="الاتصالات" /> },
-      { path: "activities", element: <OfficePlaceholder titleEs="Actividades" titleAr="الأنشطة" /> },
-      { path: "reports", element: <OfficePlaceholder titleEs="Informes" titleAr="التقارير" /> },
-      { path: "settings", element: <OfficePlaceholder titleEs="Ajustes" titleAr="الإعدادات" /> },
+      {
+        path: "members",
+        element: (
+          <OfficePlaceholder titleEs="Miembros" titleAr="الأعضاء" />
+        ),
+      },
+      {
+        path: "volunteers",
+        element: (
+          <OfficePlaceholder
+            titleEs="Voluntariado"
+            titleAr="المتطوعون"
+          />
+        ),
+      },
+      {
+        path: "finance",
+        element: (
+          <OfficePlaceholder titleEs="Finanzas" titleAr="المالية" />
+        ),
+      },
+      {
+        path: "contacts",
+        element: (
+          <OfficePlaceholder
+            titleEs="Contactos"
+            titleAr="الاتصالات"
+          />
+        ),
+      },
+      {
+        path: "activities",
+        element: (
+          <OfficePlaceholder
+            titleEs="Actividades"
+            titleAr="الأنشطة"
+          />
+        ),
+      },
+      {
+        path: "reports",
+        element: (
+          <OfficePlaceholder titleEs="Informes" titleAr="التقارير" />
+        ),
+      },
+      {
+        path: "settings",
+        element: (
+          <OfficePlaceholder titleEs="Ajustes" titleAr="الإعدادات" />
+        ),
+      },
     ],
   },
 ]);

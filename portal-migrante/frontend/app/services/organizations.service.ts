@@ -68,19 +68,15 @@ export type CreateOrganizationInput = {
   website?: string;
   languages?: string[];
   logo?: string;
-
-  // Accepted for compatibility with the current registration form. The API
-  // owns status and verification values when an organization is created.
-  address?: string;
-  phone?: string;
-  email?: string;
-  verified?: boolean;
-  status?: OrganizationStatus;
 };
 
 export const organizationsService = {
   list() {
     return http<Organization[]>("/organizations");
+  },
+
+  listMine() {
+    return http<Organization[]>("/organizations/mine");
   },
 
   create(data: CreateOrganizationInput) {
