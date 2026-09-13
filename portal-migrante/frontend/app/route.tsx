@@ -12,7 +12,7 @@ import Anuncios from "./routes/anuncios";
 import Observatorio from "./routes/observatorio";
 import AyuntamientosPage from "./routes/ayuntamientos";
 import OrganizationsPage from "./routes/organizations";
-import NewOrganizationPage from "./routes/organizations.new";
+import NewOrganizationPage from "./routes/organizations.new";\nimport OrganizationManagePage from "./routes/organizations.manage";
 import ServiceInfoPage from "./routes/service-info";
 import AsociacionesPage from "./routes/asociaciones";
 import ForoMigrantesPage from "./routes/foro";
@@ -85,6 +85,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedAuthenticatedRoute>
             <NewOrganizationPage />
+          </ProtectedAuthenticatedRoute>
+        ),
+      },
+      {
+        path: "organizations/:id/manage",
+        element: (
+          <ProtectedAuthenticatedRoute>
+            <OrganizationManagePage />
           </ProtectedAuthenticatedRoute>
         ),
       },

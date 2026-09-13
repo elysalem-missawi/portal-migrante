@@ -16,7 +16,16 @@ export default function OrganizationsPage() {
   const [locations, setLocations] = useState<OrganizationLocation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
+  const manageLabel =
+    (
+      {
+        es: "Gestionar",
+        ar: "إدارة",
+        en: "Manage",
+        eu: "Kudeatu",
+      } as Record<string, string>
+    )[locale] || "Gestionar";
 
   const getTypeLabel = (value: string) =>
     t("organization_type_" + value);
@@ -106,6 +115,9 @@ export default function OrganizationsPage() {
                 <th>{t("phone")}</th>
                 <th>{t("status")}</th>
                 <th>{t("verified")}</th>
+                <th>
+                  <span className="visually-hidden">{manageLabel}</span>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -140,6 +152,14 @@ export default function OrganizationsPage() {
                     </td>
                     <td>
                       {getVerificationLabel(organization)}
+                    </td>
+                    <td className="text-end">
+                      <Link
+                        to={"/organizations/" + organization._id + "/manage"}
+                        className="btn btn-sm btn-outline-dark"
+                      >
+                        {manageLabel}
+                      </Link>
                     </td>
                   </tr>
                 );

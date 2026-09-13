@@ -79,6 +79,10 @@ export const organizationsService = {
     return http<Organization[]>("/organizations/mine");
   },
 
+  getMineById(id: string) {
+    return http<Organization>("/organizations/mine/" + id);
+  },
+
   create(data: CreateOrganizationInput) {
     return http<Organization>("/organizations", {
       method: "POST",
