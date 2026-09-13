@@ -216,6 +216,13 @@ export const updateOrganization = async (
       ]) {
         delete data[field];
       }
+
+      // Material changes by organization managers require a fresh review.
+      data.status = "pending";
+      data.verificationStatus = "pending";
+      data.verified = false;
+      data.verifiedAt = null;
+      data.verifiedByUserId = null;
     } else if (data.verificationStatus === "verified") {
       data.verified = true;
       data.verifiedAt = new Date();
