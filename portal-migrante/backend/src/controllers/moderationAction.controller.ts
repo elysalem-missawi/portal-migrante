@@ -80,6 +80,7 @@ export const createModerationAction = async (
       publicationId: publication._id,
       targetType: "publication",
       targetId: publication._id,
+      targetLabel: publication.title,
       moderatorUserId: req.auth.userId,
       reportId: req.body.reportId,
       action: req.body.action,

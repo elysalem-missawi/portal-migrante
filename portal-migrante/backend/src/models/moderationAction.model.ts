@@ -8,6 +8,7 @@ export type ModerationTargetType =
 export interface IModerationAction extends Document {
   targetType: ModerationTargetType;
   targetId: Types.ObjectId;
+  targetLabel?: string;
 
   // Transitional reference retained for existing publication moderation data.
   publicationId?: Types.ObjectId | null;
@@ -43,6 +44,11 @@ const moderationActionSchema = new Schema<IModerationAction>(
       type: Schema.Types.ObjectId,
       required: true,
       index: true,
+    },
+    targetLabel: {
+      type: String,
+      trim: true,
+      maxlength: 200,
     },
     publicationId: {
       type: Schema.Types.ObjectId,

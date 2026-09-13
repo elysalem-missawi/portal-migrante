@@ -126,10 +126,24 @@ export const getReviewQueue = async (
       includeOrganizations ? organizationsForReview() : [],
       includeServices ? servicesForReview() : [],
     ]);
+    const recentActions = await ModerationAction.find({
+      targetType: {
+        $in: canReviewOrganizations
+          ? ["organization", "service"]
+          : ["service"],
+      },
+    })
+      .populate(
+        "moderatorUserId",
+        "fullName displayName email"
+      )
+      .sort({ createdAt: -1 })
+      .limit(20);
 
     res.status(200).json({
       organizations,
       services,
+      recentActions,
       counts: {
         organizations: organizations.length,
         services: services.length,
@@ -182,8 +196,8 @@ async function verifyServiceCanBeApproved(
     return "The service category must be active";
   }
 
-  const locationIds = Array.from(
-    new Set(
+  const locationIds: string[] = Array.from(
+    new Set<string>(
       (service.locationIds || []).map((value: Types.ObjectId) =>
         String(value)
       )
@@ -326,6 +340,7 @@ export const reviewTarget = async (
     const action = await ModerationAction.create({
       targetType,
       targetId: target._id,
+      targetLabel: target.name || target.title,
       moderatorUserId: req.auth.userId,
       action: decision,
       reason: reason || undefined,
