@@ -21,6 +21,7 @@ import ForoMigrantesPage from "./routes/foro";
 import CulturaVascaPage from "./routes/cultura-vasca";
 import LegalTermsPage from "./routes/legal-terms";
 import ProtectedAuthenticatedRoute from "./routes/guards/ProtectedAuthenticatedRoute";
+import ProtectedPlatformStaffRoute from "./routes/guards/ProtectedPlatformStaffRoute";
 import ProtectedOfficeRoute from "./routes/guards/ProtectedOfficeRoute";
 import OfficeDashboard from "./routes/office/OfficeDashboard";
 import OfficeTasks from "./routes/office/OfficeTasks";
@@ -30,6 +31,7 @@ import OfficeFunding from "./routes/office/OfficeFunding";
 import OfficeDocuments from "./routes/office/OfficeDocuments";
 import OfficePlaceholder from "./routes/office/OfficePlaceholder";
 import UnauthorizedPage from "./routes/office/Unauthorized";
+import AdminModerationPage from "./routes/admin.moderation";
 
 const router = createBrowserRouter([
   {
@@ -74,6 +76,14 @@ const router = createBrowserRouter([
       { path: "users/login", element: <LoginUser /> },
       { path: "login", element: <LoginUser /> },
       { path: "unauthorized", element: <UnauthorizedPage /> },
+      {
+        path: "admin/moderation",
+        element: (
+          <ProtectedPlatformStaffRoute>
+            <AdminModerationPage />
+          </ProtectedPlatformStaffRoute>
+        ),
+      },
       {
         path: "organizations",
         element: (

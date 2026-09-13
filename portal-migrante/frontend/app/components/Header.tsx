@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { usersService, type User } from "../services/users.service";
 
 export default function Header() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -95,6 +95,25 @@ export default function Header() {
   };
 
   const userName = currentUser?.displayName || currentUser?.fullName || "";
+  const currentPlatformRole =
+    currentUser?.platformRole ||
+    (currentUser?.role === "super_admin"
+      ? "super_admin"
+      : currentUser?.role === "admin"
+        ? "admin"
+        : "user");
+  const canModerate = ["moderator", "admin", "super_admin"].includes(
+    currentPlatformRole
+  );
+  const moderationLabel =
+    (
+      {
+        es: "Revisión de contenidos",
+        ar: "مراجعة المحتوى",
+        en: "Content review",
+        eu: "Edukien berrikuspena",
+      } as Record<string, string>
+    )[locale] || "Revisión de contenidos";
 
   const userSummary = currentUser && (
     <div className="rounded-xl border border-gray-200 bg-white p-3 text-sm shadow-lg">
@@ -111,6 +130,18 @@ export default function Header() {
         <div className="mt-2 inline-flex rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
           {t("phone_verified_short")}
         </div>
+      )}
+      {canModerate && (
+        <Link
+          to="/admin/moderation"
+          className="mt-3 block w-full rounded-xl bg-vitoria-green px-3 py-2 text-center font-semibold text-white no-underline transition hover:opacity-90"
+          onClick={() => {
+            setUserMenuOpen(false);
+            setOpen(false);
+          }}
+        >
+          {moderationLabel}
+        </Link>
       )}
       <button
         type="button"
