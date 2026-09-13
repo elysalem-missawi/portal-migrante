@@ -5,9 +5,14 @@ import type {
   OrganizationType,
   VerificationStatus,
 } from "./organizations.service";
-import type { MunicipalitySummary } from "./organization-locations.service";
+import type {
+  MunicipalitySummary,
+} from "./organization-locations.service";
 
-export type ServiceCategoryStatus = "active" | "inactive" | "archived";
+export type ServiceCategoryStatus =
+  | "active"
+  | "inactive"
+  | "archived";
 
 export type ServiceCategorySummary = {
   _id: string;
@@ -16,14 +21,15 @@ export type ServiceCategorySummary = {
   status?: ServiceCategoryStatus;
 };
 
-export type ServiceCategory = ServiceCategorySummary & {
-  description?: string;
-  parentCategoryId?: EntityReference<ServiceCategorySummary>;
-  sortOrder: number;
-  status: ServiceCategoryStatus;
-  createdAt?: string;
-  updatedAt?: string;
-};
+export type ServiceCategory =
+  ServiceCategorySummary & {
+    description?: string;
+    parentCategoryId?: EntityReference<ServiceCategorySummary>;
+    sortOrder: number;
+    status: ServiceCategoryStatus;
+    createdAt?: string;
+    updatedAt?: string;
+  };
 
 export type ServiceOrganizationSummary = {
   _id: string;
@@ -54,12 +60,22 @@ export type ServiceDeliveryMode =
   | "mobile"
   | "hybrid";
 
-export type ServiceStatus = "draft" | "active" | "inactive" | "archived";
-export type ServiceCostType = "free" | "paid" | "subsidized" | "unknown";
+export type ServiceStatus =
+  | "draft"
+  | "active"
+  | "inactive"
+  | "archived";
+
+export type ServiceCostType =
+  | "free"
+  | "paid"
+  | "subsidized"
+  | "unknown";
 
 export type Service = {
   _id: string;
-  organizationId: EntityReference<ServiceOrganizationSummary>;
+  organizationId:
+    EntityReference<ServiceOrganizationSummary>;
   locationIds: Array<string | ServiceLocationSummary>;
   categoryId: EntityReference<ServiceCategorySummary>;
   title: string;
@@ -76,7 +92,7 @@ export type Service = {
   verificationStatus: VerificationStatus;
   status: ServiceStatus;
 
-  // Transitional fields exposed by records created before the redesign.
+  // Transitional fields for records created before the redesign.
   category?: string;
   municipality?: string;
   territory?: string;
@@ -91,9 +107,13 @@ export type ServiceFilters = {
   organizationId?: string;
   categoryId?: string;
   locationId?: string;
-  status?: ServiceStatus;
   q?: string;
 };
+
+export type ManagedServiceFilters =
+  ServiceFilters & {
+    status?: ServiceStatus;
+  };
 
 export type CreateServiceInput = {
   organizationId: string;
@@ -110,15 +130,17 @@ export type CreateServiceInput = {
   phone?: string;
   email?: string;
   languages?: string[];
-  verificationStatus?: VerificationStatus;
-  status?: ServiceStatus;
 };
 
-function withQuery(path: string, values: Record<string, string | undefined>) {
+function withQuery(path: string, values: object) {
   const search = new URLSearchParams();
+
   Object.entries(values).forEach(([key, value]) => {
-    if (value) search.set(key, value);
+    if (typeof value === "string" && value) {
+      search.set(key, value);
+    }
   });
+
   const query = search.toString();
   return query ? path + "?" + query : path;
 }
@@ -133,14 +155,15 @@ export const serviceCategoriesService = {
 
 export const servicesService = {
   list(filters: ServiceFilters = {}) {
-    return http<Service[]>("/services" + (() => {
-      const search = new URLSearchParams();
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value) search.set(key, value);
-      });
-      const query = search.toString();
-      return query ? "?" + query : "";
-    })());
+    return http<Service[]>(
+      withQuery("/services", filters)
+    );
+  },
+
+  listMine(filters: ManagedServiceFilters = {}) {
+    return http<Service[]>(
+      withQuery("/services/mine", filters)
+    );
   },
 
   getById(id: string) {
@@ -154,7 +177,10 @@ export const servicesService = {
     });
   },
 
-  update(id: string, data: Partial<CreateServiceInput>) {
+  update(
+    id: string,
+    data: Partial<CreateServiceInput>
+  ) {
     return http<Service>("/services/" + id, {
       method: "PUT",
       body: JSON.stringify(data),

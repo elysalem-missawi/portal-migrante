@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createService,
   getServices,
+  getMyServices,
   getServiceById,
   updateService,
   deleteService,
@@ -10,7 +11,11 @@ import { requireAuth } from "../middlewares/requireAuth";
 
 const router = Router();
 
-router.route("/").get(getServices).post(requireAuth, createService);
+router.get("/mine", requireAuth, getMyServices);
+router
+  .route("/")
+  .get(getServices)
+  .post(requireAuth, createService);
 router
   .route("/:id")
   .get(getServiceById)
