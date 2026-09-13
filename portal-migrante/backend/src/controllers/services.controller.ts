@@ -338,6 +338,57 @@ export const getMyServices = async (
   }
 };
 
+export const getMyServiceById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const serviceId = idString(req.params.id);
+    if (!serviceId) {
+      res.status(400).json({
+        message: "Invalid service id",
+      });
+      return;
+    }
+
+    const service = await Service.findOne({
+      _id: serviceId,
+      status: { $ne: "archived" },
+    }).select("organizationId");
+
+    if (!service) {
+      res.status(404).json({
+        message: "Service not found",
+      });
+      return;
+    }
+
+    if (
+      !req.auth ||
+      !(await canManageOrganization(
+        req.auth.userId,
+        req.auth.platformRole,
+        String(service.organizationId)
+      ))
+    ) {
+      res.status(403).json({
+        message: "You cannot access this service",
+      });
+      return;
+    }
+
+    const populated = await populateService(
+      Service.findById(serviceId)
+    );
+    res.status(200).json(populated);
+  } catch (error: any) {
+    res.status(500).json({
+      message: "Failed to fetch managed service",
+      error: error.message,
+    });
+  }
+};
+
 export const getServiceById = async (
   req: Request,
   res: Response

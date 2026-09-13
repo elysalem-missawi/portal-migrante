@@ -3,6 +3,7 @@ import {
   createService,
   getServices,
   getMyServices,
+  getMyServiceById,
   getServiceById,
   updateService,
   deleteService,
@@ -12,6 +13,7 @@ import { requireAuth } from "../middlewares/requireAuth";
 const router = Router();
 
 router.get("/mine", requireAuth, getMyServices);
+router.get("/mine/:id", requireAuth, getMyServiceById);
 router
   .route("/")
   .get(getServices)
