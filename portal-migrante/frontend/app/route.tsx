@@ -1,25 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
+import { lazy } from "react";
 import Root from "./root";
 import OfficeLayout from "./components/office/OfficeLayout";
-import Home from "./routes/home";
-import Servicios from "./routes/servicios";
-import Users from "./routes/users";
-import NewUser from "./routes/users.new";
-import LoginUser from "./routes/users.login";
-import Contacto from "./routes/contacto";
-import Sobre from "./routes/sobre";
-import Anuncios from "./routes/anuncios";
-import Observatorio from "./routes/observatorio";
-import AyuntamientosPage from "./routes/ayuntamientos";
-import OrganizationsPage from "./routes/organizations";
-import NewOrganizationPage from "./routes/organizations.new";
-import OrganizationManagePage from "./routes/organizations.manage";
-import OrganizationServiceFormPage from "./routes/organizations.service-form";
-import ServiceInfoPage from "./routes/service-info";
-import AsociacionesPage from "./routes/asociaciones";
-import ForoMigrantesPage from "./routes/foro";
-import CulturaVascaPage from "./routes/cultura-vasca";
-import LegalTermsPage from "./routes/legal-terms";
 import ProtectedAuthenticatedRoute from "./routes/guards/ProtectedAuthenticatedRoute";
 import ProtectedPlatformStaffRoute from "./routes/guards/ProtectedPlatformStaffRoute";
 import ProtectedOfficeRoute from "./routes/guards/ProtectedOfficeRoute";
@@ -31,7 +13,47 @@ import OfficeFunding from "./routes/office/OfficeFunding";
 import OfficeDocuments from "./routes/office/OfficeDocuments";
 import OfficePlaceholder from "./routes/office/OfficePlaceholder";
 import UnauthorizedPage from "./routes/office/Unauthorized";
-import AdminModerationPage from "./routes/admin.moderation";
+
+const Home = lazy(() => import("./routes/home"));
+const Servicios = lazy(() => import("./routes/servicios"));
+const Users = lazy(() => import("./routes/users"));
+const NewUser = lazy(() => import("./routes/users.new"));
+const LoginUser = lazy(() => import("./routes/users.login"));
+const Contacto = lazy(() => import("./routes/contacto"));
+const Sobre = lazy(() => import("./routes/sobre"));
+const Anuncios = lazy(() => import("./routes/anuncios"));
+const Observatorio = lazy(() => import("./routes/observatorio"));
+const AyuntamientosPage = lazy(
+  () => import("./routes/ayuntamientos")
+);
+const OrganizationsPage = lazy(
+  () => import("./routes/organizations")
+);
+const NewOrganizationPage = lazy(
+  () => import("./routes/organizations.new")
+);
+const OrganizationManagePage = lazy(
+  () => import("./routes/organizations.manage")
+);
+const OrganizationServiceFormPage = lazy(
+  () => import("./routes/organizations.service-form")
+);
+const ServiceInfoPage = lazy(
+  () => import("./routes/service-info")
+);
+const AsociacionesPage = lazy(
+  () => import("./routes/asociaciones")
+);
+const ForoMigrantesPage = lazy(() => import("./routes/foro"));
+const CulturaVascaPage = lazy(
+  () => import("./routes/cultura-vasca")
+);
+const LegalTermsPage = lazy(
+  () => import("./routes/legal-terms")
+);
+const AdminModerationPage = lazy(
+  () => import("./routes/admin.moderation")
+);
 
 const router = createBrowserRouter([
   {

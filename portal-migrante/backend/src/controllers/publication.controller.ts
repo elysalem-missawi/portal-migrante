@@ -156,19 +156,29 @@ export const getPublicationById = async (req: Request, res: Response): Promise<v
       res.status(400).json({ message: "Invalid publication id" });
       return;
     }
-    const publication = await populatePublication(Publication.findById(req.params.id));
+    const now = new Date();
+    await Publication.updateOne(
+      {
+        _id: req.params.id,
+        status: "published",
+        expiresAt: { $ne: null, $lte: now },
+      },
+      { $set: { status: "expired" } }
+    );
+
+    const publication = await populatePublication(
+      Publication.findOne({
+        _id: req.params.id,
+        status: "published",
+        $or: [
+          { expiresAt: null },
+          { expiresAt: { $gt: now } },
+        ],
+      })
+    );
     if (!publication) {
       res.status(404).json({ message: "Publication not found" });
       return;
-    }
-
-    if (
-      publication.status === "published" &&
-      publication.expiresAt &&
-      publication.expiresAt.getTime() <= Date.now()
-    ) {
-      publication.status = "expired";
-      await publication.save();
     }
 
     const attachments = await PublicationAttachment.find({

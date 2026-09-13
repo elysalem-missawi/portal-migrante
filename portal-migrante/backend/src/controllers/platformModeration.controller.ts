@@ -5,10 +5,15 @@ import Organization from "../models/organization.model";
 import OrganizationLocation from "../models/organizationLocation.model";
 import Service from "../models/service.model";
 import ServiceCategory from "../models/serviceCategory.model";
-import { isPlatformAdmin } from "../services/authorization.service";
-
-type ReviewTargetType = "organization" | "service";
-type ReviewDecision = "approve" | "reject";
+import {
+  canReviewTarget,
+  reviewStateFor,
+  serviceRequiresLocation,
+} from "../services/moderationPolicy.service";
+import type {
+  ReviewDecision,
+  ReviewTargetType,
+} from "../services/moderationPolicy.service";
 
 const validId = (value: unknown): value is string =>
   typeof value === "string" && mongoose.Types.ObjectId.isValid(value);
@@ -109,8 +114,13 @@ export const getReviewQueue = async (
       return;
     }
 
-    const canReviewOrganizations = isPlatformAdmin(
-      req.auth.platformRole
+    const canReviewOrganizations = canReviewTarget(
+      req.auth.platformRole,
+      "organization"
+    );
+    const canReviewServices = canReviewTarget(
+      req.auth.platformRole,
+      "service"
     );
     const includeOrganizations =
       canReviewOrganizations &&
@@ -118,9 +128,10 @@ export const getReviewQueue = async (
         requestedType === "all" ||
         requestedType === "organization");
     const includeServices =
-      requestedType === undefined ||
-      requestedType === "all" ||
-      requestedType === "service";
+      canReviewServices &&
+      (requestedType === undefined ||
+        requestedType === "all" ||
+        requestedType === "service");
 
     const [organizations, services] = await Promise.all([
       includeOrganizations ? organizationsForReview() : [],
@@ -128,9 +139,10 @@ export const getReviewQueue = async (
     ]);
     const recentActions = await ModerationAction.find({
       targetType: {
-        $in: canReviewOrganizations
-          ? ["organization", "service"]
-          : ["service"],
+        $in: [
+          ...(canReviewOrganizations ? ["organization"] : []),
+          ...(canReviewServices ? ["service"] : []),
+        ],
       },
     })
       .populate(
@@ -150,7 +162,7 @@ export const getReviewQueue = async (
       },
       permissions: {
         canReviewOrganizations,
-        canReviewServices: true,
+        canReviewServices,
       },
     });
   } catch (error: any) {
@@ -219,8 +231,8 @@ async function verifyServiceCanBeApproved(
     }
   }
 
-  const requiresLocation = (service.deliveryModes || []).some(
-    (mode: string) => mode === "in_person" || mode === "hybrid"
+  const requiresLocation = serviceRequiresLocation(
+    service.deliveryModes || []
   );
   if (requiresLocation && locationIds.length === 0) {
     return "An in-person or hybrid service requires at least one active location";
@@ -265,13 +277,12 @@ export const reviewTarget = async (
       });
       return;
     }
-    if (
-      targetType === "organization" &&
-      !isPlatformAdmin(req.auth.platformRole)
-    ) {
+    if (!canReviewTarget(req.auth.platformRole, targetType)) {
       res.status(403).json({
         message:
-          "Only platform administrators can review organizations",
+          targetType === "organization"
+            ? "Only platform administrators can review organizations"
+            : "Only platform staff can review services",
       });
       return;
     }
@@ -311,28 +322,19 @@ export const reviewTarget = async (
     const previousVerificationStatus =
       target.verificationStatus;
 
+    const nextState = reviewStateFor(decision);
+    target.status = nextState.status;
+    target.verificationStatus = nextState.verificationStatus;
+    target.verified = nextState.verified;
+
     if (targetType === "organization") {
       if (decision === "approve") {
-        target.status = "active";
-        target.verificationStatus = "verified";
-        target.verified = true;
         target.verifiedAt = new Date();
         target.verifiedByUserId = req.auth.userId;
       } else {
-        target.status = "inactive";
-        target.verificationStatus = "rejected";
-        target.verified = false;
         target.verifiedAt = undefined;
         target.verifiedByUserId = undefined;
       }
-    } else if (decision === "approve") {
-      target.status = "active";
-      target.verificationStatus = "verified";
-      target.verified = true;
-    } else {
-      target.status = "inactive";
-      target.verificationStatus = "rejected";
-      target.verified = false;
     }
 
     await target.save();
