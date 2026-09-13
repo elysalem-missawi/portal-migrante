@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   archiveOrganizationLocation,
   createOrganizationLocation,
+  getMyOrganizationLocations,
   getOrganizationLocationById,
   getOrganizationLocations,
   updateOrganizationLocation,
@@ -10,7 +11,11 @@ import { requireAuth } from "../middlewares/requireAuth";
 
 const router = Router();
 
-router.route("/").get(getOrganizationLocations).post(requireAuth, createOrganizationLocation);
+router.get("/mine", requireAuth, getMyOrganizationLocations);
+router
+  .route("/")
+  .get(getOrganizationLocations)
+  .post(requireAuth, createOrganizationLocation);
 router
   .route("/:id")
   .get(getOrganizationLocationById)
