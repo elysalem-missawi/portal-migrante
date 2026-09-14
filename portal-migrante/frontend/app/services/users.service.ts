@@ -106,12 +106,10 @@ export const usersService = {
   },
 
   async register(data: CreateUserInput) {
-    const result = await http<RegisterUserResult>("/users/register", {
+    return http<RegisterUserResult>("/users/register", {
       method: "POST",
       body: JSON.stringify(data),
     });
-    this.setCurrentUser(result.user);
-    return result;
   },
 
   async login(data: { email: string; password: string }) {
@@ -142,8 +140,14 @@ export const usersService = {
       method: "POST",
       body: JSON.stringify({ code }),
     });
-    this.setCurrentUser(user);
+    if (this.hasAuthToken()) {
+      this.setCurrentUser(user);
+    }
     return user;
+  },
+
+  hasAuthToken() {
+    return Boolean(localStorage.getItem(AUTH_TOKEN_KEY));
   },
 
   getCurrentUser() {
@@ -160,13 +164,17 @@ export const usersService = {
     notifyCurrentUserChanged();
   },
 
+  clearLocalSession() {
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    localStorage.removeItem(CURRENT_USER_KEY);
+    notifyCurrentUserChanged();
+  },
+
   async logout() {
     try {
       await http<{ message: string }>("/auth/logout", { method: "POST" });
     } finally {
-      localStorage.removeItem(AUTH_TOKEN_KEY);
-      localStorage.removeItem(CURRENT_USER_KEY);
-      notifyCurrentUserChanged();
+      this.clearLocalSession();
     }
   },
 

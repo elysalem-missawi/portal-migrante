@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../auth";
 import { useI18n } from "../i18n";
 import {
   forumService,
@@ -8,7 +9,7 @@ import {
   type ForumPost,
   type ForumPostType,
 } from "../services/forum.service";
-import { usersService, type User } from "../services/users.service";
+import { usersService } from "../services/users.service";
 
 type Locale = "eu" | "es" | "en" | "ar";
 
@@ -323,15 +324,18 @@ const formatDate = (value: string, locale: string) =>
 
 export default function ForoMigrantesPage() {
   const { locale, t } = useI18n();
+  const {
+    currentUser,
+    signIn,
+    signOut,
+    refreshSession,
+  } = useAuth();
   const copy = text[(locale as Locale) in text ? (locale as Locale) : "es"];
   const [posts, setPosts] = useState<ForumPost[]>([]);
   const [messages, setMessages] = useState<ForumMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  const [currentUser, setCurrentUser] = useState<User | null>(() =>
-    usersService.getCurrentUser()
-  );
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [phoneCode, setPhoneCode] = useState("");
   const [activeView, setActiveView] = useState<"all" | "mine">("all");
@@ -351,12 +355,6 @@ export default function ForoMigrantesPage() {
   const canParticipate = Boolean(
     currentUser && (currentUser.phoneVerified || currentUser.isVerified)
   );
-
-  useEffect(() => {
-    return usersService.onCurrentUserChange(() => {
-      setCurrentUser(usersService.getCurrentUser());
-    });
-  }, []);
 
   const loadForum = async () => {
     setError("");
@@ -392,15 +390,13 @@ export default function ForoMigrantesPage() {
 
   const login = async (event: FormEvent) => {
     event.preventDefault();
-    const user = await usersService.login(loginData);
-    setCurrentUser(user);
+    await signIn(loginData);
     setLoginData({ email: "", password: "" });
     setNotice(copy.profileSaved);
   };
 
   const logout = () => {
-    usersService.logout();
-    setCurrentUser(null);
+    void signOut();
     setActiveView("all");
   };
 
@@ -468,8 +464,8 @@ export default function ForoMigrantesPage() {
 
   const verifyForumPhone = async () => {
     if (!currentUser) return;
-    const user = await usersService.verifyPhone(currentUser._id, phoneCode);
-    setCurrentUser(user);
+    await usersService.verifyPhone(currentUser._id, phoneCode);
+    await refreshSession();
     setPhoneCode("");
     setNotice(copy.phoneVerified);
   };

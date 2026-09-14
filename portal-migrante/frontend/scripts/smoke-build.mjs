@@ -56,6 +56,10 @@ assert.ok(
   ),
   "The moderation route must be present in the production bundle"
 );
+assert.ok(
+  javascriptBundles.some((bundle) => bundle.includes("/auth/me")),
+  "The production bundle must validate stored sessions with /auth/me"
+);
 
 const builtAssetFiles = await readdir(
   path.join(distDirectory, "assets")
@@ -64,6 +68,7 @@ for (const routeChunk of [
   "admin.moderation-",
   "organizations.manage-",
   "organizations.service-form-",
+  "service-detail-",
 ]) {
   assert.ok(
     builtAssetFiles.some(

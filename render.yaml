@@ -37,3 +37,5 @@ services:
     envVars:
       - key: VITE_API_URL
         value: https://portal-migrante.onrender.com/api
+      - key: VITE_ENABLE_DEMO_FALLBACK
+        value: false

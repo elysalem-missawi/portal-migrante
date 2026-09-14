@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
+import { AuthGateStatus, useAuth } from "../../auth";
 import {
-  usersService,
   type PlatformRole,
   type User,
 } from "../../services/users.service";
@@ -34,17 +33,16 @@ export default function ProtectedPlatformStaffRoute({
   children: ReactNode;
 }) {
   const location = useLocation();
-  const [currentUser, setCurrentUser] = useState<User | null>(() =>
-    usersService.getCurrentUser()
-  );
+  const { currentUser, status, refreshSession } = useAuth();
 
-  useEffect(
-    () =>
-      usersService.onCurrentUserChange(() =>
-        setCurrentUser(usersService.getCurrentUser())
-      ),
-    []
-  );
+  if (status === "checking" || status === "unavailable") {
+    return (
+      <AuthGateStatus
+        status={status}
+        retry={() => void refreshSession()}
+      />
+    );
+  }
 
   if (!currentUser) {
     return (

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useAuth } from "../auth";
 import { useI18n } from "../i18n";
 import {
   moderationService,
@@ -10,7 +11,6 @@ import type {
   ServiceCostType,
   ServiceDeliveryMode,
 } from "../services/services.service";
-import { usersService } from "../services/users.service";
 import { isPlatformAdminUser } from "./guards/ProtectedPlatformStaffRoute";
 
 type Locale = "eu" | "es" | "en" | "ar";
@@ -350,9 +350,9 @@ function dateLabel(value: string | undefined, locale: Locale) {
 
 export default function AdminModerationPage() {
   const { locale } = useI18n();
+  const { currentUser } = useAuth();
   const activeLocale = (locale as Locale) in copy ? (locale as Locale) : "es";
   const page = copy[activeLocale];
-  const currentUser = usersService.getCurrentUser();
   const platformAdmin = isPlatformAdminUser(currentUser);
 
   const [queue, setQueue] = useState<ReviewQueue | null>(null);

@@ -2,7 +2,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Outlet } from "react-router-dom";
 import { Suspense } from "react";
-import { I18nProvider, useI18n } from "./i18n";
+import { useI18n } from "./i18n";
 
 function AppShell() {
   const { t } = useI18n();
@@ -31,9 +31,5 @@ function AppShell() {
 }
 
 export default function Root() {
-  return (
-    <I18nProvider>
-      <AppShell />
-    </I18nProvider>
-  );
+  return <AppShell />;
 }

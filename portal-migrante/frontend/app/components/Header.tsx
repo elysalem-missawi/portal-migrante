@@ -2,16 +2,19 @@ import { NavLink, Link } from "react-router-dom";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useI18n } from "../i18n";
 import { useState, useEffect } from "react";
-import { usersService, type User } from "../services/users.service";
+import { useAuth } from "../auth";
 
 export default function Header() {
   const { t, locale } = useI18n();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(() =>
-    usersService.getCurrentUser()
-  );
+  const {
+    currentUser,
+    status: authStatus,
+    signOut,
+    refreshSession,
+  } = useAuth();
 
   const navItems = [
     { 
@@ -80,16 +83,8 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    return usersService.onCurrentUserChange(() => {
-      setCurrentUser(usersService.getCurrentUser());
-      setUserMenuOpen(false);
-    });
-  }, []);
-
-  const logout = () => {
-    usersService.logout();
-    setCurrentUser(null);
+  const logout = async () => {
+    await signOut();
     setUserMenuOpen(false);
     setOpen(false);
   };
@@ -114,6 +109,38 @@ export default function Header() {
         eu: "Edukien berrikuspena",
       } as Record<string, string>
     )[locale] || "Revisión de contenidos";
+  const accountLabels =
+    (
+      {
+        es: {
+          organizations: "Mis organizaciones",
+          announcements: "Anuncios",
+        },
+        ar: {
+          organizations: "منظماتي",
+          announcements: "الإعلانات",
+        },
+        en: {
+          organizations: "My organizations",
+          announcements: "Announcements",
+        },
+        eu: {
+          organizations: "Nire erakundeak",
+          announcements: "Iragarkiak",
+        },
+      } as Record<
+        string,
+        { organizations: string; announcements: string }
+      >
+    )[locale] || {
+      organizations: "Mis organizaciones",
+      announcements: "Anuncios",
+    };
+
+  const closeMenus = () => {
+    setUserMenuOpen(false);
+    setOpen(false);
+  };
 
   const userSummary = currentUser && (
     <div className="rounded-xl border border-gray-200 bg-white p-3 text-sm shadow-lg">
@@ -131,14 +158,27 @@ export default function Header() {
           {t("phone_verified_short")}
         </div>
       )}
+      <div className="mt-3 grid gap-2">
+        <Link
+          to="/organizations"
+          className="block w-full rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-center font-semibold text-emerald-800 no-underline transition hover:border-vitoria-green"
+          onClick={closeMenus}
+        >
+          {accountLabels.organizations}
+        </Link>
+        <Link
+          to="/anuncios"
+          className="block w-full rounded-xl border border-gray-200 px-3 py-2 text-center font-semibold text-vitoria-black no-underline transition hover:border-vitoria-green hover:text-vitoria-green"
+          onClick={closeMenus}
+        >
+          {accountLabels.announcements}
+        </Link>
+      </div>
       {canModerate && (
         <Link
           to="/admin/moderation"
           className="mt-3 block w-full rounded-xl bg-vitoria-green px-3 py-2 text-center font-semibold text-white no-underline transition hover:opacity-90"
-          onClick={() => {
-            setUserMenuOpen(false);
-            setOpen(false);
-          }}
+          onClick={closeMenus}
         >
           {moderationLabel}
         </Link>
@@ -233,6 +273,18 @@ export default function Header() {
                 <div className="absolute end-0 mt-2 w-72">{userSummary}</div>
               )}
             </div>
+          ) : authStatus === "checking" ? (
+            <span className="text-xs font-semibold text-vitoria-gray">
+              {t("session_checking")}
+            </span>
+          ) : authStatus === "unavailable" ? (
+            <button
+              type="button"
+              className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-900"
+              onClick={() => void refreshSession()}
+            >
+              {t("retry")}
+            </button>
           ) : (
             <div className="flex items-center gap-2">
               <Link
@@ -341,6 +393,18 @@ export default function Header() {
               <div className="mt-3 border-t border-gray-200 pt-4">
                 {currentUser ? (
                   <div>{userSummary}</div>
+                ) : authStatus === "checking" ? (
+                  <div className="rounded-xl border border-gray-200 bg-white p-3 text-center text-sm font-semibold text-vitoria-gray">
+                    {t("session_checking")}
+                  </div>
+                ) : authStatus === "unavailable" ? (
+                  <button
+                    type="button"
+                    className="w-full rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 font-semibold text-amber-900"
+                    onClick={() => void refreshSession()}
+                  >
+                    {t("session_unavailable")} · {t("retry")}
+                  </button>
                 ) : (
                   <div className="grid gap-2">
                     <Link

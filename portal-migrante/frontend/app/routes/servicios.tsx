@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useI18n } from "../i18n";
 import {
@@ -12,7 +12,7 @@ import type {
 } from "../services/services.service";
 
 type Locale = "eu" | "es" | "en" | "ar";
-type DataSource = "loading" | "api" | "fallback";
+type DataSource = "loading" | "api" | "error";
 
 type ServiceCategoryCard = {
   id: string;
@@ -200,30 +200,26 @@ export default function Servicios() {
   const [services, setServices] = useState<Service[]>([]);
   const [source, setSource] = useState<DataSource>("loading");
 
-  useEffect(() => {
-    let active = true;
-
-    Promise.all([
-      serviceCategoriesService.list(),
-      servicesService.list(),
-    ])
-      .then(([categoryItems, serviceItems]) => {
-        if (!active) return;
-        setApiCategories(categoryItems);
-        setServices(serviceItems);
-        setSource("api");
-      })
-      .catch(() => {
-        if (!active) return;
-        setApiCategories([]);
-        setServices([]);
-        setSource("fallback");
-      });
-
-    return () => {
-      active = false;
-    };
+  const loadCatalog = useCallback(async () => {
+    setSource("loading");
+    try {
+      const [categoryItems, serviceItems] = await Promise.all([
+        serviceCategoriesService.list(),
+        servicesService.list(),
+      ]);
+      setApiCategories(categoryItems);
+      setServices(serviceItems);
+      setSource("api");
+    } catch {
+      setApiCategories([]);
+      setServices([]);
+      setSource("error");
+    }
   }, []);
+
+  useEffect(() => {
+    void loadCatalog();
+  }, [loadCatalog]);
 
   const serviceDescriptions: Record<string, Record<string, string>> = {
     es: {
@@ -433,9 +429,16 @@ export default function Servicios() {
             {copy.loading}
           </div>
         )}
-        {source === "fallback" && (
-          <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-900">
-            {copy.fallback}
+        {source === "error" && (
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-900" role="alert">
+            <span>{copy.fallback}</span>
+            <button
+              type="button"
+              className="rounded-lg border border-amber-400 bg-white px-3 py-2 text-sm font-bold text-amber-950"
+              onClick={() => void loadCatalog()}
+            >
+              {t("retry")}
+            </button>
           </div>
         )}
 
@@ -558,6 +561,12 @@ export default function Servicios() {
                           {copy.website}
                         </a>
                       )}
+                      <Link
+                        to={`/servicios/${encodeURIComponent(service._id)}/detalle`}
+                        className="mt-4 inline-flex w-fit rounded-lg bg-emerald-700 px-4 py-2 font-black text-white no-underline transition hover:bg-emerald-800"
+                      >
+                        {t("view_details")}
+                      </Link>
                     </article>
                   );
                 })}

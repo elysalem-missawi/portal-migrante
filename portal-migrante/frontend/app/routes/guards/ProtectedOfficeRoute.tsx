@@ -1,10 +1,9 @@
 import { Navigate, useLocation } from "react-router-dom";
 import type { ReactNode } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { AuthGateStatus, useAuth } from "../../auth";
 import type { OfficePermission, OfficeRole } from "../../services/office.service";
 import { officeRolePermissions } from "../../services/office.service";
 import type { User } from "../../services/users.service";
-import { usersService } from "../../services/users.service";
 
 const currentRoleToOfficeRole: Record<string, OfficeRole> = {
   community_user: "user",
@@ -34,22 +33,22 @@ export default function ProtectedOfficeRoute({
   permission?: OfficePermission;
 }) {
   const location = useLocation();
-  const [currentUser, setCurrentUser] = useState<User | null>(() => usersService.getCurrentUser());
+  const { currentUser, status, refreshSession } = useAuth();
 
-  useEffect(() => {
-    return usersService.onCurrentUserChange(() => setCurrentUser(usersService.getCurrentUser()));
-  }, []);
-
-  const allowed = useMemo(
-    () => currentUser && hasOfficePermission(currentUser, permission),
-    [currentUser, permission]
-  );
+  if (status === "checking" || status === "unavailable") {
+    return (
+      <AuthGateStatus
+        status={status}
+        retry={() => void refreshSession()}
+      />
+    );
+  }
 
   if (!currentUser) {
     return <Navigate to="/login" replace state={{ from: location.pathname }} />;
   }
 
-  if (!allowed) {
+  if (!hasOfficePermission(currentUser, permission)) {
     return <Navigate to="/unauthorized" replace />;
   }
 

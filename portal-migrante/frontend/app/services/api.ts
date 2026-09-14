@@ -10,6 +10,19 @@ export const API_BASE = normalizedApiBase.endsWith("/api")
 
 export const AUTH_TOKEN_KEY = "portal.authToken";
 
+export const DEMO_FALLBACK_ENABLED =
+  import.meta.env.VITE_ENABLE_DEMO_FALLBACK === "true";
+
+export class HttpError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "HttpError";
+    this.status = status;
+  }
+}
+
 export async function http<T = any>(
   path: string,
   options?: RequestInit
@@ -35,7 +48,10 @@ export async function http<T = any>(
     } catch {
       message = text;
     }
-    throw new Error(message || `Request failed (${res.status})`);
+    throw new HttpError(
+      message || `Request failed (${res.status})`,
+      res.status
+    );
   }
 
   return res.json().catch(() => ({})) as Promise<T>;

@@ -43,7 +43,7 @@ Rutas creadas:
 
 ## Proteccion y roles
 
-El acceso a `/office/*` usa el usuario actual guardado por `users.service.ts`.
+La aplicacion valida cualquier sesion guardada contra `GET /api/auth/me` antes de habilitar rutas protegidas. Los datos de `localStorage` nunca se consideran una autorizacion suficiente.
 
 - Sin usuario: redireccion a `/login`.
 - Usuario sin permiso: redireccion a `/unauthorized`.
@@ -94,7 +94,9 @@ Comprobaciones usadas:
 
 ```bash
 npm --prefix frontend run typecheck
+npm --prefix frontend run test:unit
 npm --prefix frontend run build
+npm --prefix frontend run test:smoke
 ```
 
 ## Render
@@ -103,6 +105,8 @@ Para el frontend desplegado, configurar:
 
 ```env
 VITE_API_URL=https://portal-migrante.onrender.com
+VITE_ENABLE_DEMO_FALLBACK=false
 ```
 
 El frontend anade internamente `/api` cuando llama al backend.
+Los datos de demostracion solo se muestran si `VITE_ENABLE_DEMO_FALLBACK=true`; debe permanecer en `false` durante staging y pruebas de integracion para que cualquier fallo del API sea visible.

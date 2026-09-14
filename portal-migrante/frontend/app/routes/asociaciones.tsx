@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useI18n } from "../i18n";
 import ServicePagesNav from "../components/ServicePagesNav";
+import { DEMO_FALLBACK_ENABLED } from "../services/api";
 import {
   organizationsService,
   type Organization,
@@ -12,7 +13,7 @@ import {
 } from "../services/organization-locations.service";
 
 type Locale = "eu" | "es" | "en" | "ar";
-type DataSource = "loading" | "api" | "fallback";
+type DataSource = "loading" | "api" | "fallback" | "error";
 
 type DirectoryOrganization = {
   id: string;
@@ -59,30 +60,38 @@ const fallbackOrganizations: DirectoryOrganization[] = [
 
 const sourceCopy: Record<
   Locale,
-  { loading: string; fallback: string; empty: string }
+  { loading: string; fallback: string; error: string; empty: string }
 > = {
   es: {
     loading: "Cargando el directorio actualizado...",
     fallback:
       "No se pudo conectar con el directorio. Mostramos temporalmente la lista de referencia.",
+    error:
+      "No se pudo conectar con el directorio. No se muestran datos de ejemplo en este entorno.",
     empty: "Todavía no hay asociaciones activas publicadas en el directorio.",
   },
   ar: {
     loading: "جارٍ تحميل الدليل المحدّث...",
     fallback:
       "تعذر الاتصال بالدليل. نعرض مؤقتًا قائمة الجهات المرجعية.",
+    error:
+      "تعذر الاتصال بالدليل. لا تُعرض بيانات تجريبية في هذه البيئة.",
     empty: "لا توجد جمعيات نشطة منشورة في الدليل حتى الآن.",
   },
   en: {
     loading: "Loading the updated directory...",
     fallback:
       "The directory is unavailable. The reference list is shown temporarily.",
+    error:
+      "The directory is unavailable. Demo data is not shown in this environment.",
     empty: "There are no active associations published in the directory yet.",
   },
   eu: {
     loading: "Direktorio eguneratua kargatzen...",
     fallback:
       "Ezin izan da direktoriora konektatu. Erreferentzia-zerrenda erakusten da aldi baterako.",
+    error:
+      "Ezin izan da direktoriora konektatu. Ingurune honetan ez da demo-daturik erakusten.",
     empty: "Oraindik ez dago elkarte aktiborik direktorioan argitaratuta.",
   },
 };
@@ -253,20 +262,18 @@ export default function AsociacionesPage() {
   const page = content[activeLocale];
   const messages = sourceCopy[activeLocale];
   const [organizations, setOrganizations] =
-    useState<DirectoryOrganization[]>(fallbackOrganizations);
+    useState<DirectoryOrganization[]>([]);
   const [source, setSource] = useState<DataSource>("loading");
 
-  useEffect(() => {
-    let active = true;
+  const loadDirectory = useCallback(async () => {
+    setSource("loading");
+    try {
+      const [organizationItems, locationItems] = await Promise.all([
+        organizationsService.list(),
+        organizationLocationsService.list({ status: "active" }),
+      ]);
 
-    Promise.all([
-      organizationsService.list(),
-      organizationLocationsService.list({ status: "active" }),
-    ])
-      .then(([organizationItems, locationItems]) => {
-        if (!active) return;
-
-        const directory = organizationItems
+      const directory = organizationItems
           .filter(
             (organization) =>
               organization.type === "association" &&
@@ -305,19 +312,22 @@ export default function AsociacionesPage() {
             };
           });
 
-        setOrganizations(directory);
-        setSource("api");
-      })
-      .catch(() => {
-        if (!active) return;
+      setOrganizations(directory);
+      setSource("api");
+    } catch {
+      if (DEMO_FALLBACK_ENABLED) {
         setOrganizations(fallbackOrganizations);
         setSource("fallback");
-      });
-
-    return () => {
-      active = false;
-    };
+      } else {
+        setOrganizations([]);
+        setSource("error");
+      }
+    }
   }, []);
+
+  useEffect(() => {
+    void loadDirectory();
+  }, [loadDirectory]);
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -382,7 +392,20 @@ export default function AsociacionesPage() {
           <div className="alert alert-light border">{messages.loading}</div>
         )}
         {source === "fallback" && (
-          <div className="alert alert-warning">{messages.fallback}</div>
+          <div className="alert alert-warning d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <span>{messages.fallback}</span>
+            <button type="button" className="btn btn-outline-dark btn-sm" onClick={() => void loadDirectory()}>
+              {t("retry")}
+            </button>
+          </div>
+        )}
+        {source === "error" && (
+          <div className="alert alert-danger d-flex flex-wrap align-items-center justify-content-between gap-3" role="alert">
+            <span>{messages.error}</span>
+            <button type="button" className="btn btn-outline-dark btn-sm" onClick={() => void loadDirectory()}>
+              {t("retry")}
+            </button>
+          </div>
         )}
 
         {organizations.length > 0 ? (

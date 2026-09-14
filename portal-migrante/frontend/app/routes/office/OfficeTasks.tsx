@@ -1,10 +1,9 @@
 import type { FormEvent } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { useAuth } from "../../auth";
 import { useI18n } from "../../i18n";
 import type { OfficeTask } from "../../services/office.service";
 import { officeTasks } from "../../services/office.service";
-import type { User } from "../../services/users.service";
-import { usersService } from "../../services/users.service";
 import { hasOfficePermission } from "../guards/ProtectedOfficeRoute";
 import { OfficeCard, OfficePageHeader, StatusBadge, officeText } from "../../components/office/OfficeUi";
 
@@ -34,13 +33,9 @@ function taskStatus(locale: string, status: OfficeTask["status"]) {
 
 export default function OfficeTasks() {
   const { locale } = useI18n();
+  const { currentUser } = useAuth();
   const [tasks, setTasks] = useState<OfficeTask[]>(officeTasks);
   const [form, setForm] = useState<TaskForm>(emptyTask);
-  const [currentUser, setCurrentUser] = useState<User | null>(() => usersService.getCurrentUser());
-
-  useEffect(() => {
-    return usersService.onCurrentUserChange(() => setCurrentUser(usersService.getCurrentUser()));
-  }, []);
 
   const canCreate = useMemo(() => hasOfficePermission(currentUser, "create_tasks"), [currentUser]);
   const canEdit = useMemo(() => hasOfficePermission(currentUser, "edit_tasks"), [currentUser]);

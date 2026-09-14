@@ -2,22 +2,34 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useI18n } from "../i18n";
-import { usersService } from "../services/users.service";
+import { useAuth } from "../auth";
 
 export default function LoginUserPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useI18n();
+  const { signIn, status: authStatus } = useAuth();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   useEffect(() => {
-    if (usersService.getCurrentUser()) {
-      setSuccess(t("login_success"));
+    const state = location.state as {
+      email?: string;
+      registered?: boolean;
+    } | null;
+
+    if (state?.email) {
+      setFormData((current) => ({ ...current, email: state.email || "" }));
     }
-  }, [t]);
+
+    if (authStatus === "authenticated") {
+      setSuccess(t("login_success"));
+    } else if (state?.registered) {
+      setSuccess(t("registration_login_required"));
+    }
+  }, [authStatus, location.state, t]);
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
@@ -26,7 +38,7 @@ export default function LoginUserPage() {
     setSuccess("");
 
     try {
-      await usersService.login({
+      await signIn({
         email: formData.email.trim(),
         password: formData.password,
       });

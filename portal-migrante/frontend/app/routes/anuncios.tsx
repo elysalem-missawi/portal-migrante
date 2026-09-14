@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n";
+import { DEMO_FALLBACK_ENABLED } from "../services/api";
 import {
   publicationCategoriesService,
   publicationsService,
@@ -12,7 +13,7 @@ import type {
 } from "../services/publications.service";
 
 type Locale = "eu" | "es" | "en" | "ar";
-type DataSource = "loading" | "api" | "fallback";
+type DataSource = "loading" | "api" | "fallback" | "error";
 
 interface AnnouncementView {
   id: string;
@@ -35,6 +36,7 @@ const pageCopy: Record<
   {
     loading: string;
     fallback: string;
+    error: string;
     platformContact: string;
     unknownLocation: string;
     publisher: string;
@@ -45,6 +47,8 @@ const pageCopy: Record<
     loading: "Cargando anuncios publicados...",
     fallback:
       "No se pudo conectar con los anuncios. Mostramos temporalmente ejemplos de referencia.",
+    error:
+      "No se pudo conectar con los anuncios. No se muestran ejemplos en este entorno.",
     platformContact: "Contacto mediante el portal",
     unknownLocation: "Euskadi",
     publisher: "Publicado por",
@@ -60,6 +64,8 @@ const pageCopy: Record<
     loading: "جارٍ تحميل الإعلانات المنشورة...",
     fallback:
       "تعذر الاتصال بالإعلانات. نعرض مؤقتًا أمثلة مرجعية.",
+    error:
+      "تعذر الاتصال بالإعلانات. لا تُعرض أمثلة تجريبية في هذه البيئة.",
     platformContact: "التواصل عبر البوابة",
     unknownLocation: "إقليم الباسك",
     publisher: "نشر بواسطة",
@@ -75,6 +81,8 @@ const pageCopy: Record<
     loading: "Loading published announcements...",
     fallback:
       "Announcements are unavailable. Reference examples are shown temporarily.",
+    error:
+      "Announcements are unavailable. Demo examples are not shown in this environment.",
     platformContact: "Contact through the portal",
     unknownLocation: "Euskadi",
     publisher: "Published by",
@@ -90,6 +98,8 @@ const pageCopy: Record<
     loading: "Argitaratutako iragarkiak kargatzen...",
     fallback:
       "Ezin izan da iragarkietara konektatu. Erreferentzia-adibideak erakusten dira aldi baterako.",
+    error:
+      "Ezin izan da iragarkietara konektatu. Ingurune honetan ez da demo-adibiderik erakusten.",
     platformContact: "Atariaren bidezko kontaktua",
     unknownLocation: "Euskadi",
     publisher: "Argitaratzailea",
@@ -274,15 +284,13 @@ export default function Anuncios() {
   const [selectedLocation, setSelectedLocation] = useState("all");
   const [showOnlyUrgent, setShowOnlyUrgent] = useState(false);
 
-  useEffect(() => {
-    let active = true;
-
-    Promise.all([
-      publicationsService.list(),
-      publicationCategoriesService.list(),
-    ])
-      .then(([publicationItems, categoryItems]) => {
-        if (!active) return;
+  const loadAnnouncements = useCallback(async () => {
+    setSource("loading");
+    try {
+      const [publicationItems, categoryItems] = await Promise.all([
+        publicationsService.list(),
+        publicationCategoriesService.list(),
+      ]);
         setAnnouncements(
           publicationItems.map((publication) =>
             toAnnouncement(
@@ -293,17 +301,20 @@ export default function Anuncios() {
           )
         );
         setSource("api");
-      })
-      .catch(() => {
-        if (!active) return;
+    } catch {
+      if (DEMO_FALLBACK_ENABLED) {
         setAnnouncements(fallbackAnnouncements(t));
         setSource("fallback");
-      });
+      } else {
+        setAnnouncements([]);
+        setSource("error");
+      }
+    }
+  }, [copy.unknownLocation, t]);
 
-    return () => {
-      active = false;
-    };
-  }, [locale, t]);
+  useEffect(() => {
+    void loadAnnouncements();
+  }, [loadAnnouncements]);
 
   const categories = [
     { value: "all", label: t("all_categories") },
@@ -373,8 +384,27 @@ export default function Anuncios() {
           </div>
         )}
         {source === "fallback" && (
-          <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-900">
-            {copy.fallback}
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-900">
+            <span>{copy.fallback}</span>
+            <button
+              type="button"
+              className="rounded-lg border border-amber-400 bg-white px-3 py-2 text-sm font-bold text-amber-950"
+              onClick={() => void loadAnnouncements()}
+            >
+              {t("retry")}
+            </button>
+          </div>
+        )}
+        {source === "error" && (
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-red-900" role="alert">
+            <span>{copy.error}</span>
+            <button
+              type="button"
+              className="rounded-lg border border-red-300 bg-white px-3 py-2 text-sm font-bold text-red-950"
+              onClick={() => void loadAnnouncements()}
+            >
+              {t("retry")}
+            </button>
           </div>
         )}
 

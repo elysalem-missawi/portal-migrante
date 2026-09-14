@@ -332,7 +332,16 @@ export default function NewUserPage() {
       );
       setRegisteredUser(user);
       setSuccess(t("phone_verified_success"));
-      setTimeout(() => navigate("/foro"), 700);
+      setTimeout(
+        () =>
+          navigate("/login", {
+            state: {
+              registered: true,
+              email: formData.email.trim(),
+            },
+          }),
+        700
+      );
     } catch (err: any) {
       const message = String(err.message || "");
       setError(
@@ -670,9 +679,16 @@ export default function NewUserPage() {
                 <button
                   type="button"
                   className="btn btn-outline-dark rounded-pill"
-                  onClick={() => navigate("/foro")}
+                  onClick={() =>
+                    navigate("/login", {
+                      state: {
+                        registered: true,
+                        email: formData.email.trim(),
+                      },
+                    })
+                  }
                 >
-                  {t("nav_forum")}
+                  {t("login_button")}
                 </button>
               </div>
             </form>

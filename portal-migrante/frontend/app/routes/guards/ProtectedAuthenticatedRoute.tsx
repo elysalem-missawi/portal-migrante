@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import type { User } from "../../services/users.service";
-import { usersService } from "../../services/users.service";
+import { AuthGateStatus, useAuth } from "../../auth";
 
 export default function ProtectedAuthenticatedRoute({
   children,
@@ -10,15 +8,16 @@ export default function ProtectedAuthenticatedRoute({
   children: ReactNode;
 }) {
   const location = useLocation();
-  const [currentUser, setCurrentUser] = useState<User | null>(() =>
-    usersService.getCurrentUser()
-  );
+  const { currentUser, status, refreshSession } = useAuth();
 
-  useEffect(() => {
-    return usersService.onCurrentUserChange(() =>
-      setCurrentUser(usersService.getCurrentUser())
+  if (status === "checking" || status === "unavailable") {
+    return (
+      <AuthGateStatus
+        status={status}
+        retry={() => void refreshSession()}
+      />
     );
-  }, []);
+  }
 
   if (!currentUser) {
     return (

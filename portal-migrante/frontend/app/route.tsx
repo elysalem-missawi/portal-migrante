@@ -41,6 +41,9 @@ const OrganizationServiceFormPage = lazy(
 const ServiceInfoPage = lazy(
   () => import("./routes/service-info")
 );
+const ServiceDetailPage = lazy(
+  () => import("./routes/service-detail")
+);
 const AsociacionesPage = lazy(
   () => import("./routes/asociaciones")
 );
@@ -85,6 +88,10 @@ const router = createBrowserRouter([
       {
         path: "servicios/asociaciones",
         element: <AsociacionesPage />,
+      },
+      {
+        path: "servicios/:id/detalle",
+        element: <ServiceDetailPage />,
       },
       { path: "foro", element: <ForoMigrantesPage /> },
       { path: "cultura-vasca", element: <CulturaVascaPage /> },
