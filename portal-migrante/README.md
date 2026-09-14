@@ -110,3 +110,18 @@ VITE_ENABLE_DEMO_FALLBACK=false
 
 El frontend anade internamente `/api` cuando llama al backend.
 Los datos de demostracion solo se muestran si `VITE_ENABLE_DEMO_FALLBACK=true`; debe permanecer en `false` durante staging y pruebas de integracion para que cualquier fallo del API sea visible.
+
+## Municipal demo on Render
+
+The municipality demo is isolated from the existing production services and uses:
+
+- Blueprint path: `render.staging.yaml`
+- Git branch: `database-redesign`
+- Frontend: `https://zubia-social-euskadi-demo.onrender.com`
+- API: `https://zubia-social-euskadi-demo-api.onrender.com/api`
+- Separate MongoDB database: required through `MONGO_URI`
+- Demo account password: required through `DEMO_PASSWORD` (minimum 12 characters)
+
+The demo initializer is idempotent. It loads Euskadi municipalities, categories, one clearly labelled demo organization with two locations and one active head office, three verified services, two publications, and separate administrator/organization-manager accounts. It never logs the password.
+
+V1 stores the contact phone during registration but does not send or require SMS verification.

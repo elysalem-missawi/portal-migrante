@@ -289,7 +289,7 @@ export const registerUser = async (
       municipality: req.body.municipality,
       profileImage: req.body.profileImage,
       organizationId: null,
-      status: "pending",
+      status: "active",
       isVerified: false,
       passwordHash: hashPassword(password),
       identityDocument,
@@ -297,14 +297,15 @@ export const registerUser = async (
       legalConsentAt: new Date(),
     });
 
-    const sms = await assignAndSendPhoneCode(user).catch((error) => ({
-      sent: false,
-      reason: error.message,
-    }));
-
+    // V1 collects a contact phone but deliberately does not require or send SMS.
+    // The verification endpoints remain available for a later release.
     res.status(201).json({
       user: publicUser(user),
-      phoneVerification: sms,
+      phoneVerification: {
+        sent: false,
+        skipped: true,
+        reason: "not_required_in_v1",
+      },
     });
   } catch (error: any) {
     res.status(400).json({

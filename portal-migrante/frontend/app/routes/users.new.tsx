@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { usersService, type User } from "../services/users.service";
+import { usersService } from "../services/users.service";
 import { useI18n } from "../i18n";
 
 const countries = [
@@ -227,9 +227,6 @@ export default function NewUserPage() {
   });
 
   const [saving, setSaving] = useState(false);
-  const [verifying, setVerifying] = useState(false);
-  const [registeredUser, setRegisteredUser] = useState<User | null>(null);
-  const [verificationCode, setVerificationCode] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -257,8 +254,6 @@ export default function NewUserPage() {
     formData.password.length >= 8 &&
     formData.password === formData.confirmPassword &&
     formData.legalConsentAccepted;
-  const isRegistrationLocked = Boolean(registeredUser);
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setSaving(true);
@@ -266,11 +261,6 @@ export default function NewUserPage() {
     setSuccess("");
 
     try {
-      if (isRegistrationLocked) {
-        setError(t("registration_already_created"));
-        return;
-      }
-
       if (formData.password.length < 8) {
         setError(t("password_min_error"));
         return;
@@ -291,7 +281,7 @@ export default function NewUserPage() {
         return;
       }
 
-      const result = await usersService.register({
+      await usersService.register({
         accountType: "individual",
         fullName: formData.fullName.trim(),
         displayName: formData.displayName.trim() || undefined,
@@ -304,35 +294,8 @@ export default function NewUserPage() {
         legalConsentAccepted: formData.legalConsentAccepted,
       });
 
-      setRegisteredUser(result.user);
-      setSuccess(
-        result.phoneVerification?.sent
-          ? t("phone_code_sent")
-          : t("user_create_success")
-      );
-    } catch (err: any) {
-      setError(err.message || t("user_create_error"));
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleVerifyPhone = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!registeredUser) return;
-
-    setVerifying(true);
-    setError("");
-    setSuccess("");
-
-    try {
-      const user = await usersService.verifyPhone(
-        registeredUser._id,
-        verificationCode
-      );
-      setRegisteredUser(user);
-      setSuccess(t("phone_verified_success"));
-      setTimeout(
+      setSuccess(t("user_create_success"));
+      window.setTimeout(
         () =>
           navigate("/login", {
             state: {
@@ -343,31 +306,9 @@ export default function NewUserPage() {
         700
       );
     } catch (err: any) {
-      const message = String(err.message || "");
-      setError(
-        message.toLowerCase().includes("invalid verification code")
-          ? t("phone_code_invalid")
-          : message || t("phone_verify_error")
-      );
+      setError(err.message || t("user_create_error"));
     } finally {
-      setVerifying(false);
-    }
-  };
-
-  const handleResendCode = async () => {
-    if (!registeredUser) return;
-
-    setVerifying(true);
-    setError("");
-    setSuccess("");
-
-    try {
-      await usersService.sendPhoneCode(registeredUser._id);
-      setSuccess(t("phone_code_sent"));
-    } catch (err: any) {
-      setError(err.message || t("phone_code_send_error"));
-    } finally {
-      setVerifying(false);
+      setSaving(false);
     }
   };
 
@@ -624,75 +565,13 @@ export default function NewUserPage() {
               <button
                 type="submit"
                 className="btn btn-success btn-lg rounded-pill px-5 fw-semibold"
-                disabled={saving || !isFormReady || isRegistrationLocked}
+                disabled={saving || !isFormReady}
               >
-                {isRegistrationLocked
-                  ? t("registration_waiting_phone")
-                  : saving
-                    ? t("saving")
-                    : t("create_user")}
+                {saving ? t("saving") : t("create_user")}
               </button>
             </div>
           </form>
 
-          {registeredUser && (
-            <form
-              onSubmit={handleVerifyPhone}
-              className="mt-4 rounded-3 border bg-white p-4 shadow-sm"
-            >
-              <h2 className="h5 fw-bold mb-2">{t("phone_verify_title")}</h2>
-              <p className="text-muted mb-3">{t("phone_verify_subtitle")}</p>
-
-              <div className="row g-3 align-items-end">
-                <div className="col-12 col-md-8">
-                  <label className="form-label fw-semibold">{t("phone_code")}</label>
-                  <input
-                    className="form-control form-control-lg"
-                    inputMode="numeric"
-                    pattern="[0-9]{6}"
-                    maxLength={6}
-                    value={verificationCode}
-                    onChange={(event) => setVerificationCode(event.target.value)}
-                    required
-                  />
-                </div>
-                <div className="col-12 col-md-4 d-grid">
-                  <button
-                    type="submit"
-                    className="btn btn-success btn-lg rounded-pill"
-                    disabled={verifying}
-                  >
-                    {verifying ? t("saving") : t("verify_phone")}
-                  </button>
-                </div>
-              </div>
-
-              <div className="mt-3 d-flex justify-content-between gap-2 flex-wrap">
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary rounded-pill"
-                  onClick={handleResendCode}
-                  disabled={verifying}
-                >
-                  {t("resend_code")}
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-outline-dark rounded-pill"
-                  onClick={() =>
-                    navigate("/login", {
-                      state: {
-                        registered: true,
-                        email: formData.email.trim(),
-                      },
-                    })
-                  }
-                >
-                  {t("login_button")}
-                </button>
-              </div>
-            </form>
-          )}
           </div>
         </div>
       </div>
