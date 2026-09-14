@@ -43,8 +43,26 @@ const serviceCategories = [
   { code: "emergency", name: "Atención de emergencia", sortOrder: 100 },
 ];
 
-const allPublicationTypes = ["announcement", "need", "offer", "event", "resource"];
-const publicationCategories = [
+type DemoPublicationType =
+  | "announcement"
+  | "need"
+  | "offer"
+  | "event"
+  | "resource";
+
+const allPublicationTypes: DemoPublicationType[] = [
+  "announcement",
+  "need",
+  "offer",
+  "event",
+  "resource",
+];
+const publicationCategories: Array<{
+  code: string;
+  name: string;
+  sortOrder: number;
+  allowedTypes: DemoPublicationType[];
+}> = [
   { code: "housing", name: "Vivienda", sortOrder: 10, allowedTypes: allPublicationTypes },
   { code: "employment", name: "Empleo", sortOrder: 20, allowedTypes: allPublicationTypes },
   { code: "education", name: "Educación y formación", sortOrder: 30, allowedTypes: allPublicationTypes },
@@ -75,6 +93,14 @@ async function seedMunicipalDemo(): Promise<void> {
         update: {
           $set: {
             ...municipality,
+            territory: municipality.territory as
+              | "alava"
+              | "bizkaia"
+              | "gipuzkoa",
+            status:
+              municipality.status === "inactive"
+                ? ("inactive" as const)
+                : ("active" as const),
             normalizedName: normalizeName(municipality.name),
           },
         },
