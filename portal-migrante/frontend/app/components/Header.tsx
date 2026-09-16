@@ -1,7 +1,7 @@
-import { NavLink, Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { useEffect, useState } from "react";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useI18n } from "../i18n";
-import { useState, useEffect } from "react";
 import { useAuth } from "../auth";
 
 export default function Header() {
@@ -9,6 +9,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+
   const {
     currentUser,
     status: authStatus,
@@ -17,70 +18,18 @@ export default function Header() {
   } = useAuth();
 
   const navItems = [
-    { 
-      to: "/", 
-      label: t("nav_home"),
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      )
-    },
-    { 
-      to: "/servicios", 
-      label: t("nav_services"),
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-        </svg>
-      )
-    },
-    {
-      to: "/foro",
-      label: t("nav_forum"),
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h8M8 14h5M5 19l-2 2V5a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2H5z" />
-        </svg>
-      )
-    },
-    {
-      to: "/cultura-vasca",
-      label: t("nav_basque_culture"),
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 21c4-4 7-7.5 7-11a7 7 0 10-14 0c0 3.5 3 7 7 11z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 10h6M12 7v6" />
-        </svg>
-      )
-    },
-    { 
-      to: "/sobre", 
-      label: t("nav_about"),
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      )
-    },
-    { 
-      to: "/contacto", 
-      label: t("nav_contact"),
-      icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
-      )
-    },
+    { to: "/", label: t("nav_home") },
+    { to: "/servicios", label: t("nav_services") },
+    { to: "/organizations", label: t("nav_entities") },
+    { to: "/sobre", label: t("nav_about") },
+    { to: "/foro", label: t("nav_forum") },
   ];
 
-  // Handle scroll effect
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    window.addEventListener("scroll", onScroll);
+
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const logout = async () => {
@@ -89,7 +38,11 @@ export default function Header() {
     setOpen(false);
   };
 
-  const userName = currentUser?.displayName || currentUser?.fullName || "";
+  const userName =
+    currentUser?.displayName ||
+    currentUser?.fullName ||
+    "";
+
   const currentPlatformRole =
     currentUser?.platformRole ||
     (currentUser?.role === "super_admin"
@@ -97,9 +50,11 @@ export default function Header() {
       : currentUser?.role === "admin"
         ? "admin"
         : "user");
+
   const canModerate = ["moderator", "admin", "super_admin"].includes(
     currentPlatformRole
   );
+
   const moderationLabel =
     (
       {
@@ -109,6 +64,7 @@ export default function Header() {
         eu: "Edukien berrikuspena",
       } as Record<string, string>
     )[locale] || "Revisión de contenidos";
+
   const accountLabels =
     (
       {
@@ -130,7 +86,10 @@ export default function Header() {
         },
       } as Record<
         string,
-        { organizations: string; announcements: string }
+        {
+          organizations: string;
+          announcements: string;
+        }
       >
     )[locale] || {
       organizations: "Mis organizaciones",
@@ -143,50 +102,57 @@ export default function Header() {
   };
 
   const userSummary = currentUser && (
-    <div className="rounded-xl border border-gray-200 bg-white p-3 text-sm shadow-lg">
-      <div className="font-semibold text-vitoria-black">
-        {t("welcome_user")}، {userName}
+    <div className="rounded-2xl border border-slate-200 bg-white p-4 text-sm shadow-xl">
+      <div className="font-semibold text-slate-900">
+        {t("welcome_user")}, {userName}
       </div>
-      <div className="mt-2 space-y-1 text-vitoria-gray">
+
+      <div className="mt-2 space-y-1 text-slate-500">
         <div>{currentUser.email}</div>
+
         {currentUser.phone && <div>{currentUser.phone}</div>}
         {currentUser.originCountry && <div>{currentUser.originCountry}</div>}
         {currentUser.nativeLanguage && <div>{currentUser.nativeLanguage}</div>}
       </div>
+
       {(currentUser.phoneVerified || currentUser.isVerified) && (
-        <div className="mt-2 inline-flex rounded-full bg-green-50 px-3 py-1 text-xs font-semibold text-green-700">
+        <div className="mt-3 inline-flex rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
           {t("phone_verified_short")}
         </div>
       )}
-      <div className="mt-3 grid gap-2">
+
+      <div className="mt-4 grid gap-2">
         <Link
           to="/organizations"
-          className="block w-full rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-center font-semibold text-emerald-800 no-underline transition hover:border-vitoria-green"
           onClick={closeMenus}
+          className="block w-full rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-center font-semibold text-emerald-800 transition hover:border-emerald-400"
         >
           {accountLabels.organizations}
         </Link>
+
         <Link
           to="/anuncios"
-          className="block w-full rounded-xl border border-gray-200 px-3 py-2 text-center font-semibold text-vitoria-black no-underline transition hover:border-vitoria-green hover:text-vitoria-green"
           onClick={closeMenus}
+          className="block w-full rounded-xl border border-slate-200 px-3 py-2 text-center font-semibold text-slate-700 transition hover:border-emerald-400 hover:text-emerald-700"
         >
           {accountLabels.announcements}
         </Link>
       </div>
+
       {canModerate && (
         <Link
           to="/admin/moderation"
-          className="mt-3 block w-full rounded-xl bg-vitoria-green px-3 py-2 text-center font-semibold text-white no-underline transition hover:opacity-90"
           onClick={closeMenus}
+          className="mt-3 block w-full rounded-xl bg-emerald-600 px-3 py-2 text-center font-semibold text-white transition hover:bg-emerald-700"
         >
           {moderationLabel}
         </Link>
       )}
+
       <button
         type="button"
-        className="mt-3 w-full rounded-xl border border-gray-300 px-3 py-2 font-semibold text-vitoria-black transition hover:border-vitoria-green hover:text-vitoria-green"
         onClick={logout}
+        className="mt-3 w-full rounded-xl border border-slate-300 px-3 py-2 font-semibold text-slate-700 transition hover:border-emerald-500 hover:text-emerald-700"
       >
         {t("logout")}
       </button>
@@ -194,142 +160,178 @@ export default function Header() {
   );
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${
-      scrolled 
-        ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/50' 
-        : 'bg-white border-b border-gray-200'
-    }`}>
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* Logo + Title */}
-        <div className="flex items-center gap-4">
-          <Link to="/" className="flex items-center gap-3 group">
-            {/* Modern Logo Design */}
-            <div className="relative">
-              <div className="w-12 h-12 bg-vitoria-gradient rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 group-hover:scale-105">
-                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-brand-accent rounded-full border-2 border-white"></div>
+    <header
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled
+          ? "border-b border-slate-200/80 bg-white/95 shadow-sm backdrop-blur-xl"
+          : "border-b border-slate-100 bg-white"
+      }`}
+    >
+      <nav className="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+        {/* Brand */}
+        <Link
+          to="/"
+          onClick={() => setOpen(false)}
+          className="flex shrink-0 items-center gap-3"
+        >
+          <div className="relative">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-600 to-blue-700 shadow-sm">
+              <svg
+                className="h-6 w-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
             </div>
-            <div className="hidden sm:block">
-              <div className="font-bold text-xl text-vitoria-black group-hover:text-vitoria-green transition-colors duration-300">
-                {t("portal_brand")}
-              </div>
-              <div className="text-xs text-vitoria-gray font-medium tracking-wide">
-                {t("portal_region")}
-              </div>
+
+            <span className="absolute -bottom-1 -right-1 h-3.5 w-3.5 rounded-full border-2 border-white bg-emerald-400" />
+          </div>
+
+          <div className="hidden leading-tight sm:block">
+            <div className="whitespace-nowrap text-[15px] font-semibold text-slate-900">
+              {t("portal_brand")}
             </div>
-          </Link>
+
+            <div className="mt-0.5 whitespace-nowrap text-[11px] font-medium text-slate-500">
+              {t("portal_region")}
+            </div>
+          </div>
+        </Link>
+
+        {/* Desktop navigation */}
+        <div className="hidden flex-1 items-center justify-center lg:flex">
+          <div className="flex items-center gap-1">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                end={item.to === "/"}
+                className={({ isActive }) =>
+                  `rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-emerald-50 text-emerald-700"
+                      : "text-slate-600 hover:bg-slate-50 hover:text-emerald-700"
+                  }`
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
+          </div>
         </div>
 
-        {/* Desktop nav */}
-        <div className="hidden lg:flex items-center gap-2">
-          {navItems.map((item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              className={({ isActive }) =>
-                `group relative px-4 py-2 rounded-xl font-medium text-sm transition-all duration-300 flex items-center gap-2 ${
-                  isActive 
-                    ? "text-vitoria-green bg-vitoria-green/10 shadow-sm" 
-                    : "text-vitoria-gray hover:text-vitoria-green hover:bg-vitoria-green/5"
-                }`
-              }
-            >
-              <span className="opacity-70 group-hover:opacity-100 transition-opacity">
-                {item.icon}
-              </span>
-              {item.label}
-              {/* Active indicator */}
-              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-vitoria-green rounded-full transition-all duration-300 group-data-[active]:w-8"></div>
-            </NavLink>
-          ))}
-        </div>
-
-        {/* Right side actions */}
-        <div className="hidden lg:flex items-center gap-4">
+        {/* Desktop actions */}
+        <div className="hidden shrink-0 items-center gap-2 lg:flex">
           <LanguageSwitcher />
 
           {currentUser ? (
             <div className="relative">
               <button
                 type="button"
-                className="inline-flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-vitoria-black shadow-sm transition hover:border-vitoria-green"
                 onClick={() => setUserMenuOpen((value) => !value)}
+                className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-emerald-400"
               >
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-vitoria-green text-white">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-sm font-bold text-white">
                   {(userName || "?").slice(0, 1).toUpperCase()}
                 </span>
-                <span className="text-start">
-                  <span className="block text-xs text-vitoria-gray">
-                    {t("welcome_user")}
-                  </span>
-                  <span className="block max-w-36 truncate">{userName}</span>
-                </span>
+
+                <span className="max-w-32 truncate">{userName}</span>
+
+                <svg
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  className="h-4 w-4 text-slate-400"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.51a.75.75 0 01-1.08 0l-4.25-4.51a.75.75 0 01.02-1.06z"
+                    clipRule="evenodd"
+                  />
+                </svg>
               </button>
+
               {userMenuOpen && (
-                <div className="absolute end-0 mt-2 w-72">{userSummary}</div>
+                <div className="absolute end-0 mt-2 w-72">
+                  {userSummary}
+                </div>
               )}
             </div>
           ) : authStatus === "checking" ? (
-            <span className="text-xs font-semibold text-vitoria-gray">
+            <span className="text-xs font-semibold text-slate-500">
               {t("session_checking")}
             </span>
           ) : authStatus === "unavailable" ? (
             <button
               type="button"
-              className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-900"
               onClick={() => void refreshSession()}
+              className="rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-900"
             >
               {t("retry")}
             </button>
           ) : (
-            <div className="flex items-center gap-2">
+            <>
               <Link
                 to="/users/login"
-                className="inline-flex items-center gap-2 rounded-xl border border-gray-300 bg-white px-4 py-2 text-xs font-semibold text-vitoria-black shadow-sm transition hover:border-vitoria-green hover:text-vitoria-green"
+                className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-emerald-500 hover:text-emerald-700"
               >
                 {t("login_button")}
               </Link>
-              <Link 
-                to="/users/new" 
-                className="group relative inline-flex items-center gap-2 bg-vitoria-gradient text-white px-4 py-2 rounded-xl font-semibold text-xs shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-0.5"
+
+              <Link
+                to="/users/new"
+                className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800"
               >
-                <svg className="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-                {t("users_new")}
-                <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                {t("create_account_link")}
               </Link>
-            </div>
+            </>
           )}
         </div>
 
         {/* Mobile actions */}
-        <div className="lg:hidden flex items-center gap-3">
+        <div className="flex items-center gap-2 lg:hidden">
           <LanguageSwitcher />
 
           <button
-            className={`relative p-2 rounded-xl transition-all duration-300 ${
-              open 
-                ? "bg-vitoria-green text-white shadow-lg" 
-                : "bg-gray-100 text-vitoria-gray hover:bg-vitoria-green/10 hover:text-vitoria-green"
-            }`}
+            type="button"
             aria-label="Menu"
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => setOpen((value) => !value)}
+            className={`flex h-10 w-10 items-center justify-center rounded-xl transition ${
+              open
+                ? "bg-emerald-600 text-white"
+                : "bg-slate-100 text-slate-700"
+            }`}
           >
-            <div className="w-6 h-6 flex flex-col justify-center items-center">
-              <span className={`bg-current transition-all duration-300 ease-out h-0.5 w-6 rounded-full ${
-                open ? 'rotate-45 translate-y-1' : '-translate-y-0.5'
-              }`}></span>
-              <span className={`bg-current transition-all duration-300 ease-out h-0.5 w-6 rounded-full ${
-                open ? 'opacity-0' : 'opacity-100'
-              }`}></span>
-              <span className={`bg-current transition-all duration-300 ease-out h-0.5 w-6 rounded-full ${
-                open ? '-rotate-45 -translate-y-1' : 'translate-y-0.5'
-              }`}></span>
+            <div className="relative h-5 w-5">
+              <span
+                className={`absolute left-0 top-1 h-0.5 w-5 rounded bg-current transition ${
+                  open ? "translate-y-1.5 rotate-45" : ""
+                }`}
+              />
+
+              <span
+                className={`absolute left-0 top-2.5 h-0.5 w-5 rounded bg-current transition ${
+                  open ? "opacity-0" : ""
+                }`}
+              />
+
+              <span
+                className={`absolute left-0 top-4 h-0.5 w-5 rounded bg-current transition ${
+                  open ? "-translate-y-1.5 -rotate-45" : ""
+                }`}
+              />
             </div>
           </button>
         </div>
@@ -337,96 +339,68 @@ export default function Header() {
 
       {/* Mobile menu */}
       <div
-        className={`lg:hidden overflow-hidden border-t border-gray-200 bg-white shadow-xl transition-all duration-300 ease-in-out ${
-          open ? "max-h-[calc(100vh-5rem)] opacity-100" : "max-h-0 opacity-0"
+        className={`overflow-hidden border-t border-slate-200 bg-white transition-all duration-300 lg:hidden ${
+          open
+            ? "max-h-[calc(100vh-4.5rem)] opacity-100"
+            : "max-h-0 opacity-0"
         }`}
       >
-        <div className="max-h-[calc(100vh-5rem)] overflow-y-auto">
+        <div className="max-h-[calc(100vh-4.5rem)] overflow-y-auto">
           <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6">
-            <div className="mb-5 flex items-center justify-between rounded-lg border border-emerald-100 bg-emerald-50 p-3">
-              <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-vitoria-gradient text-white shadow-sm">
-                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657 13.414 20.9a1.998 1.998 0 0 1-2.827 0l-4.244-4.243a8 8 0 1 1 11.314 0Z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                  </svg>
-                </div>
-                <div>
-                  <div className="text-lg font-black text-vitoria-black">{t("portal_brand")}</div>
-                  <div className="text-xs font-bold text-vitoria-gray">{t("portal_region")}</div>
-                </div>
-              </div>
-              <button
-                type="button"
-                className="rounded-lg border border-emerald-200 bg-white px-3 py-2 text-sm font-black text-vitoria-green shadow-sm"
-                onClick={() => setOpen(false)}
-              >
-                ×
-              </button>
-            </div>
-
             <div className="grid gap-2">
-              {navItems.map((item, index) => (
+              {navItems.map((item) => (
                 <NavLink
                   key={item.to}
                   to={item.to}
+                  end={item.to === "/"}
+                  onClick={() => setOpen(false)}
                   className={({ isActive }) =>
-                    `group flex items-center justify-between rounded-lg border px-4 py-4 text-base font-black transition-all duration-200 ${
-                      isActive 
-                        ? "border-emerald-200 bg-emerald-50 text-vitoria-green shadow-sm" 
-                        : "border-gray-200 bg-white text-vitoria-gray hover:border-emerald-200 hover:bg-emerald-50 hover:text-vitoria-green"
+                    `rounded-xl px-4 py-3 text-base font-semibold transition ${
+                      isActive
+                        ? "bg-emerald-50 text-emerald-700"
+                        : "text-slate-700 hover:bg-slate-50"
                     }`
                   }
-                  onClick={() => setOpen(false)}
-                  style={{ 
-                    animationDelay: `${index * 50}ms`,
-                    animation: open ? 'slideInFromRight 0.3s ease-out forwards' : 'none'
-                  }}
                 >
-                  <span>{item.label}</span>
-                  <span className="text-vitoria-gray transition-colors group-hover:text-vitoria-green">
-                    {item.icon}
-                  </span>
+                  {item.label}
                 </NavLink>
               ))}
-              
-              <div className="mt-3 border-t border-gray-200 pt-4">
-                {currentUser ? (
-                  <div>{userSummary}</div>
-                ) : authStatus === "checking" ? (
-                  <div className="rounded-xl border border-gray-200 bg-white p-3 text-center text-sm font-semibold text-vitoria-gray">
-                    {t("session_checking")}
-                  </div>
-                ) : authStatus === "unavailable" ? (
-                  <button
-                    type="button"
-                    className="w-full rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 font-semibold text-amber-900"
-                    onClick={() => void refreshSession()}
+            </div>
+
+            <div className="mt-5 border-t border-slate-200 pt-5">
+              {currentUser ? (
+                userSummary
+              ) : authStatus === "checking" ? (
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-center text-sm font-semibold text-slate-500">
+                  {t("session_checking")}
+                </div>
+              ) : authStatus === "unavailable" ? (
+                <button
+                  type="button"
+                  onClick={() => void refreshSession()}
+                  className="w-full rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 font-semibold text-amber-900"
+                >
+                  {t("session_unavailable")} · {t("retry")}
+                </button>
+              ) : (
+                <div className="grid gap-2">
+                  <Link
+                    to="/users/login"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-3 font-semibold text-slate-700"
                   >
-                    {t("session_unavailable")} · {t("retry")}
-                  </button>
-                ) : (
-                  <div className="grid gap-2">
-                    <Link
-                      to="/users/login"
-                      className="flex items-center justify-center rounded-xl border border-gray-300 bg-white !px-4 !py-2 font-semibold text-vitoria-black shadow-sm transition hover:border-vitoria-green hover:text-vitoria-green"
-                      onClick={() => setOpen(false)}
-                    >
-                      {t("login_button")}
-                    </Link>
-                    <Link
-                      to="/users/new"
-                      className="group flex items-center justify-center gap-2 bg-vitoria-gradient text-white !px-4 !py-2 rounded-xl font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-300"
-                      onClick={() => setOpen(false)}
-                    >
-                      <svg className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                      {t("users_new")}
-                    </Link>
-                  </div>
-                )}
-              </div>
+                    {t("login_button")}
+                  </Link>
+
+                  <Link
+                    to="/users/new"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center justify-center rounded-xl bg-slate-900 px-4 py-3 font-semibold text-white"
+                  >
+                    {t("create_account_link")}
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
