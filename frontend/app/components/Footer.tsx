@@ -11,18 +11,18 @@ export default function Footer() {
           
           {/* العمود الأول: الشعار المؤسسي والتعريف */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
               <img
                 src="/images/MarcaAytoMonocolor-V.jpg"
                 alt="Ayuntamiento de Vitoria-Gasteiz"
-                className="h-16 w-auto object-contain bg-white/10 p-1.5 rounded"
+                className="h-24 sm:h-28 w-auto object-contain bg-white p-2 rounded-lg shadow-md"
               />
               <div>
-                <h3 className="font-bold text-lg tracking-wide">{t("app_title")}</h3>
-                <p className="text-xs opacity-90">{t("footer_madeby")}</p>
+                <h3 className="font-bold text-xl tracking-wide text-white">{t("app_title")}</h3>
+                <p className="text-sm opacity-90">{t("footer_madeby")}</p>
               </div>
             </div>
-            <p className="text-xs leading-relaxed opacity-80 pt-2 border-t border-white/10">
+            <p className="text-xs leading-relaxed opacity-80 pt-3 border-t border-white/10">
               Iniciativa impulsada con la colaboración y apoyo institucional del Ayuntamiento de Vitoria-Gasteiz para la integración y apoyo al colectivo migrante.
             </p>
           </div>
@@ -118,4 +118,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+} 
