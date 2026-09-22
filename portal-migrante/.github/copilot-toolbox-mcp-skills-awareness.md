@@ -1,6 +1,6 @@
 # GitHub Copilot Toolbox — MCP & Skills awareness
 
-_Generated: 2026-09-21T14:46:18.595Z_
+_Generated: 2026-09-18T16:58:53.945Z_
 
 ## How to use this report
 
@@ -15,7 +15,7 @@ _Generated: 2026-09-21T14:46:18.595Z_
 
 Workspace `mcp.json` _(folder: portal-migrante)_
 
-- **c:\Users\Administrador\OneDrive\Desktop\portal-migrante\portal-migrante\.vscode\mcp.json** — _File missing_
+- **c:\Users\Administrador\OneDrive\Desktop\portal-migrante\portal-migrante\portal-migrante\.vscode\mcp.json** — _File missing_
 
 _No active workspace servers in mcp.json._
 

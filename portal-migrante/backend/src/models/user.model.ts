@@ -32,6 +32,16 @@ export interface IUser extends Document {
   municipality?: string;
   organizationId?: Types.ObjectId | null;
 
+  // Extended profile fields
+  firstName?: string;
+  lastName?: string;
+  organizationName?: string;
+  cif?: string;
+  contactPersonName?: string;
+  address?: string;
+  postalCode?: string;
+  googleId?: string;
+
   profileImage?: string;
   identityDocument?: {
     fileName: string;
@@ -113,6 +123,16 @@ const userSchema = new Schema<IUser>(
       default: null,
     },
 
+    // Extended profile fields
+    firstName: { type: String, trim: true },
+    lastName: { type: String, trim: true },
+    organizationName: { type: String, trim: true },
+    cif: { type: String, trim: true, uppercase: true },
+    contactPersonName: { type: String, trim: true },
+    address: { type: String, trim: true },
+    postalCode: { type: String, trim: true },
+    googleId: { type: String, trim: true, index: true, sparse: true },
+
     profileImage: { type: String, trim: true },
     identityDocument: {
       fileName: { type: String, trim: true },
@@ -140,6 +160,7 @@ const userSchema = new Schema<IUser>(
 );
 
 userSchema.index({ status: 1, platformRole: 1 });
+userSchema.index({ googleId: 1 }, { unique: true, sparse: true });
 
 const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);
 

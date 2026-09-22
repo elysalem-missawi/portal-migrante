@@ -2,7 +2,12 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Outlet } from "react-router-dom";
 import { Suspense } from "react";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useI18n } from "./i18n";
+
+const GOOGLE_CLIENT_ID =
+  import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+  "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com";
 
 function AppShell() {
   const { t } = useI18n();
@@ -31,5 +36,9 @@ function AppShell() {
 }
 
 export default function Root() {
-  return <AppShell />;
+  return (
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <AppShell />
+    </GoogleOAuthProvider>
+  );
 }

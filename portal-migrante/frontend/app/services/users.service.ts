@@ -50,6 +50,15 @@ export type User = {
   isVerified: boolean;
   createdAt?: string;
   updatedAt?: string;
+
+  // ───── Extended fields ─────
+  firstName?: string;
+  lastName?: string;
+  organizationName?: string;
+  cif?: string;
+  contactPersonName?: string;
+  address?: string;
+  postalCode?: string;
 };
 
 export type CreateUserInput = {
@@ -67,6 +76,15 @@ export type CreateUserInput = {
   profileImage?: string;
   identityDocument?: IdentityDocumentInput;
   legalConsentAccepted?: boolean;
+
+  // ───── Extended fields ─────
+  firstName?: string;
+  lastName?: string;
+  organizationName?: string;
+  cif?: string;
+  contactPersonName?: string;
+  address?: string;
+  postalCode?: string;
 };
 
 export type RegisterUserResult = {
@@ -111,6 +129,12 @@ export const usersService = {
       body: JSON.stringify(data),
     });
   },
+    async googleRegister(credential: string) {
+    return http<RegisterUserResult>("/users/register/google", {
+      method: "POST",
+      body: JSON.stringify({ credential }),
+    });
+  },
 
   async login(data: { email: string; password: string }) {
     const result = await http<LoginResult>("/auth/login", {
@@ -129,10 +153,10 @@ export const usersService = {
   },
 
   async sendPhoneCode(userId: string) {
-    return http<{ message: string; phoneVerification?: RegisterUserResult["phoneVerification"] }>(
-      `/users/${userId}/send-phone-code`,
-      { method: "POST" }
-    );
+    return http<{
+      message: string;
+      phoneVerification?: RegisterUserResult["phoneVerification"];
+    }>(`/users/${userId}/send-phone-code`, { method: "POST" });
   },
 
   async verifyPhone(userId: string, code: string) {
