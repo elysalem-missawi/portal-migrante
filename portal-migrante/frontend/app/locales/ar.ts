@@ -394,6 +394,8 @@ export const ar: Dict = {
   contact_success_message: "شكراً لتواصلك معنا. سنرد عليك في أقرب وقت.",
   send_another_message: "إرسال رسالة أخرى",
   organization_type_municipality: "بلدية",
+
+  // ───── Footer ─────
   footer_project_by: "مشروع من تطوير ASOC ZUBIA SOCIAL EUSKADI",
   footer_project_desc: "منصة رقمية للاندماج والتوجيه والتماسك الاجتماعي لمجتمع المهاجرين في فيتوريا-غاستيز.",
   footer_newsletter_desc: "احصل على الأخبار والأدلة والموارد المفيدة لمجتمع المهاجرين.",
@@ -406,20 +408,15 @@ export const ar: Dict = {
   footer_legal_notice: "إشعار قانوني",
   footer_privacy: "سياسة الخصوصية",
   footer_accessibility: "إمكانية الوصول",
+
+  // ───── Sobre ─────
   about_hero_tag: "إقليم الباسك · مجتمع · استقبال",
-  
-   
-    register_or_divider: "أو",
-  register_personal_data: "البيانات الشخصية",
-  register_org_data: "بيانات الجمعية",
-  register_contact_info: "معلومات الاتصال",
-  register_security: "الأمان",
 
-
-    register_org_social_note_title: "التسجيل اليدوي للجمعيات",
-  register_org_social_note_desc: "تتطلب حسابات الجمعيات التحقق من الوثائق. أكمل النموذج لطلب التفعيل.",
-    register_social_note: "بالمتابعة، فإنك توافق على شروطنا وسياسة الخصوصية.",
-    register_first_name: "الاسم",
+  // ───── Registro ─────
+  register_title: "إنشاء حساب",
+  register_submit: "إنشاء الحساب",
+  register_submit_organization: "طلب حساب جمعية",
+  register_first_name: "الاسم",
   register_last_name: "اللقب",
   register_org_name: "اسم الجمعية",
   register_cif: "الرقم الضريبي (CIF / NIF)",
@@ -429,10 +426,16 @@ export const ar: Dict = {
   register_postal_code: "الرمز البريدي",
   register_placeholder_org_name: "مثال: جمعية زوبيا",
   register_placeholder_address: "الشارع، الرقم، الطابق...",
-  register_submit_organization: "طلب حساب جمعية",
+  register_personal_data: "البيانات الشخصية",
+  register_org_data: "بيانات الجمعية",
+  register_contact_info: "معلومات الاتصال",
+  register_security: "الأمان",
   register_show_optional: "إضافة بيانات اختيارية",
   register_hide_optional: "إخفاء البيانات الاختيارية",
   register_optional_help: "هذه الحقول اختيارية. يمكنك إضافتها الآن أو لاحقاً.",
+  register_or_divider: "أو",
+  register_facebook_button: "المتابعة عبر فيسبوك",
+  register_social_note: "بالمتابعة، فإنك توافق على شروطنا وسياسة الخصوصية.",
   register_error_names: "يرجى إدخال الاسم واللقب.",
   register_error_org_name: "يرجى إدخال اسم الجمعية.",
   register_error_cif: "يرجى إدخال رقم ضريبي صحيح.",
@@ -440,6 +443,8 @@ export const ar: Dict = {
   register_error_address: "يرجى إدخال عنوان صحيح.",
   register_error_postal: "يرجى إدخال رمز بريدي صحيح (4-5 أرقام).",
   register_success_org_desc: "لقد استلمنا طلب جمعيتك. سنراجعه ونتواصل معك خلال 2-3 أيام.",
+  register_org_social_note_title: "التسجيل اليدوي للجمعيات",
+  register_org_social_note_desc: "تتطلب حسابات الجمعيات التحقق من الوثائق. أكمل النموذج لطلب التفعيل.",
   register_org_note_title: "التحقق",
   register_org_note_desc: "تتم مراجعة حسابات الجمعيات قبل التفعيل. سنتواصل معك خلال 2-3 أيام عمل.",
   register_already_have: "هل لديك حساب بالفعل؟",

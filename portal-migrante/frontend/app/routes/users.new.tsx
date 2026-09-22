@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import FacebookLogin from "@greatsumini/react-facebook-login";
-import { usersService } from "../services/users.service";
+import { http } from "../services/api";
+import { usersService, type RegisterUserResult } from "../services/users.service";
 import { useI18n } from "../i18n";
+
+const facebookRegister = (accessToken: string) =>
+  http<RegisterUserResult>("/users/register/facebook", {
+    method: "POST",
+    body: JSON.stringify({ accessToken }),
+  });
 
 const countries = [
   ["AF", "Afghanistan", "+93"], ["AL", "Albania", "+355"], ["DZ", "Algeria", "+213"],
@@ -67,12 +74,10 @@ type AccountType = "individual" | "organization_account";
 
 const flagUrl = (iso: string) =>
   `https://flagcdn.com/w40/${iso.toLowerCase()}.png`;
+
 const countryLabel = ([, name]: Country) => name;
 const phoneLabel = (country: Country) => `${countryLabel(country)} ${country[2]}`;
 
-/* ═══════════════════════════════════════════════════════
-   Country/Phone search input — clean & minimal
-   ═══════════════════════════════════════════════════════ */
 function CountrySearchInput({
   value,
   onChange,
@@ -92,6 +97,7 @@ function CountrySearchInput({
   const query = value.trim().toLowerCase();
   const valueFor = (c: Country) =>
     mode === "phone" ? phoneLabel(c) : countryLabel(c);
+
   const selected = countries.find((c) => valueFor(c) === value);
   const filtered = countries
     .filter(([iso, name, code]) => {
@@ -146,9 +152,7 @@ function CountrySearchInput({
               />
               <span className="flex-1 font-medium text-slate-800">{c[1]}</span>
               {mode === "phone" && (
-                <span className="font-mono text-xs text-slate-500">
-                  {c[2]}
-                </span>
+                <span className="font-mono text-xs text-slate-500">{c[2]}</span>
               )}
             </button>
           ))}
@@ -165,15 +169,12 @@ const nativeLanguages = [
   "Spanish / Español",
 ];
 
-/* ═══════════════════════════════════════════════════════
-   Label with required asterisk
-   ═══════════════════════════════════════════════════════ */
 function Label({
   children,
   required = false,
   htmlFor,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   required?: boolean;
   htmlFor?: string;
 }) {
@@ -188,10 +189,7 @@ function Label({
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   Section divider — clean label
-   ═══════════════════════════════════════════════════════ */
-function SectionTitle({ children }: { children: React.ReactNode }) {
+function SectionTitle({ children }: { children: ReactNode }) {
   return (
     <div className="mb-5 flex items-center gap-3">
       <span className="h-px w-6 bg-emerald-500" />
@@ -202,9 +200,6 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   Account type card — minimal, clean
-   ═══════════════════════════════════════════════════════ */
 function AccountTypeCard({
   icon,
   title,
@@ -279,27 +274,21 @@ function AccountTypeCard({
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   Main component
-   ═══════════════════════════════════════════════════════ */
 export default function NewUserPage() {
   const navigate = useNavigate();
   const { t, locale } = useI18n();
 
   const [formData, setFormData] = useState({
     accountType: "individual" as AccountType,
-    // Individual — required
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    // Individual — optional
     phoneCountryCode: phoneLabel(["ES", "Spain", "+34"]),
     phoneNumber: "",
     originCountry: "",
     nativeLanguage: "",
-    // Organization — required
     organizationName: "",
     cif: "",
     contactPersonName: "",
@@ -307,7 +296,6 @@ export default function NewUserPage() {
     orgPhoneNumber: "",
     address: "",
     postalCode: "",
-    // Common
     legalConsentAccepted: false,
   });
 
@@ -319,7 +307,7 @@ export default function NewUserPage() {
   const isOrg = formData.accountType === "organization_account";
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
     setFormData((c) => ({
@@ -334,7 +322,8 @@ export default function NewUserPage() {
     ? `${phoneDialCode}${formData.phoneNumber.replace(/\D/g, "")}`
     : "";
 
-  const orgPhoneDialCode = formData.orgPhoneCountryCode.match(/\+\d+/)?.[0] || "";
+  const orgPhoneDialCode =
+    formData.orgPhoneCountryCode.match(/\+\d+/)?.[0] || "";
   const orgPhoneNumber = orgPhoneDialCode
     ? `${orgPhoneDialCode}${formData.orgPhoneNumber.replace(/\D/g, "")}`
     : "";
@@ -355,7 +344,7 @@ export default function NewUserPage() {
       formData.password === formData.confirmPassword &&
       formData.legalConsentAccepted;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setSaving(true);
     setError("");
@@ -476,7 +465,7 @@ export default function NewUserPage() {
         return;
       }
 
-      const result = await usersService.facebookRegister(response.accessToken);
+      const result = await facebookRegister(response.accessToken);
 
       setSuccess(t("user_create_success"));
       window.setTimeout(
@@ -495,7 +484,6 @@ export default function NewUserPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
-      {/* Top nav bar — minimal */}
       <div className="border-b border-slate-200/60 bg-white/80 backdrop-blur">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4 sm:px-6">
           <Link
@@ -516,9 +504,7 @@ export default function NewUserPage() {
         </div>
       </div>
 
-      {/* Form container */}
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
-        {/* Header */}
         <div className="mb-8">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
@@ -532,7 +518,6 @@ export default function NewUserPage() {
           </p>
         </div>
 
-        {/* Info message for organizations */}
         {isOrg && (
           <div className="mb-6 flex items-start gap-3 rounded-2xl border border-blue-200 bg-blue-50/70 p-4">
             <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-blue-500 text-sm text-white">
@@ -549,12 +534,10 @@ export default function NewUserPage() {
           </div>
         )}
 
-        {/* Form card */}
         <form
           onSubmit={handleSubmit}
           className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
         >
-          {/* ─── Account type ─── */}
           <div className="mb-8">
             <SectionTitle>{t("account_type")}</SectionTitle>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -582,7 +565,6 @@ export default function NewUserPage() {
             </div>
           </div>
 
-          {/* ═══════════ INDIVIDUAL FORM ═══════════ */}
           {!isOrg && (
             <>
               <div className="mb-8 space-y-5">
@@ -674,7 +656,6 @@ export default function NewUserPage() {
                 </div>
               </div>
 
-              {/* ─── Optional section ─── */}
               <div className="mb-8 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/50">
                 <button
                   type="button"
@@ -716,9 +697,7 @@ export default function NewUserPage() {
                   <div className="border-t border-slate-200 p-5">
                     <div className="space-y-5">
                       <div>
-                        <Label htmlFor="phoneNumber">
-                          {t("phone")}
-                        </Label>
+                        <Label htmlFor="phoneNumber">{t("phone")}</Label>
                         <div className="grid gap-2 sm:grid-cols-2">
                           <CountrySearchInput
                             value={formData.phoneCountryCode}
@@ -789,7 +768,6 @@ export default function NewUserPage() {
             </>
           )}
 
-          {/* ═══════════ ORGANIZATION FORM ═══════════ */}
           {isOrg && (
             <>
               <div className="mb-8 space-y-5">
@@ -973,7 +951,6 @@ export default function NewUserPage() {
                 </div>
               </div>
 
-              {/* Info alert for organizations */}
               <div className="mb-8 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4">
                 <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-emerald-500 text-sm text-white">
                   ✓
@@ -990,7 +967,6 @@ export default function NewUserPage() {
             </>
           )}
 
-          {/* ═══════════ LEGAL CONSENT (common) ═══════════ */}
           <div className="mb-6">
             <label className="flex cursor-pointer items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50/50 p-4 transition hover:bg-slate-50">
               <input
@@ -1017,7 +993,6 @@ export default function NewUserPage() {
             </label>
           </div>
 
-          {/* ═══════════ Alerts ═══════════ */}
           {error && (
             <div
               role="alert"
@@ -1046,7 +1021,6 @@ export default function NewUserPage() {
             </div>
           )}
 
-          {/* ═══════════ Submit ═══════════ */}
           <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
             <button
               type="button"
@@ -1064,7 +1038,7 @@ export default function NewUserPage() {
                 ? t("saving")
                 : isOrg
                   ? t("register_submit_organization")
-                  : t("create_user")}
+                  : t("register_submit")}
               {!saving && (
                 <svg
                   className="h-4 w-4"
@@ -1083,10 +1057,8 @@ export default function NewUserPage() {
           </div>
         </form>
 
-        {/* ═══════════ GOOGLE / FACEBOOK — BELOW THE FORM ═══════════ */}
         {!isOrg && (
           <div className="mt-8">
-            {/* Divider */}
             <div className="relative mb-6">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-slate-200" />
@@ -1098,9 +1070,7 @@ export default function NewUserPage() {
               </div>
             </div>
 
-            {/* Buttons grid */}
             <div className="grid gap-3 sm:grid-cols-2">
-              {/* Google — with wrapper to match Facebook height */}
               <div className="flex h-[52px] items-center justify-center [&>div]:w-full [&_iframe]:!w-full">
                 <GoogleLogin
                   onSuccess={handleGoogleSuccess}
@@ -1114,7 +1084,6 @@ export default function NewUserPage() {
                 />
               </div>
 
-              {/* Facebook — custom outline style to match Google */}
               <FacebookLogin
                 appId={import.meta.env.VITE_FACEBOOK_APP_ID || ""}
                 onSuccess={handleFacebookSuccess}
@@ -1123,7 +1092,7 @@ export default function NewUserPage() {
                   <button
                     type="button"
                     onClick={onClick}
-                    className="flex h-[52px] w-full items-center justify-center gap-3 rounded border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                    className="flex h-[52px] w-full items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
                   >
                     <svg
                       className="h-5 w-5 flex-shrink-0 text-[#1877F2]"
@@ -1133,20 +1102,18 @@ export default function NewUserPage() {
                     >
                       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                     </svg>
-                    <span>Continuar con Facebook</span>
+                    <span>{t("register_facebook_button")}</span>
                   </button>
                 )}
               />
             </div>
 
-            {/* Privacy note */}
             <p className="mt-4 text-center text-xs text-slate-400">
               {t("register_social_note")}
             </p>
           </div>
         )}
 
-        {/* Footer link */}
         <p className="mt-6 text-center text-sm text-slate-500">
           {t("register_already_have")}{" "}
           <Link

@@ -394,6 +394,8 @@ export const eu: Dict = {
   contact_success_message: "Eskerrik asko gurekin harremanetan jartzeagatik. Laster erantzungo dizugu.",
   send_another_message: "Bidali beste mezu bat",
   organization_type_municipality: "Udala",
+
+  // ───── Footer ─────
   footer_project_by: "ASOC ZUBIA SOCIAL EUSKADI-k garatutako proiektua",
   footer_project_desc: "Vitoria-Gasteizko migratzaileen kolektiboaren integraziorako, orientaziorako eta gizarte-kohesiorako plataforma digitala.",
   footer_newsletter_desc: "Jaso albisteak, gidak eta migratzaileen komunitatearentzako baliabide erabilgarriak.",
@@ -406,19 +408,15 @@ export const eu: Dict = {
   footer_legal_notice: "Lege-oharra",
   footer_privacy: "Pribatutasun-politika",
   footer_accessibility: "Irisgarritasuna",
-  about_hero_tag: "Euskadi · Komunitatea · Harrera",
-  
-  register_or_divider: "edo",
-  register_personal_data: "Datu pertsonalak",
-  register_org_data: "Elkartearen datuak",
-  register_contact_info: "Kontaktu informazioa",
-  register_security: "Segurtasuna",
 
-    register_org_social_note_title: "Elkarteentzako eskuzko erregistroa",
- 
-    register_org_social_note_desc: "Elkarte-kontuek dokumentu-egiaztapena behar dute. Bete formularioa alta eskatzeko.",
-      register_social_note: "Jarraitzean, gure baldintzak eta pribatutasun-politika onartzen dituzu.",
-        register_first_name: "Izena",
+  // ───── Sobre ─────
+  about_hero_tag: "Euskadi · Komunitatea · Harrera",
+
+  // ───── Erregistroa ─────
+  register_title: "Kontua sortu",
+  register_submit: "Sortu kontua",
+  register_submit_organization: "Eskatu elkarte kontua",
+  register_first_name: "Izena",
   register_last_name: "Abizena",
   register_org_name: "Elkartearen izena",
   register_cif: "IFZ / NAN",
@@ -428,10 +426,16 @@ export const eu: Dict = {
   register_postal_code: "Posta-kodea",
   register_placeholder_org_name: "Adib: Zubia Elkartea",
   register_placeholder_address: "Kalea, zenbakia, solairua...",
-  register_submit_organization: "Eskatu elkarte kontua",
+  register_personal_data: "Datu pertsonalak",
+  register_org_data: "Elkartearen datuak",
+  register_contact_info: "Kontaktu informazioa",
+  register_security: "Segurtasuna",
   register_show_optional: "Gehitu datu aukerakoak",
   register_hide_optional: "Ezkutatu datu aukerakoak",
   register_optional_help: "Datu hauek aukerakoak dira. Orain edo geroago gehi ditzakezu.",
+  register_or_divider: "edo",
+  register_facebook_button: "Jarraitu Facebook-ekin",
+  register_social_note: "Jarraitzean, gure baldintzak eta pribatutasun-politika onartzen dituzu.",
   register_error_names: "Sartu zure izena eta abizena.",
   register_error_org_name: "Sartu elkartearen izena.",
   register_error_cif: "Sartu baliozko IFZ bat.",
@@ -439,6 +443,8 @@ export const eu: Dict = {
   register_error_address: "Sartu baliozko helbide bat.",
   register_error_postal: "Sartu baliozko posta-kode bat (4-5 digitu).",
   register_success_org_desc: "Zure elkartearen eskaera jaso dugu. Berrikusi eta 2-3 egunetan harremanetan jarriko gara.",
+  register_org_social_note_title: "Elkarteentzako eskuzko erregistroa",
+  register_org_social_note_desc: "Elkarte-kontuek dokumentu-egiaztapena behar dute. Bete formularioa alta eskatzeko.",
   register_org_note_title: "Egiaztapena",
   register_org_note_desc: "Elkarte kontuak aktibatu aurretik berrikusten dira. 2-3 egun baliodunetan harremanetan jarriko gara.",
   register_already_have: "Kontua baduzu?",

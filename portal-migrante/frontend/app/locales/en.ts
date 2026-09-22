@@ -394,6 +394,8 @@ export const en: Dict = {
   contact_success_message: "Thank you for reaching out. We will answer soon.",
   send_another_message: "Send another message",
   organization_type_municipality: "Municipality",
+
+  // ───── Footer ─────
   footer_project_by: "Project developed by ASOC ZUBIA SOCIAL EUSKADI",
   footer_project_desc: "Digital platform for integration, guidance, and social cohesion of the migrant community in Vitoria-Gasteiz.",
   footer_newsletter_desc: "Get news, guides, and useful resources for the migrant community.",
@@ -406,19 +408,15 @@ export const en: Dict = {
   footer_legal_notice: "Legal Notice",
   footer_privacy: "Privacy Policy",
   footer_accessibility: "Accessibility",
+
+  // ───── Sobre ─────
   about_hero_tag: "Euskadi · Community · Welcome",
-  
-  
-    register_or_divider: "or",
-  register_personal_data: "Personal details",
-  register_org_data: "Organization details",
-  register_contact_info: "Contact information",
-  register_security: "Security",
-  
-    register_org_social_note_title: "Manual registration for associations",
-  register_org_social_note_desc: "Organization accounts require document verification. Complete the form to request activation.",
-    register_social_note: "By continuing you accept our terms and privacy policy.",
-      register_first_name: "First name",
+
+  // ───── Register ─────
+  register_title: "Create account",
+  register_submit: "Create account",
+  register_submit_organization: "Request organization account",
+  register_first_name: "First name",
   register_last_name: "Last name",
   register_org_name: "Association name",
   register_cif: "Tax ID",
@@ -428,10 +426,16 @@ export const en: Dict = {
   register_postal_code: "Postal code",
   register_placeholder_org_name: "E.g: Zubia Association",
   register_placeholder_address: "Street, number, floor...",
-  register_submit_organization: "Request organization account",
+  register_personal_data: "Personal details",
+  register_org_data: "Organization details",
+  register_contact_info: "Contact information",
+  register_security: "Security",
   register_show_optional: "Add optional details",
   register_hide_optional: "Hide optional details",
   register_optional_help: "These fields are optional. You can add them now or later.",
+  register_or_divider: "or",
+  register_facebook_button: "Continue with Facebook",
+  register_social_note: "By continuing you accept our terms and privacy policy.",
   register_error_names: "Please enter your first and last name.",
   register_error_org_name: "Please enter the association name.",
   register_error_cif: "Please enter a valid Tax ID.",
@@ -439,8 +443,11 @@ export const en: Dict = {
   register_error_address: "Please enter a valid address.",
   register_error_postal: "Please enter a valid postal code (4-5 digits).",
   register_success_org_desc: "We have received your association request. We will review it and contact you within 2-3 days.",
+  register_org_social_note_title: "Manual registration for associations",
+  register_org_social_note_desc: "Organization accounts require document verification. Complete the form to request activation.",
   register_org_note_title: "Verification",
   register_org_note_desc: "Organization accounts are reviewed before activation. We will contact you by email within 2-3 business days.",
   register_already_have: "Already have an account?",
   register_type_individual_desc: "Personal account to participate in the forum and access services.",
+  register_type_organization_desc: "Account for associations, foundations and social entities.",
 };

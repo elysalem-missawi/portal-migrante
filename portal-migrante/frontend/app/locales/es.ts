@@ -395,6 +395,8 @@ export const es: Dict = {
   contact_success_message: "Gracias por contactar con nosotros. Te responderemos pronto.",
   send_another_message: "Enviar otro mensaje",
   organization_type_municipality: "Ayuntamiento",
+
+  // ───── Footer ─────
   footer_project_by: "Proyecto desarrollado por ASOC ZUBIA SOCIAL EUSKADI",
   footer_project_desc: "Plataforma digital para la integración, orientación y cohesión social del colectivo migrante en Vitoria-Gasteiz.",
   footer_newsletter_desc: "Recibe novedades, guías y recursos útiles para la comunidad migrante.",
@@ -407,19 +409,15 @@ export const es: Dict = {
   footer_legal_notice: "Aviso Legal",
   footer_privacy: "Política de Privacidad",
   footer_accessibility: "Accesibilidad",
+
+  // ───── Sobre ─────
   about_hero_tag: "Euskadi · Comunidad · Acogida",
-  
-    register_or_divider: "o",
-  register_personal_data: "Datos personales",
-  register_org_data: "Datos de la asociación",
-  register_contact_info: "Información de contacto",
-  register_security: "Seguridad",
 
-
-    register_org_social_note_title: "Registro manual para asociaciones",
-  register_org_social_note_desc: "Las cuentas de asociación requieren verificación documental. Completa el formulario para solicitar el alta.",
-    register_social_note: "Al continuar aceptas nuestros términos y política de privacidad.",
-      register_first_name: "Nombre",
+  // ───── Registro ─────
+  register_title: "Crear cuenta",
+  register_submit: "Crear cuenta",
+  register_submit_organization: "Solicitar alta de asociación",
+  register_first_name: "Nombre",
   register_last_name: "Apellido",
   register_org_name: "Nombre de la asociación",
   register_cif: "CIF / NIF",
@@ -429,10 +427,16 @@ export const es: Dict = {
   register_postal_code: "Código postal",
   register_placeholder_org_name: "Ej: Asociación Zubia",
   register_placeholder_address: "Calle, número, piso...",
-  register_submit_organization: "Solicitar alta de asociación",
+  register_personal_data: "Datos personales",
+  register_org_data: "Datos de la asociación",
+  register_contact_info: "Información de contacto",
+  register_security: "Seguridad",
   register_show_optional: "Añadir datos opcionales",
   register_hide_optional: "Ocultar datos opcionales",
   register_optional_help: "Estos datos son opcionales. Puedes añadirlos ahora o más tarde.",
+  register_or_divider: "o",
+  register_facebook_button: "Continuar con Facebook",
+  register_social_note: "Al continuar aceptas nuestros términos y política de privacidad.",
   register_error_names: "Introduce tu nombre y apellido.",
   register_error_org_name: "Introduce el nombre de la asociación.",
   register_error_cif: "Introduce un CIF válido.",
@@ -440,10 +444,11 @@ export const es: Dict = {
   register_error_address: "Introduce una dirección válida.",
   register_error_postal: "Introduce un código postal válido (4-5 dígitos).",
   register_success_org_desc: "Hemos recibido la solicitud de tu asociación. La revisaremos y te contactaremos en 2-3 días.",
+  register_org_social_note_title: "Registro manual para asociaciones",
+  register_org_social_note_desc: "Las cuentas de asociación requieren verificación documental. Completa el formulario para solicitar el alta.",
   register_org_note_title: "Verificación",
   register_org_note_desc: "Las cuentas de asociación se revisan antes de ser activadas. Te contactaremos por correo en 2-3 días laborables.",
   register_already_have: "¿Ya tienes cuenta?",
   register_type_individual_desc: "Cuenta personal para participar en el foro y acceder a servicios.",
   register_type_organization_desc: "Cuenta para asociaciones, fundaciones y entidades sociales.",
-  register_submit_organization_alt: "",
 };
