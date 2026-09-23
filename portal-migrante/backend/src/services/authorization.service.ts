@@ -1,6 +1,7 @@
 import OrganizationMember, {
   OrganizationMemberRole,
 } from "../models/organizationMember.model";
+
 import { PlatformRole } from "../models/user.model";
 
 const contentManagerRoles: OrganizationMemberRole[] = [
@@ -17,11 +18,13 @@ const membershipManagerRoles: OrganizationMemberRole[] = [
 export const isPlatformStaff = (
   role: PlatformRole | undefined
 ): boolean =>
-  role === "moderator" || role === "admin" || role === "super_admin";
+  role === "moderator" ||
+  role === "admin";
 
 export const isPlatformAdmin = (
   role: PlatformRole | undefined
-): boolean => role === "admin" || role === "super_admin";
+): boolean =>
+  role === "admin";
 
 async function hasOrganizationRole(
   userId: string,
@@ -33,7 +36,9 @@ async function hasOrganizationRole(
       userId,
       organizationId,
       status: "active",
-      role: { $in: roles },
+      role: {
+        $in: roles,
+      },
     })
   );
 }
@@ -43,8 +48,17 @@ export async function canManageOrganization(
   platformRole: PlatformRole | undefined,
   organizationId: string
 ): Promise<boolean> {
-  if (isPlatformAdmin(platformRole)) return true;
-  return hasOrganizationRole(userId, organizationId, contentManagerRoles);
+  if (
+    isPlatformAdmin(platformRole)
+  ) {
+    return true;
+  }
+
+  return hasOrganizationRole(
+    userId,
+    organizationId,
+    contentManagerRoles
+  );
 }
 
 export async function canManageOrganizationMembers(
@@ -52,6 +66,15 @@ export async function canManageOrganizationMembers(
   platformRole: PlatformRole | undefined,
   organizationId: string
 ): Promise<boolean> {
-  if (isPlatformAdmin(platformRole)) return true;
-  return hasOrganizationRole(userId, organizationId, membershipManagerRoles);
+  if (
+    isPlatformAdmin(platformRole)
+  ) {
+    return true;
+  }
+
+  return hasOrganizationRole(
+    userId,
+    organizationId,
+    membershipManagerRoles
+  );
 }
