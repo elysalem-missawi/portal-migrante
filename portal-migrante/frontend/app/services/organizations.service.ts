@@ -1,4 +1,3 @@
-// frontend/app/services/organizations.service.ts
 import { http } from "./api";
 
 export type OrganizationType =
@@ -18,21 +17,43 @@ export type OrganizationStatus =
   | "pending"
   | "archived";
 
+export type VerificationStatus =
+  | "unverified"
+  | "pending"
+  | "verified"
+  | "rejected";
+
+export type EntityReference<T> = string | T | null;
+
+export type OrganizationUserSummary = {
+  _id: string;
+  fullName?: string;
+  displayName?: string;
+};
+
 export type Organization = {
   _id: string;
   type: OrganizationType;
   name: string;
+  legalName?: string;
+  registrationNumber?: string;
   slug: string;
   description?: string;
+  website?: string;
+  languages: string[];
+  logo?: string;
+  verificationStatus: VerificationStatus;
+  verifiedAt?: string;
+  verifiedByUserId?: EntityReference<OrganizationUserSummary>;
+  status: OrganizationStatus;
+  createdByUserId?: EntityReference<OrganizationUserSummary>;
+
+  // Transitional fields retained while old records are migrated to locations.
   address?: string;
   phone?: string;
   email?: string;
-  website?: string;
-  languages?: string[];
-  logo?: string;
-  verified: boolean;
-  status: OrganizationStatus;
-  createdByUserId?: string | null;
+  verified?: boolean;
+
   createdAt?: string;
   updatedAt?: string;
 };
@@ -40,44 +61,48 @@ export type Organization = {
 export type CreateOrganizationInput = {
   type: OrganizationType;
   name: string;
+  legalName?: string;
+  registrationNumber?: string;
   slug: string;
   description?: string;
-  address?: string;
-  phone?: string;
-  email?: string;
   website?: string;
   languages?: string[];
   logo?: string;
-  verified?: boolean;
-  status?: OrganizationStatus;
-  createdByUserId?: string | null;
 };
 
 export const organizationsService = {
-  async list() {
+  list() {
     return http<Organization[]>("/organizations");
   },
 
-  async create(data: CreateOrganizationInput) {
+  listMine() {
+    return http<Organization[]>("/organizations/mine");
+  },
+
+  getMineById(id: string) {
+    return http<Organization>("/organizations/mine/" + id);
+  },
+
+  create(data: CreateOrganizationInput) {
     return http<Organization>("/organizations", {
       method: "POST",
       body: JSON.stringify(data),
     });
   },
 
-  async getById(id: string) {
-    return http<Organization>(`/organizations/${id}`);
+  getById(id: string) {
+    return http<Organization>("/organizations/" + id);
   },
 
-  async update(id: string, data: Partial<CreateOrganizationInput>) {
-    return http<Organization>(`/organizations/${id}`, {
+  update(id: string, data: Partial<CreateOrganizationInput>) {
+    return http<Organization>("/organizations/" + id, {
       method: "PUT",
       body: JSON.stringify(data),
     });
   },
 
-  async remove(id: string) {
-    return http<{ message: string }>(`/organizations/${id}`, {
+  remove(id: string) {
+    return http<Organization>("/organizations/" + id, {
       method: "DELETE",
     });
   },

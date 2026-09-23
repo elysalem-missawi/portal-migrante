@@ -1,21 +1,27 @@
-// src/routes/services.route.ts
 import { Router } from "express";
 import {
   createService,
   getServices,
+  getMyServices,
+  getMyServiceById,
   getServiceById,
   updateService,
   deleteService,
 } from "../controllers/services.controller";
-import requireWriteAccess from "../middlewares/requireWriteAccess";
+import { requireAuth } from "../middlewares/requireAuth";
 
 const router = Router();
 
-router.route("/").get(getServices).post(requireWriteAccess, createService);
+router.get("/mine", requireAuth, getMyServices);
+router.get("/mine/:id", requireAuth, getMyServiceById);
+router
+  .route("/")
+  .get(getServices)
+  .post(requireAuth, createService);
 router
   .route("/:id")
   .get(getServiceById)
-  .put(requireWriteAccess, updateService)
-  .delete(requireWriteAccess, deleteService);
+  .put(requireAuth, updateService)
+  .delete(requireAuth, deleteService);
 
 export default router;

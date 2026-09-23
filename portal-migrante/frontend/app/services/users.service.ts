@@ -1,5 +1,4 @@
-// frontend/app/services/users.service.ts
-import { http } from "./api";
+import { AUTH_TOKEN_KEY, http } from "./api";
 
 export type UserRole =
   | "community_user"
@@ -7,8 +6,8 @@ export type UserRole =
   | "admin"
   | "super_admin";
 
+export type PlatformRole = "user" | "moderator" | "admin" | "super_admin";
 export type AccountType = "individual" | "organization_account";
-
 export type UserStatus = "active" | "inactive" | "pending" | "blocked";
 
 export type OrganizationRef = {
@@ -30,6 +29,7 @@ export type IdentityDocumentInput = {
 export type User = {
   _id: string;
   accountType: AccountType;
+  platformRole?: PlatformRole;
   role: UserRole;
   fullName: string;
   displayName?: string;
@@ -39,11 +39,10 @@ export type User = {
   preferredLanguage?: string;
   originCountry?: string;
   nativeLanguage?: string;
+  municipalityId?: string | null;
   municipality?: string;
   profileImage?: string;
-  identityDocument?: Partial<IdentityDocumentInput> & {
-    uploadedAt?: string;
-  };
+  identityDocument?: Partial<IdentityDocumentInput> & { uploadedAt?: string };
   legalConsentAccepted?: boolean;
   legalConsentAt?: string;
   organizationId?: string | OrganizationRef | null;
@@ -55,7 +54,6 @@ export type User = {
 
 export type CreateUserInput = {
   accountType?: AccountType;
-  role?: UserRole;
   fullName: string;
   displayName?: string;
   email: string;
@@ -64,13 +62,11 @@ export type CreateUserInput = {
   preferredLanguage?: string;
   originCountry?: string;
   nativeLanguage?: string;
+  municipalityId?: string | null;
   municipality?: string;
   profileImage?: string;
   identityDocument?: IdentityDocumentInput;
   legalConsentAccepted?: boolean;
-  organizationId?: string | null;
-  status?: UserStatus;
-  isVerified?: boolean;
 };
 
 export type RegisterUserResult = {
@@ -80,6 +76,13 @@ export type RegisterUserResult = {
     skipped?: boolean;
     reason?: string;
   };
+};
+
+export type LoginResult = {
+  user: User;
+  token: string;
+  expiresAt: string;
+  sessionId: string;
 };
 
 const CURRENT_USER_KEY = "portal.currentUser";
@@ -103,19 +106,24 @@ export const usersService = {
   },
 
   async register(data: CreateUserInput) {
-    const result = await http<RegisterUserResult>("/users/register", {
+    return http<RegisterUserResult>("/users/register", {
       method: "POST",
       body: JSON.stringify(data),
     });
-    this.setCurrentUser(result.user);
-    return result;
   },
 
   async login(data: { email: string; password: string }) {
-    const user = await http<User>("/users/login", {
+    const result = await http<LoginResult>("/auth/login", {
       method: "POST",
       body: JSON.stringify(data),
     });
+    localStorage.setItem(AUTH_TOKEN_KEY, result.token);
+    this.setCurrentUser(result.user);
+    return result.user;
+  },
+
+  async refreshCurrentUser() {
+    const user = await http<User>("/auth/me");
     this.setCurrentUser(user);
     return user;
   },
@@ -123,9 +131,7 @@ export const usersService = {
   async sendPhoneCode(userId: string) {
     return http<{ message: string; phoneVerification?: RegisterUserResult["phoneVerification"] }>(
       `/users/${userId}/send-phone-code`,
-      {
-        method: "POST",
-      }
+      { method: "POST" }
     );
   },
 
@@ -134,8 +140,14 @@ export const usersService = {
       method: "POST",
       body: JSON.stringify({ code }),
     });
-    this.setCurrentUser(user);
+    if (this.hasAuthToken()) {
+      this.setCurrentUser(user);
+    }
     return user;
+  },
+
+  hasAuthToken() {
+    return Boolean(localStorage.getItem(AUTH_TOKEN_KEY));
   },
 
   getCurrentUser() {
@@ -152,9 +164,18 @@ export const usersService = {
     notifyCurrentUserChanged();
   },
 
-  logout() {
+  clearLocalSession() {
+    localStorage.removeItem(AUTH_TOKEN_KEY);
     localStorage.removeItem(CURRENT_USER_KEY);
     notifyCurrentUserChanged();
+  },
+
+  async logout() {
+    try {
+      await http<{ message: string }>("/auth/logout", { method: "POST" });
+    } finally {
+      this.clearLocalSession();
+    }
   },
 
   onCurrentUserChange(listener: () => void) {
@@ -178,8 +199,6 @@ export const usersService = {
   },
 
   async remove(id: string) {
-    return http<{ message: string }>(`/users/${id}`, {
-      method: "DELETE",
-    });
+    return http<{ message: string }>(`/users/${id}`, { method: "DELETE" });
   },
 };

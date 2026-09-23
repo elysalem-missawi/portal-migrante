@@ -1,10 +1,10 @@
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
+import { useAuth } from "../../auth";
 import { useI18n } from "../../i18n";
 import type { OfficePermission } from "../../services/office.service";
 import type { User } from "../../services/users.service";
-import { usersService } from "../../services/users.service";
 import { getOfficePermissions, getOfficeRole } from "../../routes/guards/ProtectedOfficeRoute";
 import { officeText } from "./OfficeUi";
 
@@ -194,15 +194,11 @@ function initials(user: User | null) {
 
 export default function OfficeLayout() {
   const { locale, locales, setLocale } = useI18n();
+  const { currentUser, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const isRtl = locale === "ar";
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(() => usersService.getCurrentUser());
-
-  useEffect(() => {
-    return usersService.onCurrentUserChange(() => setCurrentUser(usersService.getCurrentUser()));
-  }, []);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -214,8 +210,8 @@ export default function OfficeLayout() {
   const userRole = currentUser ? getOfficeRole(currentUser) : "visitor";
   const roleLabel = roleLabels[userRole] ?? roleLabels.user;
 
-  const logout = () => {
-    usersService.logout();
+  const logout = async () => {
+    await signOut();
     navigate("/");
   };
 

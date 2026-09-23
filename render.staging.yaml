@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: zubia-social-euskadi-demo-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    branch: database-redesign
+    rootDir: portal-migrante/backend
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm run start:municipal-demo
+    healthCheckPath: /api/health
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        value: https://zubia-social-euskadi-demo.onrender.com
+      - key: ALLOWED_ORIGINS
+        value: https://zubia-social-euskadi-demo.onrender.com
+      - key: MONGO_URI
+        sync: false
+      - key: DEMO_PASSWORD
+        sync: false
+      - key: ADMIN_API_KEY
+        generateValue: true
+
+  - type: web
+    name: zubia-social-euskadi-demo
+    runtime: static
+    branch: database-redesign
+    rootDir: portal-migrante/frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    autoDeployTrigger: checksPass
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        value: https://zubia-social-euskadi-demo-api.onrender.com/api
+      - key: VITE_ENABLE_DEMO_FALLBACK
+        value: "false"

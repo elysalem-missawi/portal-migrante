@@ -7,7 +7,16 @@
     "dev": "nodemon --watch src --exec ts-node src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && npm run test:compiled",
+    "test:compiled": "node --test dist/tests/*.test.js",
+    "seed:municipalities": "ts-node src/seedMunicipalities.ts",
+    "seed:service-categories": "ts-node src/seedServiceCategories.ts",
+    "seed:publication-categories": "ts-node src/seedPublicationCategories.ts",
+    "migrate:database": "ts-node src/migrations/migrateDatabaseRedesign.ts",
+    "migrate:database:apply": "ts-node src/migrations/migrateDatabaseRedesign.ts --apply",
+    "seed:municipal-demo": "ts-node src/seedMunicipalDemo.ts",
+    "start:municipal-demo": "node dist/seedMunicipalDemo.js && node dist/index.js"
   },
   "dependencies": {
     "compression": "^1.8.1",
@@ -27,5 +36,8 @@
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "qs": "^6.16.0"
   }
 }

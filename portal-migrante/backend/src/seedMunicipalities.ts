@@ -5,6 +5,13 @@ import { municipalitiesData } from "./data/municipalities.data";
 
 dotenv.config();
 
+const normalizeName = (value: string): string =>
+  value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+
 const seedMunicipalities = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI as string);
@@ -13,8 +20,13 @@ const seedMunicipalities = async () => {
     for (const item of municipalitiesData) {
       await Municipality.updateOne(
         { slug: item.slug },
-        { $set: item },
-        { upsert: true }
+        {
+          $set: {
+            ...item,
+            normalizedName: normalizeName(item.name),
+          },
+        },
+        { upsert: true, runValidators: true }
       );
     }
 

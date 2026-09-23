@@ -1,9 +1,8 @@
-// src/routes/users.route.ts
 import { Router } from "express";
+import { login } from "../controllers/auth.controller";
 import {
   createUser,
   registerUser,
-  loginUser,
   sendPhoneVerificationCode,
   verifyPhoneCode,
   getUsers,
@@ -11,19 +10,44 @@ import {
   updateUser,
   deleteUser,
 } from "../controllers/user.controller";
-import requireWriteAccess from "../middlewares/requireWriteAccess";
+import { requireAuth, requirePlatformRoles } from "../middlewares/requireAuth";
+import { requireSelfOrPlatformRoles } from "../middlewares/userAuthorization";
 
 const router = Router();
 
 router.post("/register", registerUser);
-router.post("/login", loginUser);
+// Temporary compatibility alias. New clients must use POST /api/auth/login.
+router.post("/login", login);
 router.post("/:id/send-phone-code", sendPhoneVerificationCode);
 router.post("/:id/verify-phone", verifyPhoneCode);
-router.route("/").get(getUsers).post(requireWriteAccess, createUser);
+router
+  .route("/")
+  .get(
+    requireAuth,
+    requirePlatformRoles("moderator", "admin", "super_admin"),
+    getUsers
+  )
+  .post(
+    requireAuth,
+    requirePlatformRoles("admin", "super_admin"),
+    createUser
+  );
 router
   .route("/:id")
-  .get(getUserById)
-  .put(requireWriteAccess, updateUser)
-  .delete(requireWriteAccess, deleteUser);
+  .get(
+    requireAuth,
+    requireSelfOrPlatformRoles("moderator", "admin", "super_admin"),
+    getUserById
+  )
+  .put(
+    requireAuth,
+    requireSelfOrPlatformRoles("admin", "super_admin"),
+    updateUser
+  )
+  .delete(
+    requireAuth,
+    requirePlatformRoles("admin", "super_admin"),
+    deleteUser
+  );
 
 export default router;
