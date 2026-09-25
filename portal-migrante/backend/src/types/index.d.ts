@@ -7,8 +7,6 @@ declare global {
         userId: string;
         sessionId: string;
         platformRole: PlatformRole;
-        phoneVerified: boolean;
-        isVerified: boolean;
       };
     }
   }

@@ -8,7 +8,7 @@ import {
 import { requireAuth, requirePlatformRoles } from "../middlewares/requireAuth";
 
 const router = Router();
-const admins = requirePlatformRoles("admin", "super_admin");
+const admins = requirePlatformRoles("admin");
 
 router.route("/").get(getPublicationCategories).post(requireAuth, admins, createPublicationCategory);
 router
