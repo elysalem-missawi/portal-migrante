@@ -54,58 +54,6 @@ function SectionTitle({ children }: { children: ReactNode }) {
   );
 }
 
-function AccountTypeCard({
-  icon,
-  title,
-  desc,
-  selected,
-  disabled = false,
-}: {
-  icon: string;
-  title: string;
-  desc: string;
-  selected: boolean;
-  disabled?: boolean;
-}) {
-  return (
-    <div
-      className={`relative w-full rounded-2xl border-2 p-5 transition-all ${
-        selected
-          ? "border-emerald-500 bg-emerald-50/50 shadow-lg shadow-emerald-500/10"
-          : "border-slate-200 bg-slate-50/70"
-      } ${disabled ? "opacity-70" : ""}`}
-    >
-      <div className="flex items-start gap-3">
-        <span
-          className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl text-xl ${
-            selected
-              ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/30"
-              : "bg-white text-slate-600 ring-1 ring-slate-200"
-          }`}
-        >
-          {icon}
-        </span>
-
-        <div className="min-w-0 flex-1">
-          <div className="text-sm font-bold text-slate-900">{title}</div>
-          <div className="mt-1 text-xs leading-relaxed text-slate-500">{desc}</div>
-        </div>
-
-        <span
-          className={`mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 ${
-            selected
-              ? "border-emerald-500 bg-emerald-500"
-              : "border-slate-300 bg-white"
-          }`}
-        >
-          {selected && <span className="h-2 w-2 rounded-full bg-white" />}
-        </span>
-      </div>
-
-    </div>
-  );
-}
-
 function CountrySearchInput({
   value,
   onChange,
@@ -300,26 +248,15 @@ export default function NewUserPage() {
           onSubmit={handleSubmit}
           className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
         >
-          <div className="mb-8">
-            <SectionTitle>{t("account_type")}</SectionTitle>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <AccountTypeCard
-                icon="👤"
-                title={t("account_type_individual")}
-                desc={t("register_type_individual_desc")}
-                selected
-              />
-              <AccountTypeCard
-                icon="🏛️"
-                title={t("account_type_organization_account")}
-                desc={t("register_org_v1_note")}
-                selected={false}
-                disabled
-              />
-            </div>
-            <div className="mt-4 rounded-2xl border border-blue-100 bg-blue-50/70 px-4 py-3 text-sm leading-6 text-blue-900">
-              <span className="font-bold">{t("register_org_link_title")}</span>{" "}
-              {t("register_org_link_desc")}
+          <div className="mb-8 rounded-2xl border border-blue-100 bg-blue-50/70 px-5 py-4 text-sm leading-6 text-blue-950">
+            <div className="flex items-start gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-lg ring-1 ring-blue-100">
+                🏛️
+              </span>
+              <div>
+                <p className="font-bold">{t("register_org_link_title")}</p>
+                <p className="mt-1 text-blue-900/80">{t("register_org_link_desc")}</p>
+              </div>
             </div>
           </div>
 
