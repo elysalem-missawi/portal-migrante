@@ -9,7 +9,7 @@
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
     "test": "npm run build && npm run test:compiled",
-    "test:compiled": "node --test dist/tests/*.test.js",
+    "test:compiled": "node --test dist/tests",
     "seed:municipalities": "ts-node src/seedMunicipalities.ts",
     "seed:service-categories": "ts-node src/seedServiceCategories.ts",
     "seed:publication-categories": "ts-node src/seedPublicationCategories.ts",
