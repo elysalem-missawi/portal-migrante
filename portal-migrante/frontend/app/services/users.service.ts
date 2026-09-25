@@ -6,7 +6,7 @@ export type UserRole =
   | "admin"
   | "super_admin";
 
-export type PlatformRole = "user" | "moderator" | "admin" | "super_admin";
+export type PlatformRole = "user" | "moderator" | "admin";
 export type AccountType = "individual" | "organization_account";
 export type UserStatus = "active" | "inactive" | "pending" | "blocked";
 
@@ -28,10 +28,10 @@ export type IdentityDocumentInput = {
 
 export type User = {
   _id: string;
-  accountType: AccountType;
+  accountType?: AccountType;
   platformRole?: PlatformRole;
-  role: UserRole;
-  fullName: string;
+  role?: UserRole;
+  fullName?: string;
   displayName?: string;
   email: string;
   phone?: string;
@@ -47,7 +47,7 @@ export type User = {
   legalConsentAt?: string;
   organizationId?: string | OrganizationRef | null;
   status: UserStatus;
-  isVerified: boolean;
+  isVerified?: boolean;
   createdAt?: string;
   updatedAt?: string;
 };
