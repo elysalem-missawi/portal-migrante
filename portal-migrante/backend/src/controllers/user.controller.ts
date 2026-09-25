@@ -1,156 +1,343 @@
 // src/controllers/user.controller.ts
+
 import { Request, Response } from "express";
 import crypto from "crypto";
-import User from "../models/user.model";
+import { Types } from "mongoose";
+
+import User, {
+  PreferredLanguage,
+} from "../models/user.model";
+
 import AuthSession from "../models/authSession.model";
-import {
-  checkPhoneVerification,
-  isTwilioVerifyConfigured,
-  sendSms,
-  startPhoneVerification,
-} from "../services/twilio.service";
+
+/* =========================================================
+   Constants
+   ========================================================= */
 
 const PASSWORD_PREFIX = "scrypt";
-const PHONE_CODE_TTL_MINUTES = 10;
-const PHONE_CODE_MAX_ATTEMPTS = 5;
+
+const ALLOWED_LANGUAGES: PreferredLanguage[] = [
+  "es",
+  "eu",
+  "ar",
+  "en",
+];
+
+const EMAIL_REGEX =
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/* =========================================================
+   Helpers
+   ========================================================= */
 
 function hashPassword(password: string): string {
   const salt = crypto.randomBytes(16).toString("hex");
-  const hash = crypto.scryptSync(password, salt, 64).toString("hex");
+
+  const hash = crypto
+    .scryptSync(password, salt, 64)
+    .toString("hex");
+
   return `${PASSWORD_PREFIX}:${salt}:${hash}`;
 }
 
-function verifyPassword(password: string, storedHash?: string): boolean {
-  if (!storedHash) return false;
-
-  const [prefix, salt, hash] = storedHash.split(":");
-  if (prefix !== PASSWORD_PREFIX || !salt || !hash) return false;
-
-  const candidate = crypto.scryptSync(password, salt, 64);
-  const saved = Buffer.from(hash, "hex");
-  return saved.length === candidate.length && crypto.timingSafeEqual(saved, candidate);
-}
-
-function hashPhoneCode(code: string, userId: string): string {
-  return crypto
-    .createHash("sha256")
-    .update(`${userId}:${code}:${process.env.ADMIN_API_KEY || "portal"}`)
-    .digest("hex");
-}
-
-function createPhoneCode(): string {
-  return String(crypto.randomInt(100000, 1000000));
-}
-
-async function assignAndSendPhoneCode(user: any) {
-  if (!user.phone) {
-    return { sent: false, skipped: true, reason: "missing_phone" };
-  }
-
-  if (isTwilioVerifyConfigured()) {
-    user.phoneVerificationCodeHash = undefined;
-    user.phoneVerificationExpiresAt = undefined;
-    user.phoneVerificationSentAt = new Date();
-    user.phoneVerificationAttempts = 0;
-    await user.save();
-
-    return startPhoneVerification(user.phone);
-  }
-
-  const code = createPhoneCode();
-  user.phoneVerificationCodeHash = hashPhoneCode(code, String(user._id));
-  user.phoneVerificationExpiresAt = new Date(
-    Date.now() + PHONE_CODE_TTL_MINUTES * 60 * 1000
-  );
-  user.phoneVerificationSentAt = new Date();
-  user.phoneVerificationAttempts = 0;
-  await user.save();
-
-  return sendSms(
-    user.phone,
-    `Portal Migrante Euskadi: your verification code is ${code}. It expires in ${PHONE_CODE_TTL_MINUTES} minutes.`
-  );
-}
-
 function publicUser(user: any) {
-  const obj = typeof user.toObject === "function" ? user.toObject() : user;
+  const obj =
+    typeof user.toObject === "function"
+      ? user.toObject()
+      : { ...user };
+
   delete obj.passwordHash;
-  delete obj.phoneVerificationCodeHash;
-  delete obj.phoneVerificationExpiresAt;
-  delete obj.phoneVerificationSentAt;
-  delete obj.phoneVerificationAttempts;
-  if (obj.identityDocument) {
-    delete obj.identityDocument.dataUrl;
-  }
+
   return obj;
 }
 
-function normalizeIdentityDocument(value: any) {
-  if (!value) return undefined;
-
-  const fileName = typeof value.fileName === "string" ? value.fileName.trim() : "";
-  const mimeType = typeof value.mimeType === "string" ? value.mimeType.trim() : "";
-  const dataUrl = typeof value.dataUrl === "string" ? value.dataUrl.trim() : "";
-  const size = Number(value.size || 0);
-
-  if (!fileName || !mimeType || !dataUrl || !Number.isFinite(size) || size <= 0) {
+function normalizeOptionalString(
+  value: unknown
+): string | undefined {
+  if (typeof value !== "string") {
     return undefined;
   }
 
-  if (size > 3 * 1024 * 1024) {
-    return undefined;
-  }
+  const normalized = value.trim();
 
-  return {
-    fileName,
-    mimeType,
-    size,
-    dataUrl,
-    uploadedAt: new Date(),
-  };
+  return normalized || undefined;
 }
 
-export const createUser = async (req: Request, res: Response): Promise<void> => {
+function normalizeEmail(
+  value: unknown
+): string {
+  if (typeof value !== "string") {
+    return "";
+  }
+
+  return value.trim().toLowerCase();
+}
+
+function isValidLanguage(
+  value: unknown
+): value is PreferredLanguage {
+  return (
+    typeof value === "string" &&
+    ALLOWED_LANGUAGES.includes(
+      value as PreferredLanguage
+    )
+  );
+}
+
+function isDuplicateKeyError(error: any): boolean {
+  return error?.code === 11000;
+}
+
+/* =========================================================
+   REGISTER USER
+   POST /api/users/register
+   ========================================================= */
+
+export const registerUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const data = { ...req.body };
+    const displayName =
+      normalizeOptionalString(req.body.displayName);
 
-    if (typeof data.password === "string" && data.password.length >= 8) {
-      data.passwordHash = hashPassword(data.password);
-      delete data.password;
+    const fullName =
+      normalizeOptionalString(req.body.fullName);
+
+    const email =
+      normalizeEmail(req.body.email);
+
+    const password =
+      typeof req.body.password === "string"
+        ? req.body.password
+        : "";
+
+    const phone =
+      normalizeOptionalString(req.body.phone);
+
+    const originCountry =
+      normalizeOptionalString(
+        req.body.originCountry
+      );
+
+    const profileImage =
+      normalizeOptionalString(
+        req.body.profileImage
+      );
+
+    const preferredLanguage =
+      req.body.preferredLanguage ?? "es";
+
+    const legalConsentAccepted =
+      req.body.legalConsentAccepted === true;
+
+    /* -----------------------------------------------------
+       Required fields
+       ----------------------------------------------------- */
+
+    if (!displayName) {
+      res.status(400).json({
+        message: "Display name is required",
+      });
+      return;
     }
 
-    if (data.identityDocument) {
-      data.identityDocument = normalizeIdentityDocument(data.identityDocument);
+    if (
+      displayName.length < 2 ||
+      displayName.length > 80
+    ) {
+      res.status(400).json({
+        message:
+          "Display name must contain between 2 and 80 characters",
+      });
+      return;
     }
 
-    const user = await User.create(data);
-    res.status(201).json(publicUser(user));
+    if (!email) {
+      res.status(400).json({
+        message: "Email is required",
+      });
+      return;
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+      res.status(400).json({
+        message: "Invalid email format",
+      });
+      return;
+    }
+
+    if (password.length < 8) {
+      res.status(400).json({
+        message:
+          "Password must be at least 8 characters",
+      });
+      return;
+    }
+
+    if (!legalConsentAccepted) {
+      res.status(400).json({
+        message: "Legal consent is required",
+      });
+      return;
+    }
+
+    if (
+      !isValidLanguage(preferredLanguage)
+    ) {
+      res.status(400).json({
+        message:
+          "Preferred language must be es, eu, ar or en",
+      });
+      return;
+    }
+
+    /* -----------------------------------------------------
+       Municipality
+       ----------------------------------------------------- */
+
+    let municipalityId: Types.ObjectId | null =
+      null;
+
+    if (req.body.municipalityId) {
+      if (
+        typeof req.body.municipalityId !==
+          "string" ||
+        !Types.ObjectId.isValid(
+          req.body.municipalityId
+        )
+      ) {
+        res.status(400).json({
+          message: "Invalid municipalityId",
+        });
+        return;
+      }
+
+      municipalityId = new Types.ObjectId(
+        req.body.municipalityId
+      );
+    }
+
+    /* -----------------------------------------------------
+       Duplicate email
+       ----------------------------------------------------- */
+
+    const existingUser =
+      await User.findOne({ email }).select("_id");
+
+    if (existingUser) {
+      res.status(409).json({
+        message: "Email is already registered",
+      });
+      return;
+    }
+
+    /* -----------------------------------------------------
+       Create user
+       ----------------------------------------------------- */
+
+    const user = await User.create({
+      displayName,
+      fullName,
+
+      email,
+      phone,
+
+      passwordHash:
+        hashPassword(password),
+
+      preferredLanguage,
+
+      originCountry,
+      municipalityId,
+      profileImage,
+
+      /*
+       * Security:
+       * These values NEVER come from req.body.
+       */
+      platformRole: "user",
+      status: "active",
+
+      legalConsentAccepted: true,
+      legalConsentAt: new Date(),
+    });
+
+    res.status(201).json({
+      message:
+        "User registered successfully",
+
+      user: publicUser(user),
+    });
   } catch (error: any) {
-    res.status(400).json({
-      message: "Failed to create user",
+    if (isDuplicateKeyError(error)) {
+      res.status(409).json({
+        message: "Email is already registered",
+      });
+      return;
+    }
+
+    res.status(500).json({
+      message: "Failed to register user",
       error: error.message,
     });
   }
 };
 
-export const getUsers = async (req: Request, res: Response): Promise<void> => {
+/* =========================================================
+   GET USERS
+   GET /api/users
+   ========================================================= */
+
+export const getUsers = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const q = typeof req.query.q === "string" ? req.query.q.trim() : "";
+    const q =
+      typeof req.query.q === "string"
+        ? req.query.q.trim()
+        : "";
+
     const filter = q
       ? {
           $or: [
-            { fullName: { $regex: q, $options: "i" } },
-            { displayName: { $regex: q, $options: "i" } },
-            { email: { $regex: q, $options: "i" } },
-            { phone: { $regex: q, $options: "i" } },
+            {
+              fullName: {
+                $regex: q,
+                $options: "i",
+              },
+            },
+            {
+              displayName: {
+                $regex: q,
+                $options: "i",
+              },
+            },
+            {
+              email: {
+                $regex: q,
+                $options: "i",
+              },
+            },
+            {
+              phone: {
+                $regex: q,
+                $options: "i",
+              },
+            },
           ],
         }
       : {};
 
     const users = await User.find(filter)
-      .select("-passwordHash -identityDocument.dataUrl")
-      .populate("organizationId", "name type slug status verified")
-      .sort({ createdAt: -1 });
+      .populate(
+        "municipalityId",
+        "name slug territory"
+      )
+      .sort({
+        createdAt: -1,
+      });
 
     res.status(200).json(users);
   } catch (error: any) {
@@ -161,18 +348,42 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const getUserById = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const user = await User.findById(req.params.id)
-      .select("-passwordHash -identityDocument.dataUrl")
-      .populate("organizationId", "name type slug status verified");
+/* =========================================================
+   GET USER BY ID
+   GET /api/users/:id
+   ========================================================= */
 
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
+export const getUserById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    if (
+      !Types.ObjectId.isValid(req.params.id)
+    ) {
+      res.status(400).json({
+        message: "Invalid user id",
+      });
       return;
     }
 
-    res.status(200).json(user);
+    const user = await User.findById(
+      req.params.id
+    ).populate(
+      "municipalityId",
+      "name slug territory"
+    );
+
+    if (!user) {
+      res.status(404).json({
+        message: "User not found",
+      });
+      return;
+    }
+
+    res.status(200).json(
+      publicUser(user)
+    );
   } catch (error: any) {
     res.status(500).json({
       message: "Failed to fetch user",
@@ -181,39 +392,284 @@ export const getUserById = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-export const updateUser = async (req: Request, res: Response): Promise<void> => {
+/* =========================================================
+   UPDATE USER
+   PUT /api/users/:id
+   ========================================================= */
+
+export const updateUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const data = { ...req.body };
     if (
-      req.auth?.platformRole !== "admin" &&
-      req.auth?.platformRole !== "super_admin"
+      !Types.ObjectId.isValid(req.params.id)
     ) {
-      for (const field of [
-        "platformRole",
-        "role",
-        "status",
-        "isVerified",
-        "organizationId",
-        "passwordHash",
-      ]) {
-        delete data[field];
-      }
-    }
-
-    const user = await User.findByIdAndUpdate(req.params.id, data, {
-      new: true,
-      runValidators: true,
-    })
-      .select("-passwordHash -identityDocument.dataUrl")
-      .populate("organizationId", "name type slug status verified");
-
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
+      res.status(400).json({
+        message: "Invalid user id",
+      });
       return;
     }
 
-    res.status(200).json(user);
+    const data: Record<string, any> = {};
+
+    /* -----------------------------------------------------
+       Fields that user can update
+       ----------------------------------------------------- */
+
+    if (
+      req.body.displayName !== undefined
+    ) {
+      const displayName =
+        normalizeOptionalString(
+          req.body.displayName
+        );
+
+      if (
+        !displayName ||
+        displayName.length < 2 ||
+        displayName.length > 80
+      ) {
+        res.status(400).json({
+          message:
+            "Display name must contain between 2 and 80 characters",
+        });
+        return;
+      }
+
+      data.displayName = displayName;
+    }
+
+    if (
+      req.body.fullName !== undefined
+    ) {
+      data.fullName =
+        normalizeOptionalString(
+          req.body.fullName
+        );
+    }
+
+    if (req.body.phone !== undefined) {
+      data.phone =
+        normalizeOptionalString(
+          req.body.phone
+        );
+    }
+
+    if (
+      req.body.originCountry !== undefined
+    ) {
+      data.originCountry =
+        normalizeOptionalString(
+          req.body.originCountry
+        );
+    }
+
+    if (
+      req.body.profileImage !== undefined
+    ) {
+      data.profileImage =
+        normalizeOptionalString(
+          req.body.profileImage
+        );
+    }
+
+    /* -----------------------------------------------------
+       Email
+       ----------------------------------------------------- */
+
+    if (req.body.email !== undefined) {
+      const email =
+        normalizeEmail(req.body.email);
+
+      if (
+        !email ||
+        !EMAIL_REGEX.test(email)
+      ) {
+        res.status(400).json({
+          message: "Invalid email format",
+        });
+        return;
+      }
+
+      const existingUser =
+        await User.findOne({
+          email,
+          _id: {
+            $ne: req.params.id,
+          },
+        }).select("_id");
+
+      if (existingUser) {
+        res.status(409).json({
+          message:
+            "Email is already registered",
+        });
+        return;
+      }
+
+      data.email = email;
+    }
+
+    /* -----------------------------------------------------
+       Preferred language
+       ----------------------------------------------------- */
+
+    if (
+      req.body.preferredLanguage !==
+      undefined
+    ) {
+      if (
+        !isValidLanguage(
+          req.body.preferredLanguage
+        )
+      ) {
+        res.status(400).json({
+          message:
+            "Preferred language must be es, eu, ar or en",
+        });
+        return;
+      }
+
+      data.preferredLanguage =
+        req.body.preferredLanguage;
+    }
+
+    /* -----------------------------------------------------
+       Municipality
+       ----------------------------------------------------- */
+
+    if (
+      req.body.municipalityId !==
+      undefined
+    ) {
+      if (
+        req.body.municipalityId === null ||
+        req.body.municipalityId === ""
+      ) {
+        data.municipalityId = null;
+      } else {
+        if (
+          typeof req.body
+            .municipalityId !== "string" ||
+          !Types.ObjectId.isValid(
+            req.body.municipalityId
+          )
+        ) {
+          res.status(400).json({
+            message:
+              "Invalid municipalityId",
+          });
+          return;
+        }
+
+        data.municipalityId =
+          new Types.ObjectId(
+            req.body.municipalityId
+          );
+      }
+    }
+
+    /* -----------------------------------------------------
+       Admin-only fields
+       ----------------------------------------------------- */
+
+    if (
+      req.auth?.platformRole === "admin"
+    ) {
+      if (
+        req.body.platformRole !==
+        undefined
+      ) {
+        const allowedRoles = [
+          "user",
+          "moderator",
+          "admin",
+        ];
+
+        if (
+          !allowedRoles.includes(
+            req.body.platformRole
+          )
+        ) {
+          res.status(400).json({
+            message:
+              "Invalid platform role",
+          });
+          return;
+        }
+
+        data.platformRole =
+          req.body.platformRole;
+      }
+
+      if (
+        req.body.status !== undefined
+      ) {
+        const allowedStatuses = [
+          "active",
+          "inactive",
+          "pending",
+          "blocked",
+        ];
+
+        if (
+          !allowedStatuses.includes(
+            req.body.status
+          )
+        ) {
+          res.status(400).json({
+            message:
+              "Invalid user status",
+          });
+          return;
+        }
+
+        data.status =
+          req.body.status;
+      }
+    }
+
+    /* -----------------------------------------------------
+       Update
+       ----------------------------------------------------- */
+
+    const user =
+      await User.findByIdAndUpdate(
+        req.params.id,
+        {
+          $set: data,
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      ).populate(
+        "municipalityId",
+        "name slug territory"
+      );
+
+    if (!user) {
+      res.status(404).json({
+        message: "User not found",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      message:
+        "User updated successfully",
+
+      user: publicUser(user),
+    });
   } catch (error: any) {
+    if (isDuplicateKeyError(error)) {
+      res.status(409).json({
+        message: "Email is already registered",
+      });
+      return;
+    }
+
     res.status(400).json({
       message: "Failed to update user",
       error: error.message,
@@ -221,246 +677,75 @@ export const updateUser = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-export const deleteUser = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      { status: "inactive" },
-      { new: true, runValidators: true }
-    );
+/* =========================================================
+   DELETE / DEACTIVATE USER
+   DELETE /api/users/:id
+   ========================================================= */
 
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-
-    await AuthSession.updateMany(
-      { userId: user._id, revokedAt: null },
-      { $set: { revokedAt: new Date() } }
-    );
-
-    res.status(200).json({ message: "User deactivated successfully" });
-  } catch (error: any) {
-    res.status(500).json({
-      message: "Failed to delete user",
-      error: error.message,
-    });
-  }
-};
-
-export const registerUser = async (
+export const deleteUser = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   try {
-    const password = typeof req.body.password === "string" ? req.body.password : "";
-    const phone = typeof req.body.phone === "string" ? req.body.phone.trim() : "";
-    const identityDocument = normalizeIdentityDocument(req.body.identityDocument);
-    const legalConsentAccepted = Boolean(req.body.legalConsentAccepted);
-
-    if (password.length < 8) {
-      res.status(400).json({ message: "Password must be at least 8 characters" });
-      return;
-    }
-
-    if (!phone) {
-      res.status(400).json({ message: "Phone is required" });
-      return;
-    }
-
-    if (!legalConsentAccepted) {
-      res.status(400).json({ message: "Legal consent is required" });
-      return;
-    }
-
-    const user = await User.create({
-      accountType: req.body.accountType || "individual",
-      platformRole: "user",
-      role: "community_user",
-      fullName: req.body.fullName,
-      displayName: req.body.displayName,
-      email: req.body.email,
-      phone,
-      phoneVerified: false,
-      preferredLanguage: req.body.preferredLanguage,
-      originCountry: req.body.originCountry,
-      nativeLanguage: req.body.nativeLanguage,
-      municipalityId: req.body.municipalityId || null,
-      municipality: req.body.municipality,
-      profileImage: req.body.profileImage,
-      organizationId: null,
-      status: "active",
-      isVerified: false,
-      passwordHash: hashPassword(password),
-      identityDocument,
-      legalConsentAccepted,
-      legalConsentAt: new Date(),
-    });
-
-    // V1 collects a contact phone but deliberately does not require or send SMS.
-    // The verification endpoints remain available for a later release.
-    res.status(201).json({
-      user: publicUser(user),
-      phoneVerification: {
-        sent: false,
-        skipped: true,
-        reason: "not_required_in_v1",
-      },
-    });
-  } catch (error: any) {
-    res.status(400).json({
-      message: "Failed to register user",
-      error: error.message,
-    });
-  }
-};
-
-export const sendPhoneVerificationCode = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const user = await User.findById(req.params.id).select(
-      "+phoneVerificationCodeHash +phoneVerificationExpiresAt +phoneVerificationSentAt +phoneVerificationAttempts"
-    );
-
-    if (!user) {
-      res.status(404).json({ message: "User not found" });
-      return;
-    }
-
-    if (!user.phone) {
-      res.status(400).json({ message: "User phone is required" });
-      return;
-    }
-
-    const sms = await assignAndSendPhoneCode(user);
-    if (sms.skipped && sms.reason === "twilio_not_configured") {
-      res.status(503).json({
-        message: "Twilio is not configured",
-        phoneVerification: sms,
+    if (
+      !Types.ObjectId.isValid(req.params.id)
+    ) {
+      res.status(400).json({
+        message: "Invalid user id",
       });
       return;
     }
 
-    res.status(200).json({
-      message: "Verification code sent",
-      phoneVerification: sms,
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      message: "Failed to send verification code",
-      error: error.message,
-    });
-  }
-};
-
-export const verifyPhoneCode = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  try {
-    const code = typeof req.body.code === "string" ? req.body.code.trim() : "";
-    const user = await User.findById(req.params.id).select(
-      "+phoneVerificationCodeHash +phoneVerificationExpiresAt +phoneVerificationSentAt +phoneVerificationAttempts"
-    );
+    /*
+     * V1 uses soft delete.
+     * The database record is preserved.
+     */
+    const user =
+      await User.findByIdAndUpdate(
+        req.params.id,
+        {
+          $set: {
+            status: "inactive",
+          },
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
 
     if (!user) {
-      res.status(404).json({ message: "User not found" });
+      res.status(404).json({
+        message: "User not found",
+      });
       return;
     }
 
-    if (!code || !/^\d{6}$/.test(code)) {
-      res.status(400).json({ message: "A valid 6-digit code is required" });
-      return;
-    }
-
-    if (isTwilioVerifyConfigured()) {
-      if (user.phoneVerificationAttempts >= PHONE_CODE_MAX_ATTEMPTS) {
-        res.status(429).json({ message: "Too many verification attempts" });
-        return;
+    /*
+     * Revoke every active session
+     * after account deactivation.
+     */
+    await AuthSession.updateMany(
+      {
+        userId: user._id,
+        revokedAt: null,
+      },
+      {
+        $set: {
+          revokedAt: new Date(),
+        },
       }
-
-      user.phoneVerificationAttempts += 1;
-      const verification = await checkPhoneVerification(user.phone || "", code);
-
-      if (!verification.approved) {
-        await user.save();
-        res.status(400).json({ message: "Invalid verification code" });
-        return;
-      }
-
-      user.phoneVerified = true;
-      user.phoneVerificationCodeHash = undefined;
-      user.phoneVerificationExpiresAt = undefined;
-      user.phoneVerificationAttempts = 0;
-      await user.save();
-
-      res.status(200).json(publicUser(user));
-      return;
-    }
-
-    if (
-      !user.phoneVerificationCodeHash ||
-      !user.phoneVerificationExpiresAt ||
-      user.phoneVerificationExpiresAt.getTime() < Date.now()
-    ) {
-      res.status(400).json({ message: "Verification code expired" });
-      return;
-    }
-
-    if (user.phoneVerificationAttempts >= PHONE_CODE_MAX_ATTEMPTS) {
-      res.status(429).json({ message: "Too many verification attempts" });
-      return;
-    }
-
-    user.phoneVerificationAttempts += 1;
-
-    const expected = hashPhoneCode(code, String(user._id));
-    if (expected !== user.phoneVerificationCodeHash) {
-      await user.save();
-      res.status(400).json({ message: "Invalid verification code" });
-      return;
-    }
-
-    user.phoneVerified = true;
-    user.phoneVerificationCodeHash = undefined;
-    user.phoneVerificationExpiresAt = undefined;
-    user.phoneVerificationAttempts = 0;
-    await user.save();
-
-    res.status(200).json(publicUser(user));
-  } catch (error: any) {
-    res.status(500).json({
-      message: "Failed to verify phone",
-      error: error.message,
-    });
-  }
-};
-
-export const loginUser = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const email = typeof req.body.email === "string" ? req.body.email.trim() : "";
-    const password = typeof req.body.password === "string" ? req.body.password : "";
-
-    const user = await User.findOne({ email: email.toLowerCase() }).select(
-      "+passwordHash"
     );
 
-    if (!user || !verifyPassword(password, user.passwordHash)) {
-      res.status(401).json({ message: "Invalid email or password" });
-      return;
-    }
-
-    if (user.status === "blocked" || user.status === "inactive") {
-      res.status(403).json({ message: "User is not allowed to login" });
-      return;
-    }
-
-    res.status(200).json(publicUser(user));
+    res.status(200).json({
+      message:
+        "User deactivated successfully",
+    });
   } catch (error: any) {
     res.status(500).json({
-      message: "Failed to login",
+      message:
+        "Failed to deactivate user",
+
       error: error.message,
     });
   }
