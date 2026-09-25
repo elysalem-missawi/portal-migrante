@@ -134,6 +134,12 @@ export default function Sobre() {
     "about_need_partners",
   ];
 
+  const bridgeActors = [
+    { title: "about_bridge_migrant_title", desc: "about_bridge_migrant_desc" },
+    { title: "about_bridge_institutions_title", desc: "about_bridge_institutions_desc" },
+    { title: "about_bridge_citizens_title", desc: "about_bridge_citizens_desc" },
+  ];
+
   return (
     <main className="bg-white">
       {/* ═══════════ HERO ═══════════ */}
@@ -223,6 +229,37 @@ export default function Sobre() {
           <div className="space-y-3 text-sm leading-7 text-slate-700 sm:text-base">
             <p>{t("about_identity_desc")}</p>
             <p className="font-semibold text-slate-900">{t("about_non_official")}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-slate-200 bg-slate-950 py-16 text-white sm:py-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl">
+            <p className="font-mono text-[10px] font-black uppercase tracking-[0.28em] text-emerald-300">
+              {t("about_bridge_label")}
+            </p>
+            <h2 className="mt-4 text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">
+              {t("about_bridge_title")}
+            </h2>
+            <p className="mt-5 max-w-3xl text-base leading-8 text-slate-300 sm:text-lg">
+              {t("about_bridge_desc")}
+            </p>
+          </div>
+
+          <div className="mt-10 grid gap-4 lg:grid-cols-3">
+            {bridgeActors.map((actor, index) => (
+              <article key={actor.title} className="rounded-3xl border border-white/10 bg-white/5 p-6">
+                <div className="flex items-center justify-between gap-4">
+                  <span className="font-mono text-xs font-black tracking-[0.2em] text-emerald-300">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="h-px flex-1 bg-white/10" />
+                </div>
+                <h3 className="mt-6 text-xl font-black text-white">{t(actor.title)}</h3>
+                <p className="mt-3 text-sm leading-7 text-slate-300">{t(actor.desc)}</p>
+              </article>
+            ))}
           </div>
         </div>
       </section>
