@@ -76,7 +76,7 @@ export default function Header() {
      Create account label
   ========================================================= */
 
-  const createAccountLabel = t("create_account_link");
+  const createAccountLabel = t("register_submit");
 
   /* =========================================================
      User roles
@@ -258,7 +258,7 @@ export default function Header() {
             flex-1
             items-center
             justify-center
-            2xl:flex
+            xl:flex
           "
         >
           <div
@@ -311,7 +311,7 @@ export default function Header() {
             shrink-0
             items-center
             gap-2
-            2xl:flex
+            xl:flex
           "
         >
           {/* Language */}
@@ -623,7 +623,7 @@ export default function Header() {
             shrink-0
             items-center
             gap-1.5
-            2xl:hidden
+            xl:hidden
           "
         >
           {/* Language */}
@@ -726,7 +726,7 @@ export default function Header() {
           shadow-slate-200/30
           transition-all
           duration-300
-          2xl:hidden
+          xl:hidden
           ${
             open
               ? "max-h-[calc(100vh-4.5rem)] opacity-100"
