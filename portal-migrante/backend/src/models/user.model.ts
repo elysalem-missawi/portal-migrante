@@ -1,113 +1,145 @@
 import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
-export type PlatformRole = "user" | "moderator" | "admin" | "super_admin";
+/* =========================================================
+   User types
+   ========================================================= */
+
+export type PlatformRole = "user" | "moderator" | "admin";
+
+export type UserStatus =
+  | "active"
+  | "inactive"
+  | "pending"
+  | "blocked";
+
+export type PreferredLanguage = "es" | "eu" | "ar" | "en";
+
+/* =========================================================
+   User interface
+   ========================================================= */
 
 export interface IUser extends Document {
-  accountType: "individual" | "organization_account";
-  platformRole: PlatformRole;
+  /**
+   * Public name shown in the platform.
+   * Can be a real name or a chosen display name.
+   */
+  displayName: string;
 
-  // Deprecated compatibility role; organization roles belong to OrganizationMember.
-  role:
-    | "community_user"
-    | "organization_manager"
-    | "admin"
-    | "super_admin";
+  /**
+   * Real/full name.
+   * Optional because we do not need it to create an account.
+   */
+  fullName?: string;
 
-  fullName: string;
-  displayName?: string;
+  /**
+   * Unique login email.
+   */
   email: string;
+
+  /**
+   * Optional contact phone.
+   * Phone verification is not required in V1.
+   */
   phone?: string;
-  phoneVerified: boolean;
-  phoneVerificationCodeHash?: string;
-  phoneVerificationExpiresAt?: Date;
-  phoneVerificationSentAt?: Date;
-  phoneVerificationAttempts: number;
+
+  /**
+   * Password hash.
+   * select:false prevents accidental exposure.
+   *
+   * Optional at schema level to allow future
+   * external authentication providers.
+   */
   passwordHash?: string;
-  preferredLanguage?: string;
+
+  /**
+   * Interface language.
+   */
+  preferredLanguage: PreferredLanguage;
+
+  /**
+   * Optional profile information.
+   */
   originCountry?: string;
-  nativeLanguage?: string;
+
   municipalityId?: Types.ObjectId | null;
 
-  // Deprecated transitional fields.
-  municipality?: string;
-  organizationId?: Types.ObjectId | null;
-
-  // Extended profile fields
-  firstName?: string;
-  lastName?: string;
-  organizationName?: string;
-  cif?: string;
-  contactPersonName?: string;
-  address?: string;
-  postalCode?: string;
-  googleId?: string;
-
   profileImage?: string;
-  identityDocument?: {
-    fileName: string;
-    mimeType: string;
-    size: number;
-    dataUrl: string;
-    uploadedAt: Date;
-  };
+
+  /**
+   * Platform permissions.
+   * Organization permissions do NOT belong here.
+   */
+  platformRole: PlatformRole;
+
+  /**
+   * Account status.
+   */
+  status: UserStatus;
+
+  /**
+   * Legal consent required during registration.
+   */
   legalConsentAccepted: boolean;
+
   legalConsentAt?: Date;
-  status: "active" | "inactive" | "pending" | "blocked";
-  isVerified: boolean;
+
   createdAt: Date;
   updatedAt: Date;
 }
 
+/* =========================================================
+   Schema
+   ========================================================= */
+
 const userSchema = new Schema<IUser>(
   {
-    accountType: {
+    displayName: {
       type: String,
-      enum: ["individual", "organization_account"],
-      default: "individual",
       required: true,
+      trim: true,
+      minlength: 2,
+      maxlength: 80,
     },
-    platformRole: {
+
+    fullName: {
       type: String,
-      enum: ["user", "moderator", "admin", "super_admin"],
-      default: "user",
-      required: true,
-      index: true,
+      trim: true,
+      maxlength: 150,
     },
-    role: {
-      type: String,
-      enum: [
-        "community_user",
-        "organization_manager",
-        "admin",
-        "super_admin",
-      ],
-      default: "community_user",
-      required: true,
-    },
-    fullName: { type: String, required: true, trim: true },
-    displayName: { type: String, trim: true },
+
     email: {
       type: String,
       required: true,
       unique: true,
       trim: true,
       lowercase: true,
+      maxlength: 254,
     },
-    phone: { type: String, trim: true },
-    phoneVerified: { type: Boolean, default: false, required: true },
-    phoneVerificationCodeHash: { type: String, trim: true, select: false },
-    phoneVerificationExpiresAt: { type: Date, select: false },
-    phoneVerificationSentAt: { type: Date, select: false },
-    phoneVerificationAttempts: {
-      type: Number,
-      default: 0,
-      required: true,
+
+    phone: {
+      type: String,
+      trim: true,
+      maxlength: 30,
+    },
+
+    passwordHash: {
+      type: String,
       select: false,
     },
-    passwordHash: { type: String, trim: true, select: false },
-    preferredLanguage: { type: String, trim: true, default: "es" },
-    originCountry: { type: String, trim: true },
-    nativeLanguage: { type: String, trim: true },
+
+    preferredLanguage: {
+      type: String,
+      enum: ["es", "eu", "ar", "en"],
+      default: "es",
+      required: true,
+    },
+
+    originCountry: {
+      type: String,
+      trim: true,
+      maxlength: 100,
+    },
+
     municipalityId: {
       type: Schema.Types.ObjectId,
       ref: "Municipality",
@@ -115,38 +147,19 @@ const userSchema = new Schema<IUser>(
       index: true,
     },
 
-    // Kept temporarily while existing records and forms are migrated.
-    municipality: { type: String, trim: true },
-    organizationId: {
-      type: Schema.Types.ObjectId,
-      ref: "Organization",
-      default: null,
+    profileImage: {
+      type: String,
+      trim: true,
     },
 
-    // Extended profile fields
-    firstName: { type: String, trim: true },
-    lastName: { type: String, trim: true },
-    organizationName: { type: String, trim: true },
-    cif: { type: String, trim: true, uppercase: true },
-    contactPersonName: { type: String, trim: true },
-    address: { type: String, trim: true },
-    postalCode: { type: String, trim: true },
-    googleId: { type: String, trim: true, index: true, sparse: true },
-
-    profileImage: { type: String, trim: true },
-    identityDocument: {
-      fileName: { type: String, trim: true },
-      mimeType: { type: String, trim: true },
-      size: { type: Number },
-      dataUrl: { type: String },
-      uploadedAt: { type: Date },
-    },
-    legalConsentAccepted: {
-      type: Boolean,
-      default: false,
+    platformRole: {
+      type: String,
+      enum: ["user", "moderator", "admin"],
+      default: "user",
       required: true,
+      index: true,
     },
-    legalConsentAt: { type: Date },
+
     status: {
       type: String,
       enum: ["active", "inactive", "pending", "blocked"],
@@ -154,14 +167,38 @@ const userSchema = new Schema<IUser>(
       required: true,
       index: true,
     },
-    isVerified: { type: Boolean, default: false, required: true },
+
+    legalConsentAccepted: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
+
+    legalConsentAt: {
+      type: Date,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    versionKey: false,
+  }
 );
 
-userSchema.index({ status: 1, platformRole: 1 });
-userSchema.index({ googleId: 1 }, { unique: true, sparse: true });
+/* =========================================================
+   Indexes
+   ========================================================= */
 
-const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);
+userSchema.index({
+  status: 1,
+  platformRole: 1,
+});
+
+/* =========================================================
+   Model
+   ========================================================= */
+
+const User: Model<IUser> =
+  mongoose.models.User ||
+  mongoose.model<IUser>("User", userSchema);
 
 export default User;

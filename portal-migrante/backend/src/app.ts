@@ -12,7 +12,6 @@ export interface CreateAppOptions {
 
 const defaultAllowedOrigins = [
   "http://localhost:5173",
-  "http://localhost:5174",
   "http://localhost:3000",
   "https://portal-migrante-frontend.onrender.com",
 ];
