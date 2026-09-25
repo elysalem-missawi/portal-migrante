@@ -602,7 +602,7 @@ export default function Header() {
                   hover:text-emerald-700
                 "
               >
-                {t("login")}
+                {t("login_button")}
               </Link>
 
               {/* Create account */}

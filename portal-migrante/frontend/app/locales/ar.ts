@@ -166,6 +166,7 @@ export const ar: Dict = {
   home_phase_item_platform: "نموذج أولي يعمل بالخدمات، التسجيل والمنتدى.",
   home_phase_item_partners: "البحث عن تحالفات مع المؤسسات والهيئات الاجتماعية.",
   home_final_cta_title: "لنَبنِ شبكة دعم مفيدة للمهاجرين",
+  
   home_final_cta_desc: "تبقى المعلومات مفتوحة للجميع؛ ويُستخدم التسجيل للمشاركة والمطالبة وتعزيز المجتمع.",
   login_button: "تسجيل الدخول",
   login_title: "تسجيل الدخول",
