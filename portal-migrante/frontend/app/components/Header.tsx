@@ -258,7 +258,7 @@ export default function Header() {
             flex-1
             items-center
             justify-center
-            xl:flex
+            2xl:flex
           "
         >
           <div
@@ -311,7 +311,7 @@ export default function Header() {
             shrink-0
             items-center
             gap-2
-            xl:flex
+            2xl:flex
           "
         >
           {/* Language */}
@@ -623,7 +623,7 @@ export default function Header() {
             shrink-0
             items-center
             gap-1.5
-            xl:hidden
+            2xl:hidden
           "
         >
           {/* Language */}
@@ -726,7 +726,7 @@ export default function Header() {
           shadow-slate-200/30
           transition-all
           duration-300
-          xl:hidden
+          2xl:hidden
           ${
             open
               ? "max-h-[calc(100vh-4.5rem)] opacity-100"
