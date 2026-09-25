@@ -71,23 +71,26 @@ type ForumText = {
 const text: Record<Locale, ForumText> = {
   es: {
     eyebrow: "Comunidad",
-    title: "Foro de migrantes",
+    title: "Un espacio para conectar, preguntar y compartir",
     intro:
-      "Un espacio para que cada persona tenga su perfil comunitario, publique anuncios o dudas, reciba comentarios y converse con otras personas migrantes en Euskadi.",
+      "Conecta con otras personas migrantes en Euskadi, comparte información útil, publica tus dudas y encuentra respuestas de la comunidad.",
     profileTitle: "Mi espacio",
-    profileIntro: "Guarda un nombre público para publicar y ver tus aportaciones.",
+    profileIntro:
+      "Tu espacio comunitario para participar, publicar y conversar.",
     nameLabel: "Nombre visible",
     cityLabel: "Municipio o zona",
     saveProfile: "Guardar espacio",
     profileSaved: "Espacio guardado",
-    loginTitle: "Entrar al foro",
-    loginIntro: "Para publicar, comentar o usar el chat necesitas una cuenta registrada.",
+    loginTitle: "Bienvenido de nuevo",
+    loginIntro:
+      "Inicia sesión para publicar, comentar y participar en el chat.",
     passwordLabel: "Contraseña",
     login: "Entrar",
     logout: "Salir",
     registerLink: "Crear cuenta",
     signedInAs: "Sesión iniciada como",
-    phoneNotVerified: "Verifica tu teléfono para publicar, comentar y usar el chat.",
+    phoneNotVerified:
+      "Verifica tu teléfono para publicar, comentar y utilizar el chat.",
     phoneCodeLabel: "Código SMS",
     phoneCodeSent: "Código enviado.",
     verifyPhone: "Verificar teléfono",
@@ -104,49 +107,55 @@ const text: Record<Locale, ForumText> = {
     allPosts: "Todas",
     mySpace: "Mi espacio",
     filterAll: "Todos los tipos",
-    searchPlaceholder: "Buscar por tema, ciudad o contenido...",
+    searchPlaceholder: "Buscar en la comunidad...",
     comments: "comentarios",
     addComment: "Comentar",
     commentPlaceholder: "Escribe una respuesta útil...",
     send: "Enviar",
     chatTitle: "Chat comunitario",
-    chatIntro: "Mensajes breves para saludar, pedir orientación rápida o conectar.",
-    chatPlaceholder: "Escribe un mensaje corto...",
+    chatIntro:
+      "Un espacio para saludar, pedir orientación rápida y conectar.",
+    chatPlaceholder: "Escribe un mensaje...",
     emptyPosts: "Todavía no hay publicaciones con estos filtros.",
     emptyMine: "Cuando publiques algo, aparecerá aquí.",
     emptyChat: "Todavía no hay mensajes en el chat.",
-    completeProfile: "Inicia sesión y verifica tu teléfono antes de participar.",
+    completeProfile:
+      "Inicia sesión y verifica tu teléfono antes de participar.",
     loadError: "No se pudo cargar el foro.",
     postCreated: "Publicación creada.",
     commentCreated: "Comentario añadido.",
     messageCreated: "Mensaje enviado.",
-    communityRulesTitle: "Cuidado comunitario",
+    communityRulesTitle: "Una comunidad que cuidamos entre todos",
     communityRules: [
       "Comparte información útil y evita datos personales sensibles.",
-      "Respeta experiencias distintas y responde con calma.",
-      "Para temas legales urgentes, busca orientación profesional.",
+      "Respeta las experiencias diferentes y responde con calma.",
+      "Para asuntos legales urgentes, busca orientación profesional.",
     ],
-    otherPages: "Otras páginas",
+    otherPages: "También puedes consultar",
   },
+
   ar: {
     eyebrow: "المجتمع",
-    title: "منتدى المهاجرين",
+    title: "مساحة للتواصل وطرح الأسئلة وتبادل الخبرات",
     intro:
-      "مساحة لكل مستخدم ليكون له ركنه الشخصي، ينشر فيه الإعلانات أو الاستشكالات، ويتلقى تعليقات ويتحدث مع أشخاص آخرين في إقليم الباسك.",
-    profileTitle: "مساحتي الشخصية",
-    profileIntro: "احفظ اسماً ظاهراً لتستعمله في النشر ورؤية مشاركاتك.",
+      "تواصل مع المهاجرين في إقليم الباسك، شارك المعلومات المفيدة، اطرح أسئلتك واستفد من تجارب المجتمع.",
+    profileTitle: "مساحتي",
+    profileIntro:
+      "مساحتك الخاصة للمشاركة والنشر والتواصل مع المجتمع.",
     nameLabel: "الاسم الظاهر",
     cityLabel: "البلدية أو المنطقة",
     saveProfile: "حفظ المساحة",
     profileSaved: "تم حفظ المساحة",
-    loginTitle: "الدخول إلى المنتدى",
-    loginIntro: "للنشر أو التعليق أو استعمال الشات يجب أن يكون لديك حساب مسجل.",
+    loginTitle: "مرحباً بعودتك",
+    loginIntro:
+      "سجل الدخول للنشر والتعليق والمشاركة في الشات.",
     passwordLabel: "كلمة السر",
     login: "دخول",
     logout: "خروج",
     registerLink: "إنشاء حساب",
     signedInAs: "تم الدخول باسم",
-    phoneNotVerified: "تحقق من هاتفك حتى تتمكن من النشر والتعليق واستعمال الشات.",
+    phoneNotVerified:
+      "تحقق من هاتفك حتى تتمكن من النشر والتعليق واستعمال الشات.",
     phoneCodeLabel: "كود SMS",
     phoneCodeSent: "تم إرسال الكود.",
     verifyPhone: "تحقق من الهاتف",
@@ -163,49 +172,55 @@ const text: Record<Locale, ForumText> = {
     allPosts: "الكل",
     mySpace: "مساحتي",
     filterAll: "كل الأنواع",
-    searchPlaceholder: "ابحث حسب الموضوع أو المدينة أو المحتوى...",
+    searchPlaceholder: "ابحث داخل المجتمع...",
     comments: "تعليقات",
     addComment: "تعليق",
     commentPlaceholder: "اكتب رداً مفيداً...",
     send: "إرسال",
     chatTitle: "الشات المجتمعي",
-    chatIntro: "رسائل قصيرة للتعارف، طلب توجيه سريع، أو التواصل.",
-    chatPlaceholder: "اكتب رسالة قصيرة...",
+    chatIntro:
+      "مساحة للتعارف وطلب التوجيه السريع والتواصل.",
+    chatPlaceholder: "اكتب رسالة...",
     emptyPosts: "لا توجد منشورات بهذه الفلاتر بعد.",
     emptyMine: "عندما تنشر شيئاً سيظهر هنا.",
     emptyChat: "لا توجد رسائل في الشات بعد.",
-    completeProfile: "سجل الدخول وتحقق من هاتفك قبل المشاركة.",
+    completeProfile:
+      "سجل الدخول وتحقق من هاتفك قبل المشاركة.",
     loadError: "تعذر تحميل المنتدى.",
     postCreated: "تم إنشاء المنشور.",
     commentCreated: "تمت إضافة التعليق.",
     messageCreated: "تم إرسال الرسالة.",
-    communityRulesTitle: "عناية مجتمعية",
+    communityRulesTitle: "مجتمع نهتم به جميعاً",
     communityRules: [
-      "شارك معلومات مفيدة وتجنب نشر بيانات شخصية حساسة.",
+      "شارك المعلومات المفيدة وتجنب البيانات الشخصية الحساسة.",
       "احترم اختلاف التجارب ورد بهدوء.",
-      "في الأمور القانونية العاجلة، اطلب توجيهاً مهنياً.",
+      "في القضايا القانونية العاجلة، اطلب توجيهاً مهنياً.",
     ],
-    otherPages: "صفحات أخرى",
+    otherPages: "يمكنك أيضاً الاطلاع على",
   },
+
   en: {
     eyebrow: "Community",
-    title: "Migrant forum",
+    title: "A space to connect, ask and share",
     intro:
-      "A space where each person can keep a community profile, publish announcements or questions, receive comments, and chat with other migrants in Euskadi.",
+      "Connect with other migrants in Euskadi, share useful information, ask questions and learn from the community.",
     profileTitle: "My space",
-    profileIntro: "Save a public name to post and see your own contributions.",
+    profileIntro:
+      "Your community space to participate, publish and connect.",
     nameLabel: "Display name",
     cityLabel: "Municipality or area",
     saveProfile: "Save space",
     profileSaved: "Space saved",
-    loginTitle: "Sign in to the forum",
-    loginIntro: "To publish, comment, or use chat you need a registered account.",
+    loginTitle: "Welcome back",
+    loginIntro:
+      "Sign in to publish, comment and participate in the chat.",
     passwordLabel: "Password",
     login: "Sign in",
     logout: "Log out",
     registerLink: "Create account",
     signedInAs: "Signed in as",
-    phoneNotVerified: "Verify your phone to publish, comment, and use chat.",
+    phoneNotVerified:
+      "Verify your phone to publish, comment and use chat.",
     phoneCodeLabel: "SMS code",
     phoneCodeSent: "Code sent.",
     verifyPhone: "Verify phone",
@@ -222,49 +237,55 @@ const text: Record<Locale, ForumText> = {
     allPosts: "All",
     mySpace: "My space",
     filterAll: "All types",
-    searchPlaceholder: "Search by topic, city, or content...",
+    searchPlaceholder: "Search the community...",
     comments: "comments",
     addComment: "Comment",
     commentPlaceholder: "Write a helpful reply...",
     send: "Send",
     chatTitle: "Community chat",
-    chatIntro: "Short messages to say hello, ask quick guidance, or connect.",
-    chatPlaceholder: "Write a short message...",
+    chatIntro:
+      "Say hello, ask for quick guidance or connect with others.",
+    chatPlaceholder: "Write a message...",
     emptyPosts: "There are no posts with these filters yet.",
     emptyMine: "When you publish something, it will appear here.",
     emptyChat: "There are no chat messages yet.",
-    completeProfile: "Sign in and verify your phone before participating.",
+    completeProfile:
+      "Sign in and verify your phone before participating.",
     loadError: "The forum could not be loaded.",
     postCreated: "Post created.",
     commentCreated: "Comment added.",
     messageCreated: "Message sent.",
-    communityRulesTitle: "Community care",
+    communityRulesTitle: "A community we care for together",
     communityRules: [
       "Share useful information and avoid sensitive personal details.",
       "Respect different experiences and reply calmly.",
-      "For urgent legal issues, seek professional guidance.",
+      "For urgent legal matters, seek professional guidance.",
     ],
-    otherPages: "Other pages",
+    otherPages: "You may also explore",
   },
+
   eu: {
     eyebrow: "Komunitatea",
-    title: "Migratzaileen foroa",
+    title: "Konektatzeko, galdetzeko eta partekatzeko espazioa",
     intro:
-      "Pertsona bakoitzak komunitateko profila izan, iragarkiak edo galderak argitaratu, iruzkinak jaso eta Euskadiko beste migratzaileekin hitz egiteko espazioa.",
+      "Euskadiko beste migratzaileekin konektatu, informazio erabilgarria partekatu eta zure galderak komunitatearekin partekatu.",
     profileTitle: "Nire espazioa",
-    profileIntro: "Gorde izen publikoa argitaratzeko eta zure ekarpenak ikusteko.",
+    profileIntro:
+      "Zure komunitateko espazioa parte hartzeko, argitaratzeko eta konektatzeko.",
     nameLabel: "Bistaratzeko izena",
     cityLabel: "Udalerria edo eremua",
     saveProfile: "Gorde espazioa",
     profileSaved: "Espazioa gordeta",
-    loginTitle: "Sartu foroan",
-    loginIntro: "Argitaratzeko, iruzkintzeko edo txata erabiltzeko kontu erregistratua behar duzu.",
+    loginTitle: "Ongi etorri berriro",
+    loginIntro:
+      "Hasi saioa argitaratzeko, iruzkintzeko eta txatean parte hartzeko.",
     passwordLabel: "Pasahitza",
     login: "Sartu",
     logout: "Irten",
     registerLink: "Sortu kontua",
     signedInAs: "Saioa hasita",
-    phoneNotVerified: "Egiaztatu telefonoa argitaratzeko, iruzkintzeko eta txata erabiltzeko.",
+    phoneNotVerified:
+      "Egiaztatu telefonoa argitaratzeko, iruzkintzeko eta txata erabiltzeko.",
     phoneCodeLabel: "SMS kodea",
     phoneCodeSent: "Kodea bidali da.",
     verifyPhone: "Egiaztatu telefonoa",
@@ -281,23 +302,25 @@ const text: Record<Locale, ForumText> = {
     allPosts: "Guztiak",
     mySpace: "Nire espazioa",
     filterAll: "Mota guztiak",
-    searchPlaceholder: "Bilatu gaiaren, hiriaren edo edukiaren arabera...",
+    searchPlaceholder: "Bilatu komunitatean...",
     comments: "iruzkin",
     addComment: "Iruzkindu",
     commentPlaceholder: "Idatzi erantzun erabilgarria...",
     send: "Bidali",
     chatTitle: "Komunitateko txata",
-    chatIntro: "Mezu laburrak agurtzeko, orientazio azkarra eskatzeko edo konektatzeko.",
-    chatPlaceholder: "Idatzi mezu labur bat...",
+    chatIntro:
+      "Agurtzeko, orientazio azkarra eskatzeko edo konektatzeko.",
+    chatPlaceholder: "Idatzi mezua...",
     emptyPosts: "Oraindik ez dago argitalpenik iragazki hauekin.",
     emptyMine: "Zerbait argitaratzen duzunean, hemen agertuko da.",
     emptyChat: "Oraindik ez dago txateko mezurik.",
-    completeProfile: "Hasi saioa eta egiaztatu telefonoa parte hartu aurretik.",
+    completeProfile:
+      "Hasi saioa eta egiaztatu telefonoa parte hartu aurretik.",
     loadError: "Ezin izan da foroa kargatu.",
     postCreated: "Argitalpena sortu da.",
     commentCreated: "Iruzkina gehitu da.",
     messageCreated: "Mezua bidali da.",
-    communityRulesTitle: "Komunitate zaintza",
+    communityRulesTitle: "Elkar zaintzen dugun komunitatea",
     communityRules: [
       "Partekatu informazio erabilgarria eta saihestu datu pertsonal sentikorrak.",
       "Errespetatu esperientzia desberdinak eta erantzun lasai.",
@@ -308,10 +331,26 @@ const text: Record<Locale, ForumText> = {
 };
 
 const quickLinks = [
-  { labelKey: "f_health", to: "/servicios/salud", icon: "\uD83D\uDC97" },
-  { labelKey: "f_housing", to: "/servicios/vivienda", icon: "\uD83C\uDFE0" },
-  { labelKey: "f_municipalities", to: "/ayuntamientos", icon: "\uD83C\uDFDB\uFE0F" },
-  { labelKey: "f_charities", to: "/servicios/asociaciones", icon: "\uD83E\uDD1D" },
+  {
+    labelKey: "f_health",
+    to: "/servicios/salud",
+    icon: "♥",
+  },
+  {
+    labelKey: "f_housing",
+    to: "/servicios/vivienda",
+    icon: "⌂",
+  },
+  {
+    labelKey: "f_municipalities",
+    to: "/ayuntamientos",
+    icon: "▦",
+  },
+  {
+    labelKey: "f_charities",
+    to: "/servicios/asociaciones",
+    icon: "♡",
+  },
 ];
 
 const formatDate = (value: string, locale: string) =>
@@ -324,26 +363,49 @@ const formatDate = (value: string, locale: string) =>
 
 export default function ForoMigrantesPage() {
   const { locale, t } = useI18n();
+
   const {
     currentUser,
     signIn,
     signOut,
     refreshSession,
   } = useAuth();
-  const copy = text[(locale as Locale) in text ? (locale as Locale) : "es"];
+
+  const copy =
+    text[(locale as Locale) in text ? (locale as Locale) : "es"];
+
+  const isArabic = locale === "ar";
+
   const [posts, setPosts] = useState<ForumPost[]>([]);
   const [messages, setMessages] = useState<ForumMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
+
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+  });
+
   const [phoneCode, setPhoneCode] = useState("");
+
   const [activeView, setActiveView] = useState<"all" | "mine">("all");
-  const [typeFilter, setTypeFilter] = useState<ForumPostType | "all">("all");
+
+  const [typeFilter, setTypeFilter] =
+    useState<ForumPostType | "all">("all");
+
   const [search, setSearch] = useState("");
-  const [expandedPostId, setExpandedPostId] = useState<string | null>(null);
-  const [commentDrafts, setCommentDrafts] = useState<Record<string, string>>({});
+
+  const [expandedPostId, setExpandedPostId] =
+    useState<string | null>(null);
+
+  const [commentDrafts, setCommentDrafts] =
+    useState<Record<string, string>>({});
+
   const [chatDraft, setChatDraft] = useState("");
+
+  const [showComposer, setShowComposer] = useState(false);
+
   const [postDraft, setPostDraft] = useState({
     type: "question" as ForumPostType,
     title: "",
@@ -351,13 +413,14 @@ export default function ForoMigrantesPage() {
     body: "",
   });
 
-  const hasProfile = Boolean(currentUser?._id);
   const canParticipate = Boolean(
-    currentUser && (currentUser.phoneVerified || currentUser.isVerified)
+    currentUser &&
+      (currentUser.phoneVerified || currentUser.isVerified)
   );
 
   const loadForum = async () => {
     setError("");
+
     try {
       const [postsData, messagesData] = await Promise.all([
         forumService.listPosts({
@@ -366,6 +429,7 @@ export default function ForoMigrantesPage() {
         }),
         forumService.listMessages(),
       ]);
+
       setPosts(Array.isArray(postsData) ? postsData : []);
       setMessages(Array.isArray(messagesData) ? messagesData : []);
     } catch (err: any) {
@@ -385,13 +449,20 @@ export default function ForoMigrantesPage() {
         (post) => post.authorUserId === currentUser?._id
       );
     }
+
     return posts;
   }, [activeView, currentUser?._id, posts]);
 
   const login = async (event: FormEvent) => {
     event.preventDefault();
+
     await signIn(loginData);
-    setLoginData({ email: "", password: "" });
+
+    setLoginData({
+      email: "",
+      password: "",
+    });
+
     setNotice(copy.profileSaved);
   };
 
@@ -402,6 +473,7 @@ export default function ForoMigrantesPage() {
 
   const createPost = async (event: FormEvent) => {
     event.preventDefault();
+
     if (!canParticipate) {
       setNotice(copy.completeProfile);
       return;
@@ -416,8 +488,16 @@ export default function ForoMigrantesPage() {
     });
 
     setPosts((current) => [created, ...current]);
-    setPostDraft({ type: "question", title: "", category: "", body: "" });
+
+    setPostDraft({
+      type: "question",
+      title: "",
+      category: "",
+      body: "",
+    });
+
     setActiveView("mine");
+    setShowComposer(false);
     setNotice(copy.postCreated);
   };
 
@@ -428,6 +508,7 @@ export default function ForoMigrantesPage() {
     }
 
     const body = commentDrafts[postId]?.trim();
+
     if (!body) return;
 
     const updated = await forumService.addComment(postId, {
@@ -436,20 +517,29 @@ export default function ForoMigrantesPage() {
     });
 
     setPosts((current) =>
-      current.map((post) => (post._id === updated._id ? updated : post))
+      current.map((post) =>
+        post._id === updated._id ? updated : post
+      )
     );
-    setCommentDrafts((current) => ({ ...current, [postId]: "" }));
+
+    setCommentDrafts((current) => ({
+      ...current,
+      [postId]: "",
+    }));
+
     setNotice(copy.commentCreated);
   };
 
   const sendMessage = async (event: FormEvent) => {
     event.preventDefault();
+
     if (!canParticipate) {
       setNotice(copy.completeProfile);
       return;
     }
 
     const body = chatDraft.trim();
+
     if (!body) return;
 
     const created = await forumService.createMessage({
@@ -457,490 +547,563 @@ export default function ForoMigrantesPage() {
       body,
     });
 
-    setMessages((current) => [...current, created].slice(-80));
+    setMessages((current) =>
+      [...current, created].slice(-80)
+    );
+
     setChatDraft("");
     setNotice(copy.messageCreated);
   };
 
   const verifyForumPhone = async () => {
     if (!currentUser) return;
-    await usersService.verifyPhone(currentUser._id, phoneCode);
+
+    await usersService.verifyPhone(
+      currentUser._id,
+      phoneCode
+    );
+
     await refreshSession();
+
     setPhoneCode("");
     setNotice(copy.phoneVerified);
   };
 
   const resendForumCode = async () => {
     if (!currentUser) return;
+
     await usersService.sendPhoneCode(currentUser._id);
+
     setNotice(copy.phoneCodeSent);
   };
 
   return (
-    <main className="min-h-screen bg-slate-50">
-      <section className="relative overflow-hidden bg-[radial-gradient(circle_at_88%_78%,rgba(0,151,57,0.82)_0%,rgba(0,151,57,0.42)_24%,transparent_48%),linear-gradient(135deg,#2448ad_0%,#284fb8_46%,#173f89_100%)] text-white">
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_0.9fr] lg:px-8 lg:py-24">
-          <div>
-            <p className="mb-8 inline-flex items-center gap-3 rounded-full border border-white/70 px-5 py-2 text-sm font-black text-white">
-              <span aria-hidden="true">{"\uD83D\uDCAC"}</span>
-              {copy.eyebrow}
-            </p>
-            <h1 className="max-w-4xl text-5xl font-black leading-tight text-white sm:text-6xl lg:text-7xl">
-              {copy.title}
-            </h1>
-            <p className="mt-7 max-w-3xl text-xl leading-relaxed text-slate-200 sm:text-2xl">
-              {copy.intro}
-            </p>
+    <main
+      dir={isArabic ? "rtl" : "ltr"}
+      className="min-h-screen bg-[#fafbfc] text-slate-950"
+    >
+     {/* =========================================================
+    HERO — Balanced Wix Style
+========================================================= */}
+<section className="relative overflow-hidden border-b border-slate-200/70 bg-white">
+  {/* Background decoration */}
+  <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-emerald-100/50 blur-3xl" />
+  <div className="pointer-events-none absolute -left-32 bottom-0 h-80 w-80 rounded-full bg-blue-100/40 blur-3xl" />
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                to={currentUser ? "#forum-content" : "/users/new"}
-                className="rounded-lg bg-vitoria-green px-7 py-4 text-center text-lg font-black text-white no-underline shadow-lg shadow-black/20"
-              >
-                {currentUser ? copy.composerTitle : copy.registerLink}
-              </Link>
-              {!currentUser && (
-                <Link
-                  to="/users/login"
-                  className="rounded-lg border border-white/70 px-7 py-4 text-center text-lg font-black text-white no-underline transition hover:bg-white hover:text-slate-950"
-                >
-                  {copy.login}
-                </Link>
-              )}
-            </div>
+  <div className="relative mx-auto max-w-7xl px-5 py-12 sm:px-6 lg:px-8 lg:py-16">
+    <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
 
-            <div className="hidden">
-              {quickLinks.map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 text-sm font-black text-slate-800 no-underline shadow-sm transition hover:border-emerald-300 hover:text-emerald-800"
-                >
-                  <span className="text-lg" aria-hidden="true">{link.icon}</span>
-                  <span>{t(link.labelKey)}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
+      {/* =====================================================
+          LEFT — TEXT
+      ===================================================== */}
+      <div className="flex flex-col justify-center lg:pe-4">
 
-          <div className="overflow-hidden rounded-lg border border-white/70 bg-white/10 backdrop-blur">
-            <div className="hidden" />
+        {/* Eyebrow */}
+        <div className="mb-5 w-fit inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-700">
+          <span className="h-2 w-2 rounded-full bg-emerald-500" />
+          <span>{copy.eyebrow}</span>
+        </div>
+
+        {/* Title */}
+        <h1 className="max-w-2xl text-4xl font-black leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-[3.5rem]">
+          {copy.title}
+        </h1>
+
+        {/* Description */}
+        <p className="mt-5 max-w-xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">
+          {copy.intro}
+        </p>
+
+        {/* Buttons */}
+        <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+          <button
+            type="button"
+            onClick={() => {
+              if (currentUser) {
+                setShowComposer(true);
+
+                setTimeout(() => {
+                  document
+                    .getElementById("forum-content")
+                    ?.scrollIntoView({
+                      behavior: "smooth",
+                      block: "start",
+                    });
+                }, 50);
+              } else {
+                window.location.href = "/users/new";
+              }
+            }}
+            className="inline-flex items-center justify-center rounded-2xl bg-slate-950 px-6 py-3.5 font-bold text-white shadow-lg shadow-slate-900/10 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-800"
+          >
+            {currentUser
+              ? copy.composerTitle
+              : copy.registerLink}
+
+            <span className="ms-2 text-lg">
+              →
+            </span>
+          </button>
+
+          {!currentUser && (
+            <Link
+              to="/users/login"
+              className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3.5 font-bold text-slate-800 no-underline shadow-sm transition duration-200 hover:border-slate-300 hover:bg-slate-50"
+            >
+              {copy.login}
+            </Link>
+          )}
+        </div>
+
+        {/* Quick links */}
+        <div className="mt-7 flex flex-wrap gap-2">
+          {quickLinks.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-slate-600 no-underline shadow-sm transition duration-200 hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+            >
+              <span className="text-emerald-600">
+                {link.icon}
+              </span>
+
+              <span>
+                {t(link.labelKey)}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* =====================================================
+          RIGHT — IMAGE / COMMUNITY CARD
+      ===================================================== */}
+      <div className="relative lg:ps-2">
+
+        {/* Small decorative shape */}
+        <div className="pointer-events-none absolute -right-3 -top-3 z-0 h-20 w-20 rounded-3xl bg-emerald-100/70" />
+
+        <div className="relative z-10 overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_24px_60px_-30px_rgba(15,23,42,0.30)]">
+
+          {/* Image */}
+          <div className="relative h-64 overflow-hidden sm:h-72">
             <img
               src="/images/registration-migrant-travel-hero.png"
               alt=""
-              className="h-60 w-full object-cover sm:h-72"
-              style={{ objectPosition: "center 35%" }}
+              className="h-full w-full object-cover"
+              style={{
+                objectPosition: "center 35%",
+              }}
             />
-            <div className="grid gap-3 p-5">
+
+            {/* Soft overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent" />
+
+            {/* Floating badge */}
+            <div className="absolute bottom-4 start-4">
+              <div className="flex items-center gap-3 rounded-2xl border border-white/50 bg-white/90 px-4 py-3 shadow-lg backdrop-blur-md">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 font-black text-emerald-600">
+                  ✓
+                </div>
+
+                <div>
+                  <p className="m-0 text-[10px] font-black uppercase tracking-[0.15em] text-emerald-600">
+                    Zubia
+                  </p>
+
+                  <p className="m-0 mt-0.5 text-sm font-bold text-slate-900">
+                    {copy.communityRulesTitle}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Community rules */}
+          <div className="p-5 sm:p-6">
+
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <p className="m-0 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-600">
+                  Zubia
+                </p>
+
+                <h2 className="m-0 mt-1 text-lg font-black text-slate-950">
+                  {copy.communityRulesTitle}
+                </h2>
+              </div>
+
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 font-black text-emerald-600">
+                ✓
+              </div>
+            </div>
+
+            <div className="grid gap-2">
               {copy.communityRules.map((rule, index) => (
-                <div key={rule} className="rounded-lg bg-white/15 p-4">
-                  <div className="mb-3 text-sm font-black text-green-200">
+                <div
+                  key={rule}
+                  className="flex items-start gap-3 rounded-xl bg-slate-50 px-3 py-2.5"
+                >
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white text-[10px] font-black text-emerald-600 shadow-sm">
                     0{index + 1}
-                  </div>
-                  <p className="m-0 text-xl font-bold leading-relaxed text-white">
+                  </span>
+
+                  <p className="m-0 text-xs font-medium leading-5 text-slate-600">
                     {rule}
                   </p>
                 </div>
               ))}
             </div>
+
           </div>
         </div>
-      </section>
+      </div>
 
-      <div id="forum-content" className="container py-4 py-lg-5">
+    </div>
+  </div>
+</section>
+      {/* =========================================================
+          MAIN CONTENT
+      ========================================================= */}
+      <div
+        id="forum-content"
+        className="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8 lg:py-14"
+      >
+        {/* Notices */}
         {notice && (
-          <div className="alert alert-success d-flex justify-content-between gap-3">
-            <span>{notice}</span>
+          <div className="mb-6 flex items-center justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800">
+            <div className="flex items-center gap-3">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-600 text-sm font-bold text-white">
+                ✓
+              </span>
+
+              <span className="font-semibold">
+                {notice}
+              </span>
+            </div>
+
             <button
               type="button"
-              className="btn-close"
-              aria-label="Close"
               onClick={() => setNotice("")}
-            />
+              className="rounded-lg px-2 py-1 text-xl text-emerald-700 transition hover:bg-emerald-100"
+              aria-label="Close"
+            >
+              ×
+            </button>
           </div>
         )}
 
         {error && (
-          <div className="alert alert-danger" role="alert">
+          <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-red-700">
             {copy.loadError}
           </div>
         )}
 
-        <div className="row g-4">
-          <aside className="col-12 col-xl-4">
-            {currentUser ? (
-              <div className="mb-4 rounded-3 border bg-white p-4 shadow-sm">
-                <h2 className="h5 fw-bold mb-2">{copy.profileTitle}</h2>
-                <p className="text-secondary small mb-3">{copy.signedInAs}</p>
-                <div className="rounded-3 bg-light p-3 mb-3">
-                  <div className="fw-semibold">
-                    {currentUser.displayName || currentUser.fullName}
-                  </div>
-                  <div className="text-secondary small">{currentUser.email}</div>
-                  {currentUser.municipality && (
-                    <div className="text-secondary small">
-                      {currentUser.municipality}
-                    </div>
-                  )}
-                  <div className="mt-2">
-                    <span className="rounded-pill bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-700">
-                      {currentUser.phoneVerified || currentUser.isVerified
-                        ? copy.phoneVerified
-                        : currentUser.status}
-                    </span>
-                  </div>
-                </div>
-                {!canParticipate && (
-                  <div className="mb-3 rounded-3 border bg-light p-3">
-                    <p className="text-secondary small mb-2">
-                      {copy.phoneNotVerified}
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_330px]">
+          {/* =====================================================
+              POSTS
+          ===================================================== */}
+          <section className="min-w-0">
+            {/* Toolbar */}
+            <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                  <div>
+                    <h2 className="text-xl font-black text-slate-950">
+                      {copy.allPosts}
+                    </h2>
+
+                    <p className="mt-1 text-sm text-slate-500">
+                      {copy.intro}
                     </p>
-                    <label className="form-label fw-semibold">
-                      {copy.phoneCodeLabel}
-                    </label>
-                    <input
-                      className="form-control mb-2"
-                      inputMode="numeric"
-                      pattern="[0-9]{6}"
-                      maxLength={6}
-                      value={phoneCode}
-                      onChange={(event) => setPhoneCode(event.target.value)}
-                    />
-                    <div className="d-flex gap-2">
-                      <button
-                        type="button"
-                        className="btn btn-success btn-sm rounded-pill flex-fill"
-                        onClick={() => void verifyForumPhone()}
-                      >
-                        {copy.verifyPhone}
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-outline-secondary btn-sm rounded-pill flex-fill"
-                        onClick={() => void resendForumCode()}
-                      >
-                        {copy.resendCode}
-                      </button>
-                    </div>
                   </div>
-                )}
-                <button
-                  type="button"
-                  className="btn btn-outline-secondary rounded-pill fw-semibold w-100"
-                  onClick={logout}
-                >
-                  {copy.logout}
-                </button>
-              </div>
-            ) : (
-              <form
-                onSubmit={login}
-                className="mb-4 rounded-3 border bg-white p-4 shadow-sm"
-              >
-                <h2 className="h5 fw-bold mb-2">{copy.loginTitle}</h2>
-                <p className="text-secondary small mb-3">{copy.loginIntro}</p>
 
-                <div className="mb-3">
-                  <label className="form-label fw-semibold">{t("email")}</label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    value={loginData.email}
-                    onChange={(event) =>
-                      setLoginData((current) => ({
-                        ...current,
-                        email: event.target.value,
-                      }))
-                    }
-                    required
-                  />
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label fw-semibold">
-                    {copy.passwordLabel}
-                  </label>
-                  <input
-                    type="password"
-                    className="form-control"
-                    value={loginData.password}
-                    onChange={(event) =>
-                      setLoginData((current) => ({
-                        ...current,
-                        password: event.target.value,
-                      }))
-                    }
-                    required
-                  />
-                </div>
-
-                <button className="btn btn-success rounded-pill fw-semibold w-100 mb-2">
-                  {copy.login}
-                </button>
-                <Link
-                  to="/users/new"
-                  className="btn btn-outline-secondary rounded-pill fw-semibold w-100"
-                >
-                  {copy.registerLink}
-                </Link>
-              </form>
-            )}
-
-            <form
-              onSubmit={createPost}
-              className="rounded-3 border bg-white p-4 shadow-sm"
-            >
-              <h2 className="h5 fw-bold mb-3">{copy.composerTitle}</h2>
-
-              <div className="mb-3">
-                <label className="form-label fw-semibold">{copy.typeLabel}</label>
-                <div className="d-flex gap-2">
-                  <button
-                    type="button"
-                    className={`btn flex-fill rounded-pill ${
-                      postDraft.type === "question"
-                        ? "btn-success"
-                        : "btn-outline-secondary"
-                    }`}
-                    onClick={() =>
-                      setPostDraft((current) => ({ ...current, type: "question" }))
-                    }
-                  >
-                    {"\u2753"} {copy.question}
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn flex-fill rounded-pill ${
-                      postDraft.type === "announcement"
-                        ? "btn-success"
-                        : "btn-outline-secondary"
-                    }`}
-                    onClick={() =>
-                      setPostDraft((current) => ({
-                        ...current,
-                        type: "announcement",
-                      }))
-                    }
-                  >
-                    {"\uD83D\uDCE3"} {copy.announcement}
-                  </button>
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label fw-semibold">
-                  {copy.postTitleLabel}
-                </label>
-                <input
-                  className="form-control"
-                  value={postDraft.title}
-                  onChange={(event) =>
-                    setPostDraft((current) => ({
-                      ...current,
-                      title: event.target.value,
-                    }))
-                  }
-                  maxLength={160}
-                  required
-                />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label fw-semibold">
-                  {copy.categoryLabel}
-                </label>
-                <input
-                  className="form-control"
-                  value={postDraft.category}
-                  onChange={(event) =>
-                    setPostDraft((current) => ({
-                      ...current,
-                      category: event.target.value,
-                    }))
-                  }
-                  maxLength={80}
-                  placeholder={t("nav_services")}
-                />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label fw-semibold">{copy.bodyLabel}</label>
-                <textarea
-                  className="form-control"
-                  rows={5}
-                  value={postDraft.body}
-                  onChange={(event) =>
-                    setPostDraft((current) => ({
-                      ...current,
-                      body: event.target.value,
-                    }))
-                  }
-                  maxLength={4000}
-                  required
-                />
-              </div>
-
-              <button
-                className="btn btn-success rounded-pill fw-semibold w-100"
-                disabled={!canParticipate}
-              >
-                {copy.publish}
-              </button>
-              {!canParticipate && (
-                <div className="text-secondary small mt-2 text-center">
-                  {copy.completeProfile}
-                </div>
-              )}
-            </form>
-          </aside>
-
-          <section className="col-12 col-xl-8">
-            <div className="mb-4 rounded-3 border bg-white p-3 p-lg-4 shadow-sm">
-              <div className="row g-3 align-items-end">
-                <div className="col-12 col-lg-5">
-                  <div className="btn-group w-100" role="group">
+                  {currentUser && (
                     <button
                       type="button"
-                      className={`btn ${
-                        activeView === "all" ? "btn-success" : "btn-outline-secondary"
-                      }`}
+                      onClick={() => setShowComposer(true)}
+                      className="rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-emerald-700"
+                    >
+                      + {copy.composerTitle}
+                    </button>
+                  )}
+                </div>
+
+                <div className="grid gap-3 md:grid-cols-[auto_180px_1fr]">
+                  <div className="flex rounded-xl bg-slate-100 p-1">
+                    <button
+                      type="button"
                       onClick={() => setActiveView("all")}
+                      className={`rounded-lg px-4 py-2 text-sm font-bold transition ${
+                        activeView === "all"
+                          ? "bg-white text-slate-950 shadow-sm"
+                          : "text-slate-500 hover:text-slate-800"
+                      }`}
                     >
                       {copy.allPosts}
                     </button>
+
                     <button
                       type="button"
-                      className={`btn ${
-                        activeView === "mine" ? "btn-success" : "btn-outline-secondary"
-                      }`}
                       onClick={() => setActiveView("mine")}
+                      className={`rounded-lg px-4 py-2 text-sm font-bold transition ${
+                        activeView === "mine"
+                          ? "bg-white text-slate-950 shadow-sm"
+                          : "text-slate-500 hover:text-slate-800"
+                      }`}
                     >
                       {copy.mySpace}
                     </button>
                   </div>
-                </div>
 
-                <div className="col-12 col-lg-3">
                   <select
-                    className="form-select"
                     value={typeFilter}
                     onChange={(event) =>
-                      setTypeFilter(event.target.value as ForumPostType | "all")
+                      setTypeFilter(
+                        event.target.value as
+                          | ForumPostType
+                          | "all"
+                      )
                     }
+                    className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
                   >
-                    <option value="all">{copy.filterAll}</option>
-                    <option value="question">{copy.question}</option>
-                    <option value="announcement">{copy.announcement}</option>
-                  </select>
-                </div>
+                    <option value="all">
+                      {copy.filterAll}
+                    </option>
 
-                <div className="col-12 col-lg-4">
-                  <input
-                    className="form-control"
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                    placeholder={copy.searchPlaceholder}
-                  />
+                    <option value="question">
+                      {copy.question}
+                    </option>
+
+                    <option value="announcement">
+                      {copy.announcement}
+                    </option>
+                  </select>
+
+                  <div className="relative">
+                    <span className="pointer-events-none absolute inset-y-0 start-4 flex items-center text-slate-400">
+                      ⌕
+                    </span>
+
+                    <input
+                      value={search}
+                      onChange={(event) =>
+                        setSearch(event.target.value)
+                      }
+                      placeholder={copy.searchPlaceholder}
+                      className="w-full rounded-xl border border-slate-200 bg-white py-2.5 ps-10 pe-4 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
 
+            {/* Posts */}
             {loading ? (
-              <div className="text-secondary">{t("loading")}</div>
+              <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+                <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-emerald-600" />
+
+                <p className="mt-4 text-sm font-medium text-slate-500">
+                  {t("loading")}
+                </p>
+              </div>
             ) : visiblePosts.length === 0 ? (
-              <div className="rounded-3 border bg-white p-4 text-secondary shadow-sm">
-                {activeView === "mine" ? copy.emptyMine : copy.emptyPosts}
+              <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-12 text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-slate-100 text-2xl">
+                  ✦
+                </div>
+
+                <h3 className="mt-4 text-lg font-black text-slate-950">
+                  {activeView === "mine"
+                    ? copy.emptyMine
+                    : copy.emptyPosts}
+                </h3>
+
+                <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-500">
+                  {copy.intro}
+                </p>
               </div>
             ) : (
-              <div className="d-flex flex-column gap-3">
+              <div className="space-y-4">
                 {visiblePosts.map((post) => (
                   <article
                     key={post._id}
-                    className="rounded-3 border bg-white p-4 shadow-sm"
+                    className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg hover:shadow-slate-900/5 sm:p-6"
                   >
-                    <div className="d-flex justify-content-between align-items-start gap-3 mb-3">
-                      <div>
-                        <div className="d-flex flex-wrap gap-2 mb-2">
+                    {/* Post header */}
+                    <div className="flex gap-4">
+                      <div className="hidden shrink-0 sm:flex">
+                        <div
+                          className={`flex h-12 w-12 items-center justify-center rounded-2xl text-lg font-black ${
+                            post.type === "announcement"
+                              ? "bg-blue-50 text-blue-600"
+                              : "bg-emerald-50 text-emerald-600"
+                          }`}
+                        >
+                          {post.type === "announcement"
+                            ? "!"
+                            : "?"}
+                        </div>
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+                        <div className="mb-3 flex flex-wrap items-center gap-2">
                           <span
-                            className={`rounded-pill px-3 py-1 text-sm font-semibold ${
+                            className={`rounded-full px-3 py-1 text-xs font-bold ${
                               post.type === "announcement"
                                 ? "bg-blue-50 text-blue-700"
                                 : "bg-emerald-50 text-emerald-700"
                             }`}
                           >
                             {post.type === "announcement"
-                              ? `\uD83D\uDCE3 ${copy.announcement}`
-                              : `\u2753 ${copy.question}`}
+                              ? copy.announcement
+                              : copy.question}
                           </span>
+
                           {post.category && (
-                            <span className="rounded-pill bg-gray-100 px-3 py-1 text-sm font-semibold text-gray-700">
+                            <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-bold text-slate-600">
                               {post.category}
                             </span>
                           )}
                         </div>
-                        <h2 className="h4 fw-bold mb-2">{post.title}</h2>
-                        <div className="text-secondary small">
-                          {post.authorName}
-                          {post.authorCity ? ` · ${post.authorCity}` : ""} ·{" "}
-                          {formatDate(post.createdAt, locale)}
+
+                        <h2 className="text-xl font-black leading-snug text-slate-950 transition group-hover:text-emerald-700 sm:text-2xl">
+                          {post.title}
+                        </h2>
+
+                        <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-slate-400">
+                          <span className="font-bold text-slate-600">
+                            {post.authorName}
+                          </span>
+
+                          {post.authorCity && (
+                            <>
+                              <span>·</span>
+                              <span>{post.authorCity}</span>
+                            </>
+                          )}
+
+                          <span>·</span>
+
+                          <span>
+                            {formatDate(
+                              post.createdAt,
+                              locale
+                            )}
+                          </span>
                         </div>
                       </div>
                     </div>
 
-                    <p className="text-secondary mb-3 whitespace-pre-line">
-                      {post.body}
-                    </p>
+                    {/* Body */}
+                    <div className="mt-5">
+                      <p className="whitespace-pre-line text-[15px] leading-7 text-slate-600">
+                        {post.body}
+                      </p>
+                    </div>
 
-                    <button
-                      type="button"
-                      className="btn btn-outline-success btn-sm rounded-pill fw-semibold"
-                      onClick={() =>
-                        setExpandedPostId((current) =>
-                          current === post._id ? null : post._id
-                        )
-                      }
-                    >
-                      {post.comments.length.toLocaleString(locale)} {copy.comments}
-                    </button>
+                    {/* Footer */}
+                    <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedPostId((current) =>
+                            current === post._id
+                              ? null
+                              : post._id
+                          )
+                        }
+                        className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700"
+                      >
+                        <span>♡</span>
+                        {post.comments.length.toLocaleString(
+                          locale
+                        )}{" "}
+                        {copy.comments}
+                      </button>
 
+                      <span className="text-xs font-semibold text-slate-400">
+                        {post.type === "announcement"
+                          ? copy.announcement
+                          : copy.question}
+                      </span>
+                    </div>
+
+                    {/* Comments */}
                     {expandedPostId === post._id && (
-                      <div className="mt-3 rounded-3 border bg-light p-3">
-                        <div className="d-flex flex-column gap-3 mb-3">
-                          {post.comments.map((comment) => (
-                            <div
-                              key={comment._id || `${comment.authorName}-${comment.createdAt}`}
-                              className="rounded-3 bg-white p-3"
-                            >
-                              <div className="small fw-semibold mb-1">
-                                {comment.authorName}
-                                {comment.authorCity ? ` · ${comment.authorCity}` : ""}
+                      <div className="mt-4 rounded-2xl bg-slate-50 p-4 sm:p-5">
+                        <div className="space-y-3">
+                          {post.comments.length === 0 ? (
+                            <p className="text-sm text-slate-500">
+                              {copy.commentPlaceholder}
+                            </p>
+                          ) : (
+                            post.comments.map((comment) => (
+                              <div
+                                key={
+                                  comment._id ||
+                                  `${comment.authorName}-${comment.createdAt}`
+                                }
+                                className="rounded-xl border border-slate-200 bg-white p-4"
+                              >
+                                <div className="flex items-start justify-between gap-3">
+                                  <div>
+                                    <p className="m-0 text-sm font-bold text-slate-800">
+                                      {comment.authorName}
+                                      {comment.authorCity
+                                        ? ` · ${comment.authorCity}`
+                                        : ""}
+                                    </p>
+
+                                    <p className="mt-1 text-xs text-slate-400">
+                                      {formatDate(
+                                        comment.createdAt,
+                                        locale
+                                      )}
+                                    </p>
+                                  </div>
+
+                                  <span className="text-emerald-500">
+                                    ●
+                                  </span>
+                                </div>
+
+                                <p className="mb-0 mt-3 text-sm leading-6 text-slate-600">
+                                  {comment.body}
+                                </p>
                               </div>
-                              <div className="text-secondary small mb-2">
-                                {formatDate(comment.createdAt, locale)}
-                              </div>
-                              <p className="mb-0 text-secondary">{comment.body}</p>
-                            </div>
-                          ))}
+                            ))
+                          )}
                         </div>
 
-                        <div className="d-flex gap-2">
+                        <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                           <input
-                            className="form-control"
-                            value={commentDrafts[post._id] || ""}
-                            onChange={(event) =>
-                              setCommentDrafts((current) => ({
-                                ...current,
-                                [post._id]: event.target.value,
-                              }))
+                            value={
+                              commentDrafts[post._id] || ""
                             }
-                            placeholder={copy.commentPlaceholder}
+                            onChange={(event) =>
+                              setCommentDrafts(
+                                (current) => ({
+                                  ...current,
+                                  [post._id]:
+                                    event.target.value,
+                                })
+                              )
+                            }
+                            placeholder={
+                              copy.commentPlaceholder
+                            }
                             maxLength={1200}
+                            className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
                           />
+
                           <button
                             type="button"
-                            className="btn btn-success rounded-pill px-4"
-                            onClick={() => void addComment(post._id)}
+                            onClick={() =>
+                              void addComment(post._id)
+                            }
                             disabled={!canParticipate}
+                            className="rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
                           >
                             {copy.addComment}
                           </button>
@@ -952,71 +1115,523 @@ export default function ForoMigrantesPage() {
               </div>
             )}
           </section>
-        </div>
 
-        <section className="row g-4 mt-1">
-          <div className="col-12 col-xl-8">
-            <div className="rounded-3 border bg-white p-4 shadow-sm">
-              <h2 className="h5 fw-bold mb-3">{copy.communityRulesTitle}</h2>
-              <div className="row g-3">
-                {copy.communityRules.map((rule, index) => (
-                  <div key={rule} className="col-12 col-md-4">
-                    <div className="h-100 rounded-3 border bg-light p-3">
-                      <div className="small fw-bold text-success mb-2">
-                        {String(index + 1).padStart(2, "0")}
-                      </div>
-                      <p className="text-secondary mb-0">{rule}</p>
+          {/* =====================================================
+              SIDEBAR
+          ===================================================== */}
+          <aside className="space-y-5">
+            {/* Account */}
+            {currentUser ? (
+              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">
+                      {copy.profileTitle}
+                    </p>
+
+                    <h2 className="mt-1 text-lg font-black text-slate-950">
+                      {currentUser.displayName ||
+                        currentUser.fullName}
+                    </h2>
+                  </div>
+
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-950 font-black text-white">
+                    {(currentUser.displayName ||
+                      currentUser.fullName ||
+                      "U")
+                      .charAt(0)
+                      .toUpperCase()}
+                  </div>
+                </div>
+
+                <p className="mt-1 text-sm text-slate-500">
+                  {currentUser.email}
+                </p>
+
+                {currentUser.municipality && (
+                  <p className="mt-1 text-sm text-slate-500">
+                    {currentUser.municipality}
+                  </p>
+                )}
+
+                <div className="mt-4">
+                  <span
+                    className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold ${
+                      canParticipate
+                        ? "bg-emerald-50 text-emerald-700"
+                        : "bg-amber-50 text-amber-700"
+                    }`}
+                  >
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full ${
+                        canParticipate
+                          ? "bg-emerald-500"
+                          : "bg-amber-500"
+                      }`}
+                    />
+
+                    {canParticipate
+                      ? copy.phoneVerified
+                      : currentUser.status}
+                  </span>
+                </div>
+
+                {!canParticipate && (
+                  <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4">
+                    <p className="text-sm leading-6 text-amber-800">
+                      {copy.phoneNotVerified}
+                    </p>
+
+                    <label className="mt-3 block text-xs font-bold text-amber-900">
+                      {copy.phoneCodeLabel}
+                    </label>
+
+                    <input
+                      inputMode="numeric"
+                      pattern="[0-9]{6}"
+                      maxLength={6}
+                      value={phoneCode}
+                      onChange={(event) =>
+                        setPhoneCode(event.target.value)
+                      }
+                      className="mt-2 w-full rounded-xl border border-amber-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
+                    />
+
+                    <div className="mt-3 grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          void verifyForumPhone()
+                        }
+                        className="rounded-xl bg-slate-950 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-slate-800"
+                      >
+                        {copy.verifyPhone}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          void resendForumCode()
+                        }
+                        className="rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
+                      >
+                        {copy.resendCode}
+                      </button>
                     </div>
                   </div>
-                ))}
+                )}
+
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="mt-5 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
+                >
+                  {copy.logout}
+                </button>
               </div>
-            </div>
-          </div>
-
-          <aside className="col-12 col-xl-4">
-            <div className="rounded-3 border bg-white p-4 shadow-sm">
-              <h2 className="h5 fw-bold mb-2">{copy.chatTitle}</h2>
-              <p className="text-secondary small mb-3">{copy.chatIntro}</p>
-
-              <div
-                className="mb-3 d-flex flex-column gap-2 overflow-auto rounded-3 border bg-light p-3"
-                style={{ maxHeight: 320 }}
+            ) : (
+              <form
+                onSubmit={login}
+                className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
               >
+                <div className="mb-5">
+                  <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">
+                    Zubia
+                  </p>
+
+                  <h2 className="mt-1 text-xl font-black text-slate-950">
+                    {copy.loginTitle}
+                  </h2>
+
+                  <p className="mt-2 text-sm leading-6 text-slate-500">
+                    {copy.loginIntro}
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="mb-2 block text-sm font-bold text-slate-700">
+                      {t("email")}
+                    </label>
+
+                    <input
+                      type="email"
+                      value={loginData.email}
+                      onChange={(event) =>
+                        setLoginData((current) => ({
+                          ...current,
+                          email: event.target.value,
+                        }))
+                      }
+                      required
+                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="mb-2 block text-sm font-bold text-slate-700">
+                      {copy.passwordLabel}
+                    </label>
+
+                    <input
+                      type="password"
+                      value={loginData.password}
+                      onChange={(event) =>
+                        setLoginData((current) => ({
+                          ...current,
+                          password: event.target.value,
+                        }))
+                      }
+                      required
+                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  className="mt-5 w-full rounded-xl bg-slate-950 px-4 py-3 font-bold text-white transition hover:bg-slate-800"
+                >
+                  {copy.login}
+                </button>
+
+                <Link
+                  to="/users/new"
+                  className="mt-2 block rounded-xl border border-slate-200 px-4 py-3 text-center text-sm font-bold text-slate-700 no-underline transition hover:bg-slate-50"
+                >
+                  {copy.registerLink}
+                </Link>
+              </form>
+            )}
+
+            {/* Chat */}
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                  ●
+                </div>
+
+                <div>
+                  <h2 className="text-lg font-black text-slate-950">
+                    {copy.chatTitle}
+                  </h2>
+
+                  <p className="mt-1 text-xs leading-5 text-slate-500">
+                    {copy.chatIntro}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-4 flex max-h-80 flex-col gap-2 overflow-auto rounded-xl bg-slate-50 p-3">
                 {messages.length === 0 ? (
-                  <div className="text-secondary small">{copy.emptyChat}</div>
+                  <div className="py-8 text-center text-sm text-slate-400">
+                    {copy.emptyChat}
+                  </div>
                 ) : (
                   messages.map((message) => (
-                    <div key={message._id} className="rounded-3 bg-white p-3">
-                      <div className="small fw-semibold">
-                        {message.authorName}
-                        {message.authorCity ? ` · ${message.authorCity}` : ""}
+                    <div
+                      key={message._id}
+                      className="rounded-xl border border-slate-200 bg-white p-3"
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-bold text-slate-800">
+                          {message.authorName}
+                        </span>
+
+                        <span className="text-[10px] text-slate-400">
+                          {formatDate(
+                            message.createdAt,
+                            locale
+                          )}
+                        </span>
                       </div>
-                      <p className="mb-1 text-secondary">{message.body}</p>
-                      <div className="text-secondary small">
-                        {formatDate(message.createdAt, locale)}
-                      </div>
+
+                      {message.authorCity && (
+                        <div className="mt-1 text-[10px] text-slate-400">
+                          {message.authorCity}
+                        </div>
+                      )}
+
+                      <p className="mb-0 mt-2 text-sm leading-6 text-slate-600">
+                        {message.body}
+                      </p>
                     </div>
                   ))
                 )}
               </div>
 
-              <form onSubmit={sendMessage} className="d-flex gap-2">
+              <form
+                onSubmit={sendMessage}
+                className="mt-3 flex gap-2"
+              >
                 <input
-                  className="form-control"
                   value={chatDraft}
-                  onChange={(event) => setChatDraft(event.target.value)}
+                  onChange={(event) =>
+                    setChatDraft(event.target.value)
+                  }
                   placeholder={copy.chatPlaceholder}
                   maxLength={1000}
+                  className="min-w-0 flex-1 rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
                 />
+
                 <button
-                  className="btn btn-success rounded-pill px-4"
+                  type="submit"
                   disabled={!canParticipate}
+                  className="rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {copy.send}
                 </button>
               </form>
             </div>
           </aside>
+        </div>
+
+        {/* =======================================================
+            CREATE POST MODAL
+        ======================================================= */}
+        {showComposer && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4 backdrop-blur-sm"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) {
+                setShowComposer(false);
+              }
+            }}
+          >
+            <div className="max-h-[90vh] w-full max-w-2xl overflow-auto rounded-3xl bg-white p-6 shadow-2xl sm:p-8">
+              <div className="flex items-start justify-between gap-5">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">
+                    Comunidad
+                  </p>
+
+                  <h2 className="mt-1 text-2xl font-black text-slate-950">
+                    {copy.composerTitle}
+                  </h2>
+
+                  <p className="mt-2 text-sm leading-6 text-slate-500">
+                    Comparte algo que pueda ser útil para otras personas.
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setShowComposer(false)}
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-xl text-slate-500 transition hover:bg-slate-200"
+                  aria-label="Close"
+                >
+                  ×
+                </button>
+              </div>
+
+              {!canParticipate ? (
+                <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5">
+                  <p className="font-bold text-amber-900">
+                    {copy.completeProfile}
+                  </p>
+
+                  {!currentUser && (
+                    <Link
+                      to="/users/login"
+                      onClick={() => setShowComposer(false)}
+                      className="mt-4 inline-block rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white no-underline"
+                    >
+                      {copy.login}
+                    </Link>
+                  )}
+                </div>
+              ) : (
+                <form
+                  onSubmit={createPost}
+                  className="mt-6"
+                >
+                  <div>
+                    <label className="mb-2 block text-sm font-bold text-slate-700">
+                      {copy.typeLabel}
+                    </label>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setPostDraft((current) => ({
+                            ...current,
+                            type: "question",
+                          }))
+                        }
+                        className={`rounded-xl border px-4 py-3 text-sm font-bold transition ${
+                          postDraft.type === "question"
+                            ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+                            : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                        }`}
+                      >
+                        ? {copy.question}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setPostDraft((current) => ({
+                            ...current,
+                            type: "announcement",
+                          }))
+                        }
+                        className={`rounded-xl border px-4 py-3 text-sm font-bold transition ${
+                          postDraft.type === "announcement"
+                            ? "border-blue-500 bg-blue-50 text-blue-700"
+                            : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                        }`}
+                      >
+                        ! {copy.announcement}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="mt-5">
+                    <label className="mb-2 block text-sm font-bold text-slate-700">
+                      {copy.postTitleLabel}
+                    </label>
+
+                    <input
+                      value={postDraft.title}
+                      onChange={(event) =>
+                        setPostDraft((current) => ({
+                          ...current,
+                          title: event.target.value,
+                        }))
+                      }
+                      maxLength={160}
+                      required
+                      className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                    />
+                  </div>
+
+                  <div className="mt-5">
+                    <label className="mb-2 block text-sm font-bold text-slate-700">
+                      {copy.categoryLabel}
+                    </label>
+
+                    <input
+                      value={postDraft.category}
+                      onChange={(event) =>
+                        setPostDraft((current) => ({
+                          ...current,
+                          category: event.target.value,
+                        }))
+                      }
+                      maxLength={80}
+                      placeholder={t("nav_services")}
+                      className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                    />
+                  </div>
+
+                  <div className="mt-5">
+                    <label className="mb-2 block text-sm font-bold text-slate-700">
+                      {copy.bodyLabel}
+                    </label>
+
+                    <textarea
+                      rows={6}
+                      value={postDraft.body}
+                      onChange={(event) =>
+                        setPostDraft((current) => ({
+                          ...current,
+                          body: event.target.value,
+                        }))
+                      }
+                      maxLength={4000}
+                      required
+                      className="w-full resize-y rounded-xl border border-slate-200 px-4 py-3 text-sm leading-6 outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                    />
+                  </div>
+
+                  <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowComposer(false)
+                      }
+                      className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-600 transition hover:bg-slate-50"
+                    >
+                      ×
+                    </button>
+
+                    <button
+                      type="submit"
+                      className="rounded-xl bg-slate-950 px-6 py-3 text-sm font-bold text-white transition hover:bg-slate-800"
+                    >
+                      {copy.publish}
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* =======================================================
+            COMMUNITY CARE
+        ======================================================= */}
+        <section className="mt-10">
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+            <div className="max-w-2xl">
+              <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">
+                Zubia · Comunidad
+              </p>
+
+              <h2 className="mt-2 text-2xl font-black text-slate-950 sm:text-3xl">
+                {copy.communityRulesTitle}
+              </h2>
+            </div>
+
+            <div className="mt-7 grid gap-4 md:grid-cols-3">
+              {copy.communityRules.map((rule, index) => (
+                <div
+                  key={rule}
+                  className="rounded-2xl bg-slate-50 p-5"
+                >
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white font-black text-emerald-600 shadow-sm">
+                    0{index + 1}
+                  </div>
+
+                  <p className="mt-4 text-sm font-medium leading-6 text-slate-600">
+                    {rule}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =======================================================
+            QUICK LINKS
+        ======================================================= */}
+        <section className="mt-6">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {quickLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="group rounded-2xl border border-slate-200 bg-white p-4 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-lg text-emerald-600">
+                    {link.icon}
+                  </div>
+
+                  <div>
+                    <p className="m-0 text-sm font-bold text-slate-800 group-hover:text-emerald-700">
+                      {t(link.labelKey)}
+                    </p>
+
+                    <p className="m-0 mt-1 text-xs text-slate-400">
+                      {copy.otherPages}
+                    </p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
         </section>
       </div>
     </main>
