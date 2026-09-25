@@ -102,11 +102,6 @@ function AccountTypeCard({
         </span>
       </div>
 
-      {disabled && (
-        <span className="mt-3 inline-flex rounded-full bg-slate-200/70 px-2.5 py-1 text-[11px] font-bold text-slate-600">
-          {desc}
-        </span>
-      )}
     </div>
   );
 }
@@ -261,7 +256,7 @@ export default function NewUserPage() {
 
       await usersService.register({
         displayName: formData.displayName.trim(),
-        fullName: formData.fullName.trim() || formData.displayName.trim(),
+        fullName: formData.fullName.trim() || undefined,
         email: formData.email.trim(),
         password: formData.password,
         phone,
@@ -322,6 +317,10 @@ export default function NewUserPage() {
                 disabled
               />
             </div>
+            <div className="mt-4 rounded-2xl border border-blue-100 bg-blue-50/70 px-4 py-3 text-sm leading-6 text-blue-900">
+              <span className="font-bold">{t("register_org_link_title")}</span>{" "}
+              {t("register_org_link_desc")}
+            </div>
           </div>
 
           <div className="mb-8 space-y-5">
@@ -341,6 +340,9 @@ export default function NewUserPage() {
                   autoComplete="nickname"
                   required
                 />
+                <p className="mt-1.5 text-xs text-slate-500">
+                  {t("display_name_help")}
+                </p>
               </div>
 
               <div>
@@ -460,6 +462,16 @@ export default function NewUserPage() {
             )}
           </div>
 
+          <div className="mb-6 flex items-start gap-3 rounded-2xl border border-emerald-100 bg-emerald-50/60 px-4 py-3 text-sm leading-6 text-slate-700">
+            <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-black text-emerald-700">
+              i
+            </span>
+            <div>
+              <span className="font-bold text-slate-900">{t("register_language_label")}: </span>
+              {t("register_language_note")}
+            </div>
+          </div>
+
           <label className="mb-6 flex items-start gap-3 rounded-2xl border border-slate-200 p-4 text-sm leading-6 text-slate-700">
             <input
               type="checkbox"
@@ -499,7 +511,7 @@ export default function NewUserPage() {
               disabled={!isReady || saving}
               className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-black text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300"
             >
-              {saving ? t("saving") : t("create_account_link")}
+              {saving ? t("saving") : t("register_submit")}
             </button>
           </div>
         </form>
