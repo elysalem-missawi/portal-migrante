@@ -69,6 +69,19 @@ export type CreateUserInput = {
   legalConsentAccepted?: boolean;
 };
 
+export type RegisterUserInput = {
+  displayName: string;
+  fullName?: string;
+  email: string;
+  password: string;
+  phone?: string;
+  preferredLanguage?: "es" | "eu" | "ar" | "en";
+  originCountry?: string;
+  municipalityId?: string | null;
+  profileImage?: string;
+  legalConsentAccepted: true;
+};
+
 export type RegisterUserResult = {
   user: User;
   phoneVerification?: {
@@ -105,7 +118,7 @@ export const usersService = {
     });
   },
 
-  async register(data: CreateUserInput) {
+  async register(data: RegisterUserInput) {
     return http<RegisterUserResult>("/users/register", {
       method: "POST",
       body: JSON.stringify(data),
