@@ -83,12 +83,8 @@ export type RegisterUserInput = {
 };
 
 export type RegisterUserResult = {
+  message: string;
   user: User;
-  phoneVerification?: {
-    sent: boolean;
-    skipped?: boolean;
-    reason?: string;
-  };
 };
 
 export type LoginResult = {
@@ -136,27 +132,9 @@ export const usersService = {
   },
 
   async refreshCurrentUser() {
-    const user = await http<User>("/auth/me");
-    this.setCurrentUser(user);
-    return user;
-  },
-
-  async sendPhoneCode(userId: string) {
-    return http<{ message: string; phoneVerification?: RegisterUserResult["phoneVerification"] }>(
-      `/users/${userId}/send-phone-code`,
-      { method: "POST" }
-    );
-  },
-
-  async verifyPhone(userId: string, code: string) {
-    const user = await http<User>(`/users/${userId}/verify-phone`, {
-      method: "POST",
-      body: JSON.stringify({ code }),
-    });
-    if (this.hasAuthToken()) {
-      this.setCurrentUser(user);
-    }
-    return user;
+    const result = await http<{ user: User }>("/auth/me");
+    this.setCurrentUser(result.user);
+    return result.user;
   },
 
   hasAuthToken() {
