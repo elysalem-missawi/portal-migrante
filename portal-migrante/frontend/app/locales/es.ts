@@ -418,6 +418,7 @@ export const es: Dict = {
   footer_legal_notice: "Aviso legal",
   footer_privacy: "Política de privacidad",
   footer_accessibility: "Accesibilidad",
+  footer_back_to_top: "Volver arriba",
 
   about_hero_tag: "Euskadi · Comunidad · Acogida",
 

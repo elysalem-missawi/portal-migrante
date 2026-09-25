@@ -409,6 +409,7 @@ export const ar: Dict = {
   footer_legal_notice: "إشعار قانوني",
   footer_privacy: "سياسة الخصوصية",
   footer_accessibility: "إمكانية الوصول",
+  footer_back_to_top: "العودة إلى الأعلى",
 
   // ───── Sobre ─────
   about_hero_tag: "إقليم الباسك · مجتمع · استقبال",

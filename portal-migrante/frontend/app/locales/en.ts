@@ -419,6 +419,7 @@ export const en: Dict = {
   footer_legal_notice: "Legal Notice",
   footer_privacy: "Privacy Policy",
   footer_accessibility: "Accessibility",
+  footer_back_to_top: "Back to top",
 
   about_hero_tag: "Euskadi · Community · Welcome",
 

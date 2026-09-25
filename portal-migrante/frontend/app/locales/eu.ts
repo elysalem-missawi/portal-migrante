@@ -419,6 +419,7 @@ export const eu: Dict = {
   footer_legal_notice: "Lege-oharra",
   footer_privacy: "Pribatutasun-politika",
   footer_accessibility: "Irisgarritasuna",
+  footer_back_to_top: "Gora itzuli",
 
   about_hero_tag: "Euskadi · Komunitatea · Harrera",
 
