@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useI18n } from "../i18n";
 import { useAuth } from "../auth";
+import { getUserFriendlyError } from "../utils/user-friendly-error";
 
 export default function LoginUserPage() {
   const navigate = useNavigate();
@@ -45,8 +46,8 @@ export default function LoginUserPage() {
       setSuccess(t("login_success"));
       const from = (location.state as { from?: string } | null)?.from || "/foro";
       setTimeout(() => navigate(from), 700);
-    } catch (err: any) {
-      setError(err.message || t("login_error"));
+    } catch (err: unknown) {
+      setError(getUserFriendlyError(err, t, "login_error"));
     } finally {
       setSaving(false);
     }

@@ -5,6 +5,7 @@ import FacebookLogin from "@greatsumini/react-facebook-login";
 import { http } from "../services/api";
 import { usersService, type RegisterUserResult } from "../services/users.service";
 import { useI18n } from "../i18n";
+import { getUserFriendlyError } from "../utils/user-friendly-error";
 
 const facebookRegister = (accessToken: string) =>
   http<RegisterUserResult>("/users/register/facebook", {
@@ -302,7 +303,6 @@ export default function NewUserPage() {
   const [showOptional, setShowOptional] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const isOrg = formData.accountType === "organization_account";
 
@@ -348,7 +348,6 @@ export default function NewUserPage() {
     e.preventDefault();
     setSaving(true);
     setError("");
-    setSuccess("");
 
     try {
       if (!isOrg) {
@@ -415,19 +414,14 @@ export default function NewUserPage() {
         postalCode: isOrg ? formData.postalCode.trim() : undefined,
       });
 
-      setSuccess(
-        isOrg ? t("register_success_org_desc") : t("user_create_success")
-      );
-
-      window.setTimeout(
-        () =>
-          navigate("/login", {
-            state: { registered: true, email: formData.email.trim() },
-          }),
-        900
-      );
+      navigate("/users/registration-success", {
+        state: {
+          email: formData.email.trim(),
+          accountType: formData.accountType,
+        },
+      });
     } catch (err: any) {
-      setError(err.message || t("user_create_error"));
+      setError(getUserFriendlyError(err, t));
     } finally {
       setSaving(false);
     }
@@ -440,16 +434,11 @@ export default function NewUserPage() {
       const result = await usersService.googleRegister(
         credentialResponse.credential
       );
-      setSuccess(t("user_create_success"));
-      window.setTimeout(
-        () =>
-          navigate("/login", {
-            state: { registered: true, email: result.user.email },
-          }),
-        900
-      );
+      navigate("/users/registration-success", {
+        state: { email: result.user.email, accountType: "individual" },
+      });
     } catch (err: any) {
-      setError(err.message || t("user_create_error"));
+      setError(getUserFriendlyError(err, t));
     } finally {
       setSaving(false);
     }
@@ -467,16 +456,11 @@ export default function NewUserPage() {
 
       const result = await facebookRegister(response.accessToken);
 
-      setSuccess(t("user_create_success"));
-      window.setTimeout(
-        () =>
-          navigate("/login", {
-            state: { registered: true, email: result.user.email },
-          }),
-        900
-      );
+      navigate("/users/registration-success", {
+        state: { email: result.user.email, accountType: "individual" },
+      });
     } catch (err: any) {
-      setError(err.message || t("user_create_error"));
+      setError(getUserFriendlyError(err, t));
     } finally {
       setSaving(false);
     }
@@ -1003,20 +987,6 @@ export default function NewUserPage() {
               </span>
               <p className="text-sm font-medium leading-relaxed text-red-800">
                 {error}
-              </p>
-            </div>
-          )}
-
-          {success && (
-            <div
-              role="status"
-              className="mb-6 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4"
-            >
-              <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
-                ✓
-              </span>
-              <p className="text-sm font-medium leading-relaxed text-emerald-800">
-                {success}
               </p>
             </div>
           )}

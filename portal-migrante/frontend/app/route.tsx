@@ -19,6 +19,7 @@ const Servicios = lazy(() => import("./routes/servicios"));
 const Users = lazy(() => import("./routes/users"));
 const NewUser = lazy(() => import("./routes/users.new"));
 const LoginUser = lazy(() => import("./routes/users.login"));
+const RegistrationSuccess = lazy(() => import("./routes/users.registration-success"));
 const Contacto = lazy(() => import("./routes/contacto"));
 const Sobre = lazy(() => import("./routes/sobre"));
 const Anuncios = lazy(() => import("./routes/anuncios"));
@@ -103,6 +104,7 @@ const router = createBrowserRouter([
       { path: "users", element: <Users /> },
       { path: "users/new", element: <NewUser /> },
       { path: "users/login", element: <LoginUser /> },
+      { path: "users/registration-success", element: <RegistrationSuccess /> },
       { path: "login", element: <LoginUser /> },
       { path: "unauthorized", element: <UnauthorizedPage /> },
       {
