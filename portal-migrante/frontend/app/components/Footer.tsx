@@ -126,7 +126,7 @@ export default function Footer() {
 
         {/* ═══════════ الجهة الداعمة ═══════════ */}
         <div className="border-t border-white/10 py-10">
-          <div className="flex flex-col items-center gap-8 lg:flex-row lg:justify-between">
+          <div className="rounded-3xl border border-white/10 bg-white/[0.035] p-6 sm:p-8 flex flex-col items-center gap-7 lg:flex-row lg:justify-between">
             <div className="max-w-2xl text-center lg:text-start">
               <span className="font-mono text-[10px] font-black uppercase tracking-[0.25em] text-vitoria-green">
                 {t("footer_support_label")}
@@ -136,11 +136,11 @@ export default function Footer() {
               </p>
             </div>
 
-            <div className="flex shrink-0 items-center gap-4 rounded-2xl bg-white p-4 shadow-lg">
+            <div className="flex w-full max-w-[320px] shrink-0 items-center justify-center rounded-2xl bg-white px-6 py-5 shadow-xl shadow-black/10">
               <img
-                src="/images/MarcaAytoMonocolor-V.jpg"
+                src="/images/MarcaAytoBicolor-H.jpg"
                 alt="Ayuntamiento de Vitoria-Gasteiz / Vitoria-Gasteizko Udala"
-                className="h-14 w-auto object-contain"
+                className="h-auto max-h-16 w-full object-contain sm:max-h-20"
               />
             </div>
           </div>
