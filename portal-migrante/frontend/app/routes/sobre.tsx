@@ -215,6 +215,18 @@ export default function Sobre() {
         </div>
       </section>
 
+      <section className="border-y border-emerald-100 bg-emerald-50/60 py-8">
+        <div className="mx-auto grid max-w-6xl gap-4 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:px-8">
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-emerald-700">
+            {t("about_identity_title")}
+          </p>
+          <div className="space-y-3 text-sm leading-7 text-slate-700 sm:text-base">
+            <p>{t("about_identity_desc")}</p>
+            <p className="font-semibold text-slate-900">{t("about_non_official")}</p>
+          </div>
+        </div>
+      </section>
+
       {/* ═══════════ 01 · ORIGEN ═══════════ */}
       <Section number="01" label={t("about_origin_label")}>
         <h2 className="max-w-3xl text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-4xl">
