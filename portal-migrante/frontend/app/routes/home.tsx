@@ -641,7 +641,7 @@ export default function Home() {
                 </p>
 
                 <Link
-                  to="/servicios?c=empleo"
+                  to="/foro"
                   className="mt-6 inline-flex font-semibold text-blue-700 hover:text-blue-800"
                 >
                   {t("view_information")} →
