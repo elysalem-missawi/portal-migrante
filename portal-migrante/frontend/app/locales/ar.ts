@@ -33,7 +33,7 @@ export const ar: Dict = {
   languages: "اللغات",
   name: "الاسم",
   email: "البريد الإلكتروني",
-  phone: "الهاتف (اختياري)",
+  phone: "الهاتف",
   address: "العنوان",
   contact: "التواصل",
   date: "التاريخ",
@@ -166,13 +166,24 @@ export const ar: Dict = {
   home_phase_item_platform: "نموذج أولي يعمل بالخدمات، التسجيل والمنتدى.",
   home_phase_item_partners: "البحث عن تحالفات مع المؤسسات والهيئات الاجتماعية.",
   home_final_cta_title: "لنَبنِ شبكة دعم مفيدة للمهاجرين",
-  
   home_final_cta_desc: "تبقى المعلومات مفتوحة للجميع؛ ويُستخدم التسجيل للمشاركة والمطالبة وتعزيز المجتمع.",
+
+  // ───── Login ─────
   login_button: "تسجيل الدخول",
   login_title: "تسجيل الدخول",
   login_subtitle: "أدخل بريدك الإلكتروني وكلمة السر للمتابعة في المنتدى.",
+  login_submit: "تسجيل الدخول",
+  login_submitting: "جارٍ تسجيل الدخول...",
   login_success: "تم تسجيل الدخول بنجاح. مرحباً بك.",
   login_error: "تعذر تسجيل الدخول.",
+  login_invalid_credentials: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+  login_remember_me: "تذكرني على هذا الجهاز",
+  login_forgot_password: "هل نسيت كلمة المرور؟",
+  login_reset_password_link: "إعادة تعيين كلمة المرور",
+  login_social_divider: "أو سجّل الدخول باستخدام",
+  login_google_button: "المتابعة عبر Google",
+  login_facebook_button: "المتابعة عبر Facebook",
+
   registration_login_required: "تم إنشاء الحساب. سجّل الدخول للمتابعة.",
   no_account: "ليس لديك حساب بعد؟",
   create_account_link: "إنشاء حساب",
@@ -180,6 +191,8 @@ export const ar: Dict = {
   welcome_user: "أهلاً بك",
   my_user_data: "بياناتي",
   phone_verified_short: "الهاتف مفعل",
+
+  // ───── Users ─────
   users_title: "المستخدمون",
   user_new_title: "إنشاء حسابك",
   user_new_subtitle: "أنشئ حسابك الشخصي للوصول إلى المجتمع ووظائف Portal Migrante.",
@@ -200,7 +213,7 @@ export const ar: Dict = {
   organization_singular: "المنظمة",
   select_organization: "اختر المنظمة",
   organization_load_error: "تعذر تحميل المنظمات.",
-  display_name: "الاسم الظاهر",
+  display_name: "الاسم العلني",
   display_name_help: "الاسم الذي سيظهر عند مشاركتك في المجتمع.",
   preferred_language: "اللغة المفضلة",
   origin_country: "بلد الأصل (اختياري)",
@@ -246,6 +259,8 @@ export const ar: Dict = {
   phone_verify_error: "تعذر التحقق من الرمز.",
   resend_code: "إعادة إرسال الرمز",
   uploaded: "تم الرفع",
+
+  // ───── Services ─────
   cta_services: "فئات الخدمات",
   f_health: "الصحة",
   f_housing: "السكن",
@@ -277,6 +292,8 @@ export const ar: Dict = {
   territory_bizkaia: "بيسكايا",
   territory_gipuzkoa: "غيبوثكوا",
   territory_undefined: "غير محدد",
+
+  // ───── Municipalities ─────
   ay_title: "بلديات إقليم الباسك",
   ay_subtitle: "اعثر على معلومات التواصل الأساسية لبلديات إقليم الباسك.",
   ay_eyebrow: "الإدارة المحلية",
@@ -298,6 +315,8 @@ export const ar: Dict = {
   view_details: "عرض التفاصيل",
   result_singular: "نتيجة",
   result_plural: "نتائج",
+
+  // ───── Hero general ─────
   hero_title: "المهاجرون في إقليم الباسك",
   hero_description_1: "منصة للعثور على معلومات مفيدة، الوصول إلى الخدمات، والتواصل مع الموارد المتاحة في إقليم الباسك.",
   hero_description_2: "تتضمن أيضاً مساحة مجتمعية يتبادل فيها المهاجرون الخبرات ويدعمون بعضهم البعض.",
@@ -321,6 +340,8 @@ export const ar: Dict = {
   confidential: "سري",
   multilingual: "بلغتك",
   contact_us: "تحدث معنا",
+
+  // ───── Footer ─────
   footer_about: "عن البوابة",
   footer_contact: "اتصل بنا",
   footer_madeby: "صُنع بمحبة من أجل مجتمع المهاجرين.",
@@ -330,6 +351,20 @@ export const ar: Dict = {
   footer_subscribe_success: "تم تسجيل الاشتراك.",
   footer_rights: "جميع الحقوق محفوظة",
   quick_links: "روابط سريعة",
+  footer_project_by: "مشروع تطوره Zubia Social Euskadi",
+  footer_project_desc: "منصة رقمية متعددة اللغات للإرشاد والمشاركة والربط الاجتماعي بين المهاجر والمجتمع والجهات المعنية.",
+  footer_newsletter_desc: "احصل على الأخبار والأدلة والموارد المفيدة لمجتمع المهاجرين.",
+  footer_subscribe_loading: "جارٍ الإرسال...",
+  footer_subscribe_error: "تعذر إتمام الاشتراك. حاول مرة أخرى.",
+  footer_support_label: "بدعم من",
+  footer_support_desc: "يحظى تطوير المرحلة الأولى من Portal Migrante بدعم بلدية Vitoria-Gasteiz، ضمن مشروع تقوده جمعية Zubia Social Euskadi.",
+  footer_copyright: "جميع الحقوق محفوظة.",
+  footer_disclaimer: "الآراء والمحتويات المعبّر عنها في هذه المنصة هي مسؤولية حصرية لجمعية ASOC ZUBIA SOCIAL EUSKADI ولا تعكس بالضرورة رأي بلدية فيتوريا-غاستيز.",
+  footer_legal_notice: "إشعار قانوني",
+  footer_privacy: "سياسة الخصوصية",
+  footer_accessibility: "إمكانية الوصول",
+
+  // ───── About ─────
   about_badge: "Portal Migrante · Zubia Social Euskadi",
   about_title: "تحول رقمي من أجل اندماج أوضح وأكثر ترابطًا ومشاركة",
   about_subtitle: "Portal Migrante منصة رقمية متعددة اللغات للإرشاد والمشاركة والربط الاجتماعي. تساعد المهاجر على فهم احتياجاته والعثور على المعلومات والموارد والدعم، وتربطه بالمواطنين والجمعيات والبلديات والمؤسسات المعنية.",
@@ -370,6 +405,21 @@ export const ar: Dict = {
   about_need_partners: "التعاون مع المؤسسات والجمعيات المحلية",
   about_cta_title: "ساهم في بناء مجتمع أكثر شمولًا",
   about_cta_desc: "نرحب بتواصل المهاجرين والمؤسسات والجمعيات ومتطوعين الراغبين في التعاون مع جمعية زوبيا.",
+  about_hero_tag: "إقليم الباسك · مجتمع · استقبال",
+  about_identity_title: "من نحن",
+  about_identity_desc: "Zubia Social Euskadi هي الجمعية صاحبة المشروع والمسؤولة عنه، وPortal Migrante هي المنصة الرقمية التي تطورها الجمعية.",
+  about_non_official: "Portal Migrante ليست بوابة رسمية لأي إدارة أو جهة حكومية.",
+  about_bridge_label: "نقطة التقاء رقمية للاندماج",
+  about_bridge_title: "منصة تربط المهاجر بالمؤسسات والمجتمع",
+  about_bridge_desc: "تنظم Portal Migrante التجربة حول احتياجات الشخص، لا حول تعقيد الهياكل الإدارية. وتعمل كحلقة وصل تساعد على الفهم والتوجيه والوصول والمشاركة.",
+  about_bridge_migrant_title: "المهاجر",
+  about_bridge_migrant_desc: "يفهم احتياجه، يعرف من أين يبدأ، ويصل إلى معلومات وموارد ودعم واضح.",
+  about_bridge_institutions_title: "المؤسسات والجمعيات",
+  about_bridge_institutions_desc: "تقدم خدماتها ومعلوماتها وتتعرف بصورة أفضل على الاحتياجات والعوائق غير المغطاة.",
+  about_bridge_citizens_title: "المواطن والمجتمع المحلي",
+  about_bridge_citizens_desc: "يشارك ويساعد ويتطوع ويتواصل مع المبادرات والجمعيات والمجتمعات المحلية.",
+
+  // ───── Contact ─────
   contact_title: "تواصل معنا",
   contact_subtitle: "نحن هنا لمساعدتك. يمكنك التواصل مع فريقنا في أي وقت.",
   contact_info: "معلومات الاتصال",
@@ -396,24 +446,7 @@ export const ar: Dict = {
   send_another_message: "إرسال رسالة أخرى",
   organization_type_municipality: "بلدية",
 
-  // ───── Footer ─────
-  footer_project_by: "مشروع تطوره Zubia Social Euskadi",
-  footer_project_desc: "منصة رقمية متعددة اللغات للإرشاد والمشاركة والربط الاجتماعي بين المهاجر والمجتمع والجهات المعنية.",
-  footer_newsletter_desc: "احصل على الأخبار والأدلة والموارد المفيدة لمجتمع المهاجرين.",
-  footer_subscribe_loading: "جارٍ الإرسال...",
-  footer_subscribe_error: "تعذر إتمام الاشتراك. حاول مرة أخرى.",
-  footer_support_label: "بدعم من",
-  footer_support_desc: "يحظى تطوير المرحلة الأولى من Portal Migrante بدعم بلدية Vitoria-Gasteiz، ضمن مشروع تقوده جمعية Zubia Social Euskadi.",
-  footer_copyright: "جميع الحقوق محفوظة.",
-  footer_disclaimer: "الآراء والمحتويات المعبّر عنها في هذه المنصة هي مسؤولية حصرية لجمعية ASOC ZUBIA SOCIAL EUSKADI ولا تعكس بالضرورة رأي بلدية فيتوريا-غاستيز.",
-  footer_legal_notice: "إشعار قانوني",
-  footer_privacy: "سياسة الخصوصية",
-  footer_accessibility: "إمكانية الوصول",
-
-  // ───── Sobre ─────
-  about_hero_tag: "إقليم الباسك · مجتمع · استقبال",
-
-  // ───── Registro ─────
+  // ───── Registration ─────
   register_title: "إنشاء حساب",
   register_submit: "إنشاء حساب",
   register_submit_organization: "طلب حساب جمعية",
@@ -451,27 +484,34 @@ export const ar: Dict = {
   register_already_have: "هل لديك حساب بالفعل؟",
   register_type_individual_desc: "حساب شخصي للمشاركة في المنتدى والوصول إلى الخدمات.",
   register_type_organization_desc: "حساب للجمعيات والمؤسسات والهيئات الاجتماعية.",
-  home_quick_info: "أحتاج إلى معلومات",
-  home_quick_resources: "البحث عن مساعدة أو مورد",
-  home_quick_community: "طرح سؤال على المجتمع",
-  about_identity_title: "من نحن",
-  about_identity_desc: "Zubia Social Euskadi هي الجمعية صاحبة المشروع والمسؤولة عنه، وPortal Migrante هي المنصة الرقمية التي تطورها الجمعية.",
-  about_non_official: "Portal Migrante ليست بوابة رسمية لأي إدارة أو جهة حكومية.",
-  footer_newsletter_soon: "سيصبح الاشتراك في النشرة متاحًا قريبًا.",
-  about_bridge_label: "نقطة التقاء رقمية للاندماج",
-  about_bridge_title: "منصة تربط المهاجر بالمؤسسات والمجتمع",
-  about_bridge_desc: "تنظم Portal Migrante التجربة حول احتياجات الشخص، لا حول تعقيد الهياكل الإدارية. وتعمل كحلقة وصل تساعد على الفهم والتوجيه والوصول والمشاركة.",
-  about_bridge_migrant_title: "المهاجر",
-  about_bridge_migrant_desc: "يفهم احتياجه، يعرف من أين يبدأ، ويصل إلى معلومات وموارد ودعم واضح.",
-  about_bridge_institutions_title: "المؤسسات والجمعيات",
-  about_bridge_institutions_desc: "تقدم خدماتها ومعلوماتها وتتعرف بصورة أفضل على الاحتياجات والعوائق غير المغطاة.",
-  about_bridge_citizens_title: "المواطن والمجتمع المحلي",
-  about_bridge_citizens_desc: "يشارك ويساعد ويتطوع ويتواصل مع المبادرات والجمعيات والمجتمعات المحلية.",
   register_org_v1_note: "يتم ربط الحساب بجهة أو جمعية بعد إنشاء الحساب الشخصي.",
   register_org_link_title: "هل تمثل جمعية أو مؤسسة؟",
   register_org_link_desc: "أنشئ أولًا حسابك الشخصي، وبعد ذلك يمكن ربطه بجهة من خلال مسار التحقق المناسب.",
   register_language_label: "اللغة المفضلة",
   register_language_note: "سيتم حفظ لغة الواجهة التي تستخدمها الآن تلقائيًا، ويمكنك تغييرها لاحقًا من ملفك الشخصي.",
+
+  // ───── Registration: fields and validation ─────
+  register_public_name: "الاسم العلني",
+  register_public_name_placeholder: "مثال: علي سالم",
+  register_public_name_help: "هكذا سيراك الآخرون في المنتدى.",
+  register_full_name_help: "اختياري. للتحقق الداخلي فقط.",
+  register_display_name_error: "يجب أن يكون الاسم حرفين على الأقل.",
+  register_error_email_required: "البريد الإلكتروني مطلوب.",
+  register_error_email_taken: "هذا البريد الإلكتروني مسجّل بالفعل.",
+  register_error_password_weak: "كلمة المرور ضعيفة جداً.",
+  register_error_phone_required: "رقم الهاتف مطلوب.",
+  register_missing_fields: "هناك بيانات ناقصة:",
+  register_password_show: "عرض",
+  register_password_hide: "إخفاء",
+  register_email_placeholder: "name@example.com",
+  register_password_placeholder: "8 أحرف على الأقل",
+  register_confirm_placeholder: "أعد كتابة كلمة المرور",
+  register_phone_placeholder: "612 345 678",
+  register_email_help: "ستستخدمه لتسجيل الدخول إلى Portal Migrante.",
+  register_confirm_help: "يجب أن يطابق كلمة المرور السابقة.",
+  register_phone_help: "اختياري. أدخل الرقم فقط، بدون رمز الدولة.",
+
+  // ───── Legal (terms page) ─────
   legal_summary_title: "ملخص سريع",
   legal_required_label: "البيانات الضرورية",
   legal_required_summary: "الاسم الظاهر، البريد الإلكتروني، كلمة المرور، لغة الاستخدام، والموافقة على هذه الشروط.",
@@ -499,4 +539,10 @@ export const ar: Dict = {
   legal_contact_title: "هل لديك سؤال حول بياناتك أو هذه الشروط؟",
   legal_contact_body: "يمكنك التواصل مع فريق Portal Migrante لطلب معلومات أو ممارسة حقوقك أو الإبلاغ عن مشكلة مرتبطة بحسابك.",
   legal_contact_cta: "التواصل مع Portal Migrante",
+
+  // ───── Home extras ─────
+  home_quick_info: "أحتاج إلى معلومات",
+  home_quick_resources: "البحث عن مساعدة أو مورد",
+  home_quick_community: "طرح سؤال على المجتمع",
+  footer_newsletter_soon: "سيصبح الاشتراك في النشرة متاحًا قريبًا.",
 };

@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useI18n } from "../i18n";
 
@@ -38,17 +38,13 @@ function FooterLink({
 }
 
 export default function Footer() {
-  const { t, locale, setLocale } = useI18n();
+  const { t } = useI18n();
   const [subscribed, setSubscribed] = useState(false);
 
   const handleSubscribe = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubscribed(true);
     setTimeout(() => setSubscribed(false), 4000);
-  };
-
-  const handleBackToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -125,12 +121,24 @@ export default function Footer() {
 
             <div className="mt-5 space-y-3">
               <div className="flex flex-col gap-2">
-                <input type="email" placeholder={t("footer_email_placeholder")} className="w-full cursor-not-allowed rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/50 placeholder-white/30" disabled aria-disabled="true" />
-                <button type="button" disabled className="cursor-not-allowed rounded-xl bg-white/10 px-4 py-3 text-sm font-black text-white/50">
+                <input
+                  type="email"
+                  placeholder={t("footer_email_placeholder")}
+                  className="w-full cursor-not-allowed rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/50 placeholder-white/30"
+                  disabled
+                  aria-disabled="true"
+                />
+                <button
+                  type="button"
+                  disabled
+                  className="cursor-not-allowed rounded-xl bg-white/10 px-4 py-3 text-sm font-black text-white/50"
+                >
                   {t("footer_subscribe")}
                 </button>
               </div>
-              <p className="text-xs font-semibold leading-relaxed text-emerald-200">{t("footer_newsletter_soon")}</p>
+              <p className="text-xs font-semibold leading-relaxed text-emerald-200">
+                {t("footer_newsletter_soon")}
+              </p>
             </div>
           </div>
         </div>

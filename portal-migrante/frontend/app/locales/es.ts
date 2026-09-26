@@ -31,7 +31,7 @@ export const es: Dict = {
   languages: "Idiomas",
   name: "Nombre",
   email: "Correo electrónico",
-  phone: "Teléfono (opcional)",
+  phone: "Teléfono",
   address: "Dirección",
   contact: "Contacto",
   date: "Fecha",
@@ -166,7 +166,7 @@ export const es: Dict = {
   home_final_cta_title: "Construyamos una red útil para la comunidad",
   home_final_cta_desc: "La información se mantiene abierta a toda la ciudadanía; el registro permite participar, publicar y fortalecer la comunidad.",
 
-  // Login
+  // ───── Login ─────
   login_button: "Iniciar sesión",
   login_title: "Iniciar sesión",
   login_subtitle: "Introduce tus datos para acceder al foro y a tu cuenta.",
@@ -190,6 +190,7 @@ export const es: Dict = {
   my_user_data: "Mis datos personales",
   phone_verified_short: "Teléfono verificado",
 
+  // ───── Usuarios ─────
   users_title: "Usuarios",
   user_new_title: "Crear tu cuenta",
   user_new_subtitle: "Crea tu cuenta personal para acceder a la comunidad y a las funciones de Portal Migrante.",
@@ -256,6 +257,8 @@ export const es: Dict = {
   phone_verify_error: "No se pudo verificar el código.",
   resend_code: "Reenviar código",
   uploaded: "Subido",
+
+  // ───── Servicios ─────
   cta_services: "Categorías de Servicios",
   f_health: "Salud",
   f_housing: "Vivienda",
@@ -287,6 +290,8 @@ export const es: Dict = {
   territory_bizkaia: "Vizcaya / Bizkaia",
   territory_gipuzkoa: "Guipúzcoa / Gipuzkoa",
   territory_undefined: "No definido",
+
+  // ───── Ayuntamientos ─────
   ay_title: "Municipios de Euskadi",
   ay_subtitle: "Información de contacto y localización de los municipios vascos.",
   ay_eyebrow: "Administración Local",
@@ -308,6 +313,8 @@ export const es: Dict = {
   view_details: "Ver detalles",
   result_singular: "resultado",
   result_plural: "resultados",
+
+  // ───── Hero general ─────
   hero_title: "Personas migrantes en Euskadi",
   hero_description_1: "Plataforma para encontrar información útil, acceder a servicios y conectar con recursos en Euskadi.",
   hero_description_2: "Incluye un espacio comunitario para compartir experiencias y apoyarse mutuamente.",
@@ -331,6 +338,8 @@ export const es: Dict = {
   confidential: "Confidencial",
   multilingual: "En tu idioma",
   contact_us: "Contáctanos",
+
+  // ───── Footer ─────
   footer_about: "Sobre el Portal",
   footer_contact: "Contacto",
   footer_madeby: "Creado con compromiso para la comunidad.",
@@ -340,6 +349,20 @@ export const es: Dict = {
   footer_subscribe_success: "Suscripción completada.",
   footer_rights: "Todos los derechos reservados",
   quick_links: "Enlaces rápidos",
+  footer_project_by: "Un proyecto desarrollado por Zubia Social Euskadi",
+  footer_project_desc: "Plataforma digital multilingüe de orientación, participación y conexión social entre personas migrantes, comunidad y entidades.",
+  footer_newsletter_desc: "Recibe noticias, guías y recursos de interés.",
+  footer_subscribe_loading: "Enviando...",
+  footer_subscribe_error: "No se pudo realizar la suscripción. Reinténtalo.",
+  footer_support_label: "Con el apoyo de",
+  footer_support_desc: "El desarrollo de la primera fase de Portal Migrante cuenta con el apoyo del Ayuntamiento de Vitoria-Gasteiz, dentro de un proyecto impulsado por Zubia Social Euskadi.",
+  footer_copyright: "Todos los derechos reservados.",
+  footer_disclaimer: "Las opiniones contenidas en esta plataforma son responsabilidad exclusiva de ASOC ZUBIA SOCIAL EUSKADI.",
+  footer_legal_notice: "Aviso legal",
+  footer_privacy: "Política de privacidad",
+  footer_accessibility: "Accesibilidad",
+
+  // ───── Sobre ─────
   about_badge: "Portal Migrante · Zubia Social Euskadi",
   about_title: "Transformación digital para una integración más clara, conectada y participativa",
   about_subtitle: "Portal Migrante es una plataforma digital multilingüe de orientación, participación y conexión social. Ayuda a las personas migrantes a entender sus necesidades, encontrar información, recursos y apoyo, y conectarse con ciudadanía, asociaciones, ayuntamientos e instituciones.",
@@ -380,6 +403,21 @@ export const es: Dict = {
   about_need_partners: "Colaboración con entidades locales",
   about_cta_title: "Colabora en la construcción de un entorno inclusivo",
   about_cta_desc: "Damos la bienvenida a personas, entidades e instituciones con voluntad de colaborar.",
+  about_hero_tag: "Euskadi · Comunidad · Acogida",
+  about_identity_title: "Quiénes somos",
+  about_identity_desc: "Zubia Social Euskadi es la asociación promotora y responsable del proyecto. Portal Migrante es la plataforma digital desarrollada por la asociación.",
+  about_non_official: "Portal Migrante no es un portal oficial de ninguna administración pública.",
+  about_bridge_label: "Punto de encuentro digital para la integración",
+  about_bridge_title: "Una plataforma que conecta a la persona migrante con instituciones y comunidad",
+  about_bridge_desc: "Portal Migrante organiza la experiencia alrededor de las necesidades de la persona, no de la complejidad administrativa. Actúa como puente para comprender, orientarse, acceder a recursos y participar.",
+  about_bridge_migrant_title: "Persona migrante",
+  about_bridge_migrant_desc: "Entiende su necesidad, sabe por dónde empezar y accede a información, recursos y apoyo claros.",
+  about_bridge_institutions_title: "Instituciones y asociaciones",
+  about_bridge_institutions_desc: "Presentan sus servicios e información y conocen mejor las necesidades y barreras que aún no encuentran respuesta suficiente.",
+  about_bridge_citizens_title: "Ciudadanía y comunidad local",
+  about_bridge_citizens_desc: "Participan, ayudan, hacen voluntariado y se conectan con iniciativas, asociaciones y comunidades locales.",
+
+  // ───── Contacto ─────
   contact_title: "Contacto",
   contact_subtitle: "Estamos aquí para ayudarte. Ponte en contacto con nuestro equipo.",
   contact_info: "Información de contacto",
@@ -406,21 +444,7 @@ export const es: Dict = {
   send_another_message: "Enviar otro mensaje",
   organization_type_municipality: "Ayuntamiento / Municipio",
 
-  footer_project_by: "Un proyecto desarrollado por Zubia Social Euskadi",
-  footer_project_desc: "Plataforma digital multilingüe de orientación, participación y conexión social entre personas migrantes, comunidad y entidades.",
-  footer_newsletter_desc: "Recibe noticias, guías y recursos de interés.",
-  footer_subscribe_loading: "Enviando...",
-  footer_subscribe_error: "No se pudo realizar la suscripción. Reinténtalo.",
-  footer_support_label: "Con el apoyo de",
-  footer_support_desc: "El desarrollo de la primera fase de Portal Migrante cuenta con el apoyo del Ayuntamiento de Vitoria-Gasteiz, dentro de un proyecto impulsado por Zubia Social Euskadi.",
-  footer_copyright: "Todos los derechos reservados.",
-  footer_disclaimer: "Las opiniones contenidas en esta plataforma son responsabilidad exclusiva de ASOC ZUBIA SOCIAL EUSKADI.",
-  footer_legal_notice: "Aviso legal",
-  footer_privacy: "Política de privacidad",
-  footer_accessibility: "Accesibilidad",
-
-  about_hero_tag: "Euskadi · Comunidad · Acogida",
-
+  // ───── Registro ─────
   register_title: "Crear una cuenta",
   register_submit: "Crear cuenta",
   register_submit_organization: "Solicitar cuenta de organización",
@@ -458,27 +482,34 @@ export const es: Dict = {
   register_already_have: "¿Ya tienes cuenta?",
   register_type_individual_desc: "Cuenta personal para participar en el foro y consultar servicios.",
   register_type_organization_desc: "Cuenta para asociaciones, entidades e instituciones sociales.",
-  home_quick_info: "Necesito información",
-  home_quick_resources: "Buscar ayuda o un recurso",
-  home_quick_community: "Preguntar a la comunidad",
-  about_identity_title: "Quiénes somos",
-  about_identity_desc: "Zubia Social Euskadi es la asociación promotora y responsable del proyecto. Portal Migrante es la plataforma digital desarrollada por la asociación.",
-  about_non_official: "Portal Migrante no es un portal oficial de ninguna administración pública.",
-  footer_newsletter_soon: "La suscripción al boletín estará disponible próximamente.",
-  about_bridge_label: "Punto de encuentro digital para la integración",
-  about_bridge_title: "Una plataforma que conecta a la persona migrante con instituciones y comunidad",
-  about_bridge_desc: "Portal Migrante organiza la experiencia alrededor de las necesidades de la persona, no de la complejidad administrativa. Actúa como puente para comprender, orientarse, acceder a recursos y participar.",
-  about_bridge_migrant_title: "Persona migrante",
-  about_bridge_migrant_desc: "Entiende su necesidad, sabe por dónde empezar y accede a información, recursos y apoyo claros.",
-  about_bridge_institutions_title: "Instituciones y asociaciones",
-  about_bridge_institutions_desc: "Presentan sus servicios e información y conocen mejor las necesidades y barreras que aún no encuentran respuesta suficiente.",
-  about_bridge_citizens_title: "Ciudadanía y comunidad local",
-  about_bridge_citizens_desc: "Participan, ayudan, hacen voluntariado y se conectan con iniciativas, asociaciones y comunidades locales.",
   register_org_v1_note: "La vinculación con una entidad se realiza después de crear la cuenta personal.",
   register_org_link_title: "¿Representas a una organización o asociación?",
   register_org_link_desc: "Crea primero tu cuenta personal. Después podrás vincularla a una entidad mediante el proceso de verificación correspondiente.",
   register_language_label: "Idioma preferido",
   register_language_note: "Se guardará automáticamente el idioma que estás usando ahora y podrás cambiarlo más adelante desde tu perfil.",
+
+  // ───── Registro: campos y validación ─────
+  register_public_name: "Nombre público",
+  register_public_name_placeholder: "Ej: Ely Salem",
+  register_public_name_help: "Así te verán otras personas en el foro.",
+  register_full_name_help: "Opcional. Solo para verificaciones internas.",
+  register_display_name_error: "El nombre debe tener al menos 2 caracteres.",
+  register_error_email_required: "El correo electrónico es obligatorio.",
+  register_error_email_taken: "Este correo ya está registrado.",
+  register_error_password_weak: "La contraseña es demasiado débil.",
+  register_error_phone_required: "El número de teléfono es obligatorio.",
+  register_missing_fields: "Faltan algunos datos:",
+  register_password_show: "Mostrar",
+  register_password_hide: "Ocultar",
+  register_email_placeholder: "nombre@ejemplo.com",
+  register_password_placeholder: "Mínimo 8 caracteres",
+  register_confirm_placeholder: "Repite tu contraseña",
+  register_phone_placeholder: "612 345 678",
+  register_email_help: "Lo utilizarás para iniciar sesión en Portal Migrante.",
+  register_confirm_help: "Debe coincidir con la contraseña anterior.",
+  register_phone_help: "Opcional. Introduce solo el número, sin el prefijo del país.",
+
+  // ───── Legal (página de condiciones) ─────
   legal_summary_title: "Resumen rápido",
   legal_required_label: "Datos necesarios",
   legal_required_summary: "Nombre público, correo electrónico, contraseña, idioma de uso y aceptación de estas condiciones.",
@@ -506,4 +537,10 @@ export const es: Dict = {
   legal_contact_title: "¿Tienes dudas sobre tus datos o estas condiciones?",
   legal_contact_body: "Puedes contactar con el equipo de Portal Migrante para solicitar información, ejercer tus derechos o comunicar una incidencia relacionada con tu cuenta.",
   legal_contact_cta: "Contactar con Portal Migrante",
+
+  // ───── Home extras ─────
+  home_quick_info: "Necesito información",
+  home_quick_resources: "Buscar ayuda o un recurso",
+  home_quick_community: "Preguntar a la comunidad",
+  footer_newsletter_soon: "La suscripción al boletín estará disponible próximamente.",
 };
