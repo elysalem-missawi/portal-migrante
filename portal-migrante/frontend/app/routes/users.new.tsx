@@ -8,6 +8,7 @@ import {
 } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { usersService } from "../services/users.service";
+import { HttpError } from "../services/api";
 import { useI18n } from "../i18n";
 
 /* ─────────────────────────────────────────
@@ -103,6 +104,36 @@ function FieldError({ id, message }: { id: string; message?: string }) {
       </span>
       <span>{message}</span>
     </p>
+  );
+}
+
+function PasswordVisibilityIcon({ visible }: { visible: boolean }) {
+  return visible ? (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="h-5 w-5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <path d="M3 3l18 18" strokeLinecap="round" />
+      <path d="M10.6 10.7a2 2 0 0 0 2.7 2.7" strokeLinecap="round" />
+      <path d="M9.9 4.3A10.8 10.8 0 0 1 12 4c5.5 0 9 5 9 5s-1.2 1.7-3.3 3.1" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M6.1 6.1C4.1 7.4 3 9 3 9s3.5 5 9 5c1 0 2-.2 2.8-.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ) : (
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="h-5 w-5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+    >
+      <path d="M3 12s3.5-5 9-5 9 5 9 5-3.5 5-9 5-9-5-9-5Z" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="12" cy="12" r="2.4" />
+    </svg>
   );
 }
 
@@ -248,7 +279,8 @@ export default function NewUserPage() {
   const validate = (data = formData): FieldErrors => {
     const errors: FieldErrors = {};
 
-    if (data.displayName.trim().length < 2) {
+    const displayNameLength = data.displayName.trim().length;
+    if (displayNameLength < 2 || displayNameLength > 80) {
       errors.displayName = t("register_display_name_error");
     }
 
@@ -376,10 +408,23 @@ export default function NewUserPage() {
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "";
 
-      if (/email.*already|ya.*registrado|already.*exists/i.test(message)) {
-        setFieldErrors({ email: t("register_error_email_taken") });
-      } else if (/password.*weak|contraseña.*débil/i.test(message)) {
-        setFieldErrors({ password: t("register_error_password_weak") });
+      if (err instanceof HttpError && err.status === 409) {
+        setFieldErrors((current) => ({
+          ...current,
+          email: t("register_error_email_taken"),
+        }));
+        window.setTimeout(() => {
+          document.getElementById("email")?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+          document.getElementById("email")?.focus({ preventScroll: true });
+        }, 50);
+      } else if (/email.*already|ya.*registrado|already.*exists/i.test(message)) {
+        setFieldErrors((current) => ({
+          ...current,
+          email: t("register_error_email_taken"),
+        }));
       } else {
         setApiError(message || t("user_create_error"));
       }
@@ -412,6 +457,7 @@ export default function NewUserPage() {
           ref={formRef}
           onSubmit={handleSubmit}
           noValidate
+          autoComplete="off"
           className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 md:p-9"
         >
           {/* صندوق معلوماتي */}
@@ -450,7 +496,8 @@ export default function NewUserPage() {
                   errors.displayName ? "displayName-error" : "displayName-help"
                 }
                 className={inputClass(!!errors.displayName)}
-                autoComplete="username"
+                autoComplete="nickname"
+                maxLength={80}
                 required
               />
               <FieldError id="displayName-error" message={errors.displayName} />
@@ -480,7 +527,8 @@ export default function NewUserPage() {
                 aria-invalid={!!errors.email}
                 aria-describedby={errors.email ? "email-error" : "email-help"}
                 className={inputClass(!!errors.email)}
-                autoComplete="email"
+                autoComplete="off"
+                maxLength={254}
                 required
               />
               <FieldError id="email-error" message={errors.email} />
@@ -521,16 +569,14 @@ export default function NewUserPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword((value) => !value)}
-                    className="absolute end-2 top-1/2 -translate-y-1/2 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                    className="absolute end-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
                     aria-label={
                       showPassword
                         ? t("register_password_hide")
                         : t("register_password_show")
                     }
                   >
-                    {showPassword
-                      ? t("register_password_hide")
-                      : t("register_password_show")}
+                    <PasswordVisibilityIcon visible={showPassword} />
                   </button>
                 </div>
                 <FieldError id="password-error" message={errors.password} />
@@ -571,16 +617,14 @@ export default function NewUserPage() {
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword((value) => !value)}
-                    className="absolute end-2 top-1/2 -translate-y-1/2 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                    className="absolute end-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
                     aria-label={
                       showConfirmPassword
                         ? t("register_password_hide")
                         : t("register_password_show")
                     }
                   >
-                    {showConfirmPassword
-                      ? t("register_password_hide")
-                      : t("register_password_show")}
+                    <PasswordVisibilityIcon visible={showConfirmPassword} />
                   </button>
                 </div>
                 <FieldError
@@ -639,7 +683,8 @@ export default function NewUserPage() {
                     value={formData.fullName}
                     onChange={handleChange}
                     className={inputClass(false)}
-                    autoComplete="name"
+                    autoComplete="off"
+                    maxLength={150}
                   />
                   <p className="mt-1.5 text-xs leading-5 text-slate-500">
                     {t("register_full_name_help")}
@@ -671,8 +716,9 @@ export default function NewUserPage() {
                       onChange={handleChange}
                       className={inputClass(false)}
                       placeholder={t("register_phone_placeholder")}
-                      autoComplete="tel-national"
+                      autoComplete="off"
                       inputMode="tel"
+                      maxLength={20}
                       aria-describedby="phone-help"
                     />
                   </div>
@@ -798,13 +844,15 @@ export default function NewUserPage() {
             >
               {t("cancel")}
             </Link>
-            <button
-              type="submit"
-              disabled={saving}
-              className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-black text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {saving ? t("saving") : t("register_submit")}
-            </button>
+            {isReady && (
+              <button
+                type="submit"
+                disabled={saving}
+                className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-black text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {saving ? t("saving") : t("register_submit")}
+              </button>
+            )}
           </div>
         </form>
 
