@@ -191,18 +191,18 @@ export default function Home() {
       outline: "border-emerald-200 group-hover:border-emerald-400",
     },
     {
-      icon: "heart" as IconName,
+      icon: "building" as IconName,
       title: t("home_actor_entities_title"),
       description: t("home_actor_entities_short"),
-      to: "/organizations",
+      to: "/servicios/asociaciones",
       color: "bg-violet-50 text-violet-700",
       outline: "border-violet-200 group-hover:border-violet-400",
     },
     {
-      icon: "building" as IconName,
-      title: t("home_actor_admin_title"),
-      description: t("home_actor_admin_short"),
-      to: "/ayuntamientos",
+      icon: "heart" as IconName,
+      title: t("home_actor_community_title"),
+      description: t("home_actor_community_short"),
+      to: "/foro",
       color: "bg-blue-50 text-blue-700",
       outline: "border-blue-200 group-hover:border-blue-400",
     },
@@ -210,8 +210,9 @@ export default function Home() {
 
   const quickNeeds = [
     { icon: "scale" as IconName, title: t("home_quick_info") },
-    { icon: "heart" as IconName, title: t("home_quick_resources") },
+    { icon: "pin" as IconName, title: t("home_quick_resources") },
     { icon: "network" as IconName, title: t("home_quick_community") },
+    { icon: "heart" as IconName, title: t("home_quick_support") },
   ];
 
   const services = [
@@ -266,11 +267,11 @@ export default function Home() {
     t("home_municipality_benefit_6"),
   ];
 
-  const demoMetrics = [
-    { value: "24", label: t("nav_services") },
-    { value: "12", label: t("home_actor_entities_title") },
-    { value: "4", label: t("f_municipalities") },
-    { value: "18", label: t("nav_forum") },
+  const demoSteps = [
+    { step: "01", label: t("home_demo_need") },
+    { step: "02", label: t("home_demo_resources") },
+    { step: "03", label: t("home_demo_participation") },
+    { step: "04", label: t("home_demo_knowledge") },
   ];
 
   return (
@@ -322,7 +323,7 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="mt-9 grid max-w-2xl gap-3 text-sm sm:grid-cols-3">
+            <div className="mt-9 grid max-w-4xl gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
               {quickNeeds.map((item) => (
                 <div
                   key={item.title}
@@ -342,7 +343,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">
             <p className="text-xs font-bold uppercase tracking-[0.22em] text-emerald-700">
-              {t("home_areas_label")}
+              {t("home_ecosystem_label")}
             </p>
             <h2 className="mt-3 text-3xl font-bold leading-tight text-slate-950 sm:text-4xl">
               {t("home_ecosystem_title")}
@@ -389,7 +390,7 @@ export default function Home() {
             {/* Labour: left node */}
             <div className="absolute left-[127px] top-1/2 -translate-y-1/2">
               <Link
-                to="/servicios?c=empleo"
+                to="/foro"
                 className="group flex h-[136px] w-[136px] flex-col items-center justify-center rounded-full border border-blue-200 bg-blue-50/50 p-3 text-center shadow-[0_12px_35px_rgba(15,23,42,0.07)] transition-transform duration-200 motion-safe:hover:scale-[1.03] hover:border-blue-400 hover:shadow-lg focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-200"
               >
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-blue-700 shadow-sm">
@@ -409,7 +410,7 @@ export default function Home() {
                   <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-emerald-300">
                     <Icon name="network" className="h-5 w-5" />
                   </span>
-                  <div className="mt-3 text-2xl font-bold tracking-tight">Zubia</div>
+                  <div className="mt-3 text-xl font-bold tracking-tight">Portal Migrante</div>
                   <div className="mt-1 text-xs font-medium leading-snug text-slate-200">
                     {t("home_ecosystem_center")}
                   </div>
@@ -455,7 +456,7 @@ export default function Home() {
                 <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-emerald-300">
                   <Icon name="network" className="h-5 w-5" />
                 </span>
-                <div className="mt-2 text-xl font-bold">Zubia</div>
+                <div className="mt-2 text-lg font-bold">Portal Migrante</div>
                 <div className="mt-1 text-xs leading-snug text-slate-200">
                   {t("home_ecosystem_center")}
                 </div>
@@ -507,10 +508,14 @@ export default function Home() {
               ))}
             </div>
           </div>
+
+          <p className="mx-auto mt-3 max-w-3xl text-center text-sm leading-7 text-slate-500 sm:text-base">
+            {t("home_digital_role_note")}
+          </p>
         </div>
       </section>
 
-      {/* ACTORS: three stakeholders connected through Zubia */}
+      {/* ACTORS: three stakeholders connected through Portal Migrante */}
       <section className="border-y border-slate-100 bg-slate-50 py-12 sm:py-14">
         <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">
@@ -560,13 +565,13 @@ export default function Home() {
               <span className="absolute bottom-0 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-emerald-500 ring-4 ring-slate-50" />
             </div>
 
-            {/* Zubia is the connecting infrastructure, not a fourth stakeholder. */}
+            {/* Portal Migrante is the connecting digital layer, not a fourth stakeholder. */}
             <div className="mx-auto mt-4 flex max-w-lg items-center justify-center gap-3 rounded-2xl bg-slate-950 px-5 py-4 text-white shadow-lg md:mt-0">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-400/15 text-emerald-300">
                 <Icon name="network" className="h-6 w-6" />
               </span>
               <span className="min-w-0 text-start">
-                <span className="block text-base font-bold">Zubia Social Euskadi</span>
+                <span className="block text-base font-bold">Portal Migrante</span>
                 <span className="block text-sm text-slate-300">
                   {t("home_ecosystem_center")}
                 </span>
@@ -620,7 +625,7 @@ export default function Home() {
 
               <div className="relative">
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-                  <Icon name="briefcase" />
+                  <Icon name="network" />
                 </div>
 
                 <p className="mt-6 text-xs font-bold uppercase tracking-[0.18em] text-blue-700">
@@ -725,7 +730,7 @@ export default function Home() {
             <div className="flex items-center justify-between gap-4 border-b border-slate-100 pb-4">
               <div>
                 <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">
-                  Zubia Social Euskadi · DEMO
+                  Portal Migrante · DEMO
                 </p>
 
                 <h3 className="mt-1 text-lg font-bold">
@@ -739,14 +744,14 @@ export default function Home() {
             </div>
 
             <div className="mt-4 grid gap-3 sm:grid-cols-4">
-              {demoMetrics.map((metric) => (
-                <div key={metric.label} className="rounded-2xl bg-slate-50 p-4">
-                  <div className="text-2xl font-bold text-slate-950">
-                    {metric.value}
+              {demoSteps.map((item) => (
+                <div key={item.step} className="rounded-2xl bg-slate-50 p-4">
+                  <div className="font-mono text-xs font-black tracking-[0.18em] text-emerald-700">
+                    {item.step}
                   </div>
 
-                  <div className="mt-1 text-xs font-medium text-slate-500">
-                    {metric.label}
+                  <div className="mt-2 text-sm font-bold leading-snug text-slate-700">
+                    {item.label}
                   </div>
                 </div>
               ))}
@@ -783,7 +788,7 @@ export default function Home() {
 
                 <div className="mx-auto mt-7 flex h-32 w-32 items-center justify-center rounded-full bg-[conic-gradient(#10b981_0_30%,#2563eb_30%_55%,#8b5cf6_55%_75%,#f59e0b_75%_100%)]">
                   <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white text-center text-xs font-bold text-slate-600">
-                    ZUBIA
+                    PORTAL
                   </div>
                 </div>
               </div>
