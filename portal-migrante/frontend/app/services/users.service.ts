@@ -6,7 +6,7 @@ export type UserRole =
   | "admin"
   | "super_admin";
 
-export type PlatformRole = "user" | "moderator" | "admin" | "super_admin";
+export type PlatformRole = "user" | "moderator" | "admin";
 export type AccountType = "individual" | "organization_account";
 export type UserStatus = "active" | "inactive" | "pending" | "blocked";
 
@@ -28,10 +28,10 @@ export type IdentityDocumentInput = {
 
 export type User = {
   _id: string;
-  accountType: AccountType;
+  accountType?: AccountType;
   platformRole?: PlatformRole;
-  role: UserRole;
-  fullName: string;
+  role?: UserRole;
+  fullName?: string;
   displayName?: string;
   email: string;
   phone?: string;
@@ -47,7 +47,7 @@ export type User = {
   legalConsentAt?: string;
   organizationId?: string | OrganizationRef | null;
   status: UserStatus;
-  isVerified: boolean;
+  isVerified?: boolean;
   createdAt?: string;
   updatedAt?: string;
 };
@@ -69,13 +69,22 @@ export type CreateUserInput = {
   legalConsentAccepted?: boolean;
 };
 
+export type RegisterUserInput = {
+  displayName: string;
+  fullName?: string;
+  email: string;
+  password: string;
+  phone?: string;
+  preferredLanguage?: "es" | "eu" | "ar" | "en";
+  originCountry?: string;
+  municipalityId?: string | null;
+  profileImage?: string;
+  legalConsentAccepted: true;
+};
+
 export type RegisterUserResult = {
+  message: string;
   user: User;
-  phoneVerification?: {
-    sent: boolean;
-    skipped?: boolean;
-    reason?: string;
-  };
 };
 
 export type LoginResult = {
@@ -105,7 +114,7 @@ export const usersService = {
     });
   },
 
-  async register(data: CreateUserInput) {
+  async register(data: RegisterUserInput) {
     return http<RegisterUserResult>("/users/register", {
       method: "POST",
       body: JSON.stringify(data),
@@ -123,27 +132,9 @@ export const usersService = {
   },
 
   async refreshCurrentUser() {
-    const user = await http<User>("/auth/me");
-    this.setCurrentUser(user);
-    return user;
-  },
-
-  async sendPhoneCode(userId: string) {
-    return http<{ message: string; phoneVerification?: RegisterUserResult["phoneVerification"] }>(
-      `/users/${userId}/send-phone-code`,
-      { method: "POST" }
-    );
-  },
-
-  async verifyPhone(userId: string, code: string) {
-    const user = await http<User>(`/users/${userId}/verify-phone`, {
-      method: "POST",
-      body: JSON.stringify({ code }),
-    });
-    if (this.hasAuthToken()) {
-      this.setCurrentUser(user);
-    }
-    return user;
+    const result = await http<{ user: User }>("/auth/me");
+    this.setCurrentUser(result.user);
+    return result.user;
   },
 
   hasAuthToken() {

@@ -146,7 +146,7 @@ export const updateReport = async (req: Request, res: Response): Promise<void> =
         _id: updates.assignedToUserId,
         status: "active",
         platformRole: {
-          $in: ["moderator", "admin", "super_admin"],
+          $in: ["moderator", "admin"],
         },
       }))
     ) {

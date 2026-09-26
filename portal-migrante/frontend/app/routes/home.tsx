@@ -208,6 +208,12 @@ export default function Home() {
     },
   ];
 
+  const quickNeeds = [
+    { icon: "scale" as IconName, title: t("home_quick_info") },
+    { icon: "heart" as IconName, title: t("home_quick_resources") },
+    { icon: "network" as IconName, title: t("home_quick_community") },
+  ];
+
   const services = [
     {
       icon: "briefcase" as IconName,
@@ -317,13 +323,13 @@ export default function Home() {
             </div>
 
             <div className="mt-9 grid max-w-2xl gap-3 text-sm sm:grid-cols-3">
-              {actors.map((actor) => (
+              {quickNeeds.map((item) => (
                 <div
-                  key={actor.title}
+                  key={item.title}
                   className="flex items-center gap-3 rounded-xl border border-white/15 bg-slate-950/25 px-3 py-3 backdrop-blur-sm"
                 >
-                  <Icon name={actor.icon} className="h-5 w-5 text-emerald-300" />
-                  <span className="font-medium text-slate-100">{actor.title}</span>
+                  <Icon name={item.icon} className="h-5 w-5 text-emerald-300" />
+                  <span className="font-medium text-slate-100">{item.title}</span>
                 </div>
               ))}
             </div>

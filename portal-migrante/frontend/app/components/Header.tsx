@@ -59,7 +59,7 @@ export default function Header() {
       label: t("nav_services"),
     },
     {
-      to: "/organizations",
+      to: "/servicios/asociaciones",
       label: t("nav_entities"),
     },
     {
@@ -76,37 +76,21 @@ export default function Header() {
      Create account label
   ========================================================= */
 
-  const createAccountLabel =
-    locale === "es"
-      ? "Crear cuenta"
-      : locale === "eu"
-        ? "Kontua sortu"
-        : locale === "en"
-          ? "Create account"
-          : "إنشاء حساب";
+  const createAccountLabel = t("register_submit");
 
   /* =========================================================
      User roles
   ========================================================= */
 
-  const userRole = currentUser?.role;
   const platformRole = currentUser?.platformRole;
-
-  const isAdmin =
-    platformRole === "admin" ||
-    platformRole === "super_admin" ||
-    userRole === "admin" ||
-    userRole === "super_admin";
-
-  const isModerator =
-    isAdmin || platformRole === "moderator";
+  const isAdmin = platformRole === "admin";
+  const isModerator = isAdmin || platformRole === "moderator";
 
   /* =========================================================
      User information
   ========================================================= */
 
   const displayName =
-    currentUser?.fullName ||
     currentUser?.displayName ||
     currentUser?.email ||
     "";
@@ -469,9 +453,7 @@ export default function Header() {
                         text-slate-900
                       "
                     >
-                      {currentUser.fullName ||
-                        currentUser.displayName ||
-                        t("profile")}
+                      {displayName || t("profile")}
                     </p>
 
                     <p
@@ -511,7 +493,7 @@ export default function Header() {
 
                   {isModerator && (
                     <Link
-                      to="/moderacion"
+                      to="/admin/moderation"
                       onClick={closeMenus}
                       className="
                         flex
@@ -534,7 +516,7 @@ export default function Header() {
 
                   {isAdmin && (
                     <Link
-                      to="/admin"
+                      to="/office/dashboard"
                       onClick={closeMenus}
                       className="
                         flex
@@ -848,9 +830,7 @@ export default function Header() {
                       text-slate-900
                     "
                   >
-                    {currentUser.fullName ||
-                      currentUser.displayName ||
-                      t("profile")}
+                    {displayName || t("profile")}
                   </p>
 
                   <p
@@ -891,7 +871,7 @@ export default function Header() {
 
               {isModerator && (
                 <Link
-                  to="/moderacion"
+                  to="/admin/moderation"
                   onClick={closeMenus}
                   className="
                     flex
@@ -915,7 +895,7 @@ export default function Header() {
 
               {isAdmin && (
                 <Link
-                  to="/admin"
+                  to="/office/dashboard"
                   onClick={closeMenus}
                   className="
                     flex
@@ -998,7 +978,7 @@ export default function Header() {
                   hover:text-emerald-700
                 "
               >
-                {t("login")}
+                {t("login_button")}
               </Link>
 
               {/* Create account */}

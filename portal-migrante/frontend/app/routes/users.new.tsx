@@ -1,11 +1,4 @@
-import {
-  useMemo,
-  useRef,
-  useState,
-  type ChangeEvent,
-  type FormEvent,
-  type ReactNode,
-} from "react";
+import { useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { usersService } from "../services/users.service";
 import { useI18n } from "../i18n";
@@ -36,44 +29,19 @@ const flagUrl = (iso: string) =>
 const countryLabel = ([, name]: Country) => name;
 const phoneLabel = (country: Country) => `${countryLabel(country)} ${country[2]}`;
 
-/* ─────────────────────────────────────────
-   نمط حقول الإدخال (يتغير حسب وجود خطأ)
-   ───────────────────────────────────────── */
-const inputClass = (hasError: boolean) =>
-  `w-full rounded-xl border bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-4 ${
-    hasError
-      ? "border-red-400 focus:border-red-500 focus:ring-red-500/10"
-      : "border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/10"
-  }`;
-
-/* ─────────────────────────────────────────
-   مكونات مساعدة
-   ───────────────────────────────────────── */
 function Label({
   children,
   required = false,
-  optional = false,
   htmlFor,
 }: {
   children: ReactNode;
   required?: boolean;
-  optional?: boolean;
   htmlFor?: string;
 }) {
   return (
-    <label
-      htmlFor={htmlFor}
-      className="mb-2 flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-800"
-    >
-      <span>
-        {children}
-        {required && <span className="ms-1 text-emerald-600">*</span>}
-      </span>
-      {optional && (
-        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-          Opcional
-        </span>
-      )}
+    <label htmlFor={htmlFor} className="mb-2 block text-sm font-semibold text-slate-800">
+      {children}
+      {required && <span className="ms-1 text-emerald-600">*</span>}
     </label>
   );
 }
@@ -89,38 +57,16 @@ function SectionTitle({ children }: { children: ReactNode }) {
   );
 }
 
-/* عرض الخطأ أسفل الحقل */
-function FieldError({ id, message }: { id: string; message?: string }) {
-  if (!message) return null;
-  return (
-    <p
-      id={id}
-      role="alert"
-      className="mt-1.5 flex items-start gap-1.5 text-xs font-medium text-red-600"
-    >
-      <span aria-hidden className="mt-0.5 shrink-0">
-        ⚠
-      </span>
-      <span>{message}</span>
-    </p>
-  );
-}
-
-/* ─────────────────────────────────────────
-   منتقي الدولة
-   ───────────────────────────────────────── */
 function CountrySearchInput({
   value,
   onChange,
   mode,
   placeholder,
-  hasError = false,
 }: {
   value: string;
   onChange: (value: string) => void;
   mode: "country" | "phone";
   placeholder: string;
-  hasError?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const query = value.trim().toLowerCase();
@@ -128,9 +74,8 @@ function CountrySearchInput({
     mode === "phone" ? phoneLabel(country) : countryLabel(country);
   const selected = countries.find((country) => valueFor(country) === value);
   const filtered = countries
-    .filter(
-      ([iso, name, code]) =>
-        !query || `${iso} ${name} ${code}`.toLowerCase().includes(query)
+    .filter(([iso, name, code]) =>
+      !query || `${iso} ${name} ${code}`.toLowerCase().includes(query)
     )
     .slice(0, 12);
 
@@ -153,18 +98,13 @@ function CountrySearchInput({
         onFocus={() => setOpen(true)}
         onBlur={() => window.setTimeout(() => setOpen(false), 120)}
         placeholder={placeholder}
-        role="combobox"
-        aria-expanded={open}
-        aria-autocomplete="list"
-        aria-invalid={hasError}
-        className={`${inputClass(hasError)} ${selected ? "ps-14 pe-4" : "px-4"}`}
+        className={`w-full rounded-xl border border-slate-200 bg-white py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 ${
+          selected ? "ps-14 pe-4" : "px-4"
+        }`}
         autoComplete="off"
       />
       {open && filtered.length > 0 && (
-        <div
-          role="listbox"
-          className="absolute z-40 mt-1 max-h-72 w-full overflow-auto rounded-xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10"
-        >
+        <div className="absolute z-40 mt-1 max-h-72 w-full overflow-auto rounded-xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10">
           {filtered.map((country) => (
             <button
               key={`${mode}-${country[0]}-${country[2]}`}
@@ -193,30 +133,11 @@ function CountrySearchInput({
   );
 }
 
-/* ─────────────────────────────────────────
-   أنواع أخطاء الحقول
-   ───────────────────────────────────────── */
-type FieldErrors = {
-  displayName?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-  phoneNumber?: string;
-  legalConsent?: string;
-};
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-/* ─────────────────────────────────────────
-   الصفحة الرئيسية
-   ───────────────────────────────────────── */
 export default function NewUserPage() {
   const navigate = useNavigate();
   const { t, locale } = useI18n();
 
   const [showOptional, setShowOptional] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     displayName: "",
     fullName: "",
@@ -231,77 +152,6 @@ export default function NewUserPage() {
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState("");
 
-  /* هل حاول المستخدم الإرسال؟ (لإظهار الأخطاء) */
-  const [submitted, setSubmitted] = useState(false);
-
-  /* أخطاء الحقول (بعد blur) */
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
-
-  /* أخطاء الباكند (من API) */
-  const [apiError, setApiError] = useState("");
-
-  /* مرجع للتمرير إلى الخطأ الأول */
-  const formRef = useRef<HTMLFormElement>(null);
-
-  /* ─────────────────────────────────────────
-     التحقق من كل الحقول
-     ───────────────────────────────────────── */
-  const validate = (data = formData): FieldErrors => {
-    const errors: FieldErrors = {};
-
-    if (data.displayName.trim().length < 2) {
-      errors.displayName = t("register_display_name_error");
-    }
-
-    if (!data.email.trim()) {
-      errors.email = t("register_error_email_required");
-    } else if (!EMAIL_REGEX.test(data.email.trim())) {
-      errors.email = t("register_error_email");
-    }
-
-    if (data.password.length < 8) {
-      errors.password = t("password_min_error");
-    }
-
-    if (data.password !== data.confirmPassword) {
-      errors.confirmPassword = t("password_match_error");
-    }
-
-    if (!data.phoneNumber.trim()) {
-      errors.phoneNumber = t("register_error_phone_required");
-    }
-
-    if (!data.legalConsentAccepted) {
-      errors.legalConsent = t("legal_consent_required");
-    }
-
-    return errors;
-  };
-
-  /* إعادة حساب الأخطاء عند تغيّر الحقول (فقط بعد الإرسال الأول) */
-  const currentErrors = useMemo(
-    () => (submitted ? validate() : {}),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [formData, submitted]
-  );
-
-  /* دمج أخطاء "بعد blur" مع "بعد submit" */
-  const errors: FieldErrors = submitted ? currentErrors : fieldErrors;
-
-  /* هل النموذج جاهز للإرسال؟ */
-  const isReady = Object.keys(validate()).length === 0;
-
-  /* ─────────────────────────────────────────
-     التحقق عند مغادرة الحقل (blur)
-     ───────────────────────────────────────── */
-  const handleBlur = (field: keyof FieldErrors) => () => {
-    const allErrors = validate();
-    setFieldErrors((current) => ({ ...current, [field]: allErrors[field] }));
-  };
-
-  /* ─────────────────────────────────────────
-     تحديث الحقول
-     ───────────────────────────────────────── */
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = event.target;
     setFormData((current) => ({
@@ -321,9 +171,13 @@ export default function NewUserPage() {
     if (apiError) setApiError("");
   };
 
-  /* ─────────────────────────────────────────
-     الإرسال
-     ───────────────────────────────────────── */
+  const isReady =
+    formData.displayName.trim().length >= 2 &&
+    formData.email.trim().length > 0 &&
+    formData.password.length >= 8 &&
+    formData.password === formData.confirmPassword &&
+    formData.legalConsentAccepted;
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setSubmitted(true);
@@ -351,11 +205,30 @@ export default function NewUserPage() {
     setSaving(true);
 
     try {
+      if (formData.displayName.trim().length < 2) {
+        setError(t("register_display_name_error"));
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+        setError(t("register_error_email"));
+        return;
+      }
+      if (formData.password.length < 8) {
+        setError(t("password_min_error"));
+        return;
+      }
+      if (formData.password !== formData.confirmPassword) {
+        setError(t("password_match_error"));
+        return;
+      }
+      if (!formData.legalConsentAccepted) {
+        setError(t("legal_consent_required"));
+        return;
+      }
+
       const phoneDialCode =
         formData.phoneCountryCode.match(/\+\d+/)?.[0] || "";
-      const phoneNumber = formData.phoneNumber
-        .replace(/\D/g, "")
-        .replace(/^0+/, "");
+      const phoneNumber = formData.phoneNumber.replace(/\D/g, "");
       const phone =
         phoneDialCode && phoneNumber ? `${phoneDialCode}${phoneNumber}` : undefined;
 
@@ -370,7 +243,7 @@ export default function NewUserPage() {
         originCountry: formData.originCountry.trim() || undefined,
         preferredLanguage: locale,
         legalConsentAccepted: true,
-      } as any);
+      });
 
       setSuccess(t("user_create_success"));
       window.setTimeout(
@@ -417,7 +290,6 @@ export default function NewUserPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
-        {/* الرأس */}
         <div className="mb-8">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
@@ -432,12 +304,9 @@ export default function NewUserPage() {
         </div>
 
         <form
-          ref={formRef}
           onSubmit={handleSubmit}
-          noValidate
-          className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 md:p-9"
+          className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
         >
-          {/* صندوق معلوماتي */}
           <div className="mb-8 rounded-2xl border border-blue-100 bg-blue-50/70 px-5 py-4 text-sm leading-6 text-blue-950">
             <div className="flex items-start gap-3">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-lg ring-1 ring-blue-100">
@@ -445,230 +314,92 @@ export default function NewUserPage() {
               </span>
               <div>
                 <p className="font-bold">{t("register_org_link_title")}</p>
-                <p className="mt-1 text-blue-900/80">
-                  {t("register_org_link_desc")}
-                </p>
+                <p className="mt-1 text-blue-900/80">{t("register_org_link_desc")}</p>
               </div>
             </div>
           </div>
 
-          {/* ═══════ قسم المعلومات الأساسية ═══════ */}
           <div className="mb-8 space-y-5">
             <SectionTitle>{t("register_personal_data")}</SectionTitle>
 
-            {/* الاسم العلني */}
-            <div>
-              <Label htmlFor="displayName" required>
-                {t("register_public_name")}
-              </Label>
-              <input
-                id="displayName"
-                name="displayName"
-                value={formData.displayName}
-                onChange={handleChange}
-                onBlur={handleBlur("displayName")}
-                placeholder={t("register_public_name_placeholder")}
-                aria-invalid={!!errors.displayName}
-                aria-describedby={
-                  errors.displayName ? "displayName-error" : "displayName-help"
-                }
-                className={inputClass(!!errors.displayName)}
-                autoComplete="username"
-                required
-              />
-              <FieldError id="displayName-error" message={errors.displayName} />
-              {!errors.displayName && (
-                <p
-                  id="displayName-help"
-                  className="mt-1.5 text-xs leading-5 text-slate-500"
-                >
-                  {t("register_public_name_help")}
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <Label htmlFor="displayName" required>
+                  {t("display_name")}
+                </Label>
+                <input
+                  id="displayName"
+                  name="displayName"
+                  value={formData.displayName}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                  autoComplete="nickname"
+                  required
+                />
+                <p className="mt-1.5 text-xs text-slate-500">
+                  {t("display_name_help")}
                 </p>
-              )}
+              </div>
+
+              <div>
+                <Label htmlFor="fullName">{t("full_name")}</Label>
+                <input
+                  id="fullName"
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                  autoComplete="name"
+                />
+              </div>
             </div>
 
-            {/* البريد الإلكتروني */}
             <div>
-              <Label htmlFor="email" required>
-                {t("email")}
-              </Label>
+              <Label htmlFor="email" required>{t("email")}</Label>
               <input
                 id="email"
                 name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                onBlur={handleBlur("email")}
-                placeholder={t("register_email_placeholder")}
-                aria-invalid={!!errors.email}
-                aria-describedby={errors.email ? "email-error" : "email-help"}
-                className={inputClass(!!errors.email)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
                 autoComplete="email"
                 required
               />
-              <FieldError id="email-error" message={errors.email} />
-              {!errors.email && (
-                <p
-                  id="email-help"
-                  className="mt-1.5 text-xs leading-5 text-slate-500"
-                >
-                  {t("register_email_help")}
-                </p>
-              )}
             </div>
 
-            {/* كلمة المرور + التأكيد */}
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <Label htmlFor="password" required>
-                  {t("password")}
-                </Label>
-                <div className="relative">
-                  <input
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    value={formData.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur("password")}
-                    minLength={8}
-                    placeholder={t("register_password_placeholder")}
-                    aria-invalid={!!errors.password}
-                    aria-describedby={
-                      errors.password ? "password-error" : "password-help"
-                    }
-                    className={`${inputClass(!!errors.password)} pe-24`}
-                    autoComplete="new-password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((value) => !value)}
-                    className="absolute end-2 top-1/2 -translate-y-1/2 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-                    aria-label={
-                      showPassword
-                        ? t("register_password_hide")
-                        : t("register_password_show")
-                    }
-                  >
-                    {showPassword
-                      ? t("register_password_hide")
-                      : t("register_password_show")}
-                  </button>
-                </div>
-                <FieldError id="password-error" message={errors.password} />
-                {!errors.password && (
-                  <p
-                    id="password-help"
-                    className="mt-1.5 text-xs leading-5 text-slate-500"
-                  >
-                    {t("password_help")}
-                  </p>
-                )}
+                <Label htmlFor="password" required>{t("password")}</Label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  minLength={8}
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                  required
+                />
+                <p className="mt-1.5 text-xs text-slate-500">{t("password_help")}</p>
               </div>
 
               <div>
-                <Label htmlFor="confirmPassword" required>
-                  {t("confirm_password")}
-                </Label>
-                <div className="relative">
-                  <input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    onBlur={handleBlur("confirmPassword")}
-                    minLength={8}
-                    placeholder={t("register_confirm_placeholder")}
-                    aria-invalid={!!errors.confirmPassword}
-                    aria-describedby={
-                      errors.confirmPassword
-                        ? "confirmPassword-error"
-                        : "confirmPassword-help"
-                    }
-                    className={`${inputClass(!!errors.confirmPassword)} pe-24`}
-                    autoComplete="new-password"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword((value) => !value)}
-                    className="absolute end-2 top-1/2 -translate-y-1/2 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-                    aria-label={
-                      showConfirmPassword
-                        ? t("register_password_hide")
-                        : t("register_password_show")
-                    }
-                  >
-                    {showConfirmPassword
-                      ? t("register_password_hide")
-                      : t("register_password_show")}
-                  </button>
-                </div>
-                <FieldError
-                  id="confirmPassword-error"
-                  message={errors.confirmPassword}
-                />
-                {!errors.confirmPassword && (
-                  <p
-                    id="confirmPassword-help"
-                    className="mt-1.5 text-xs leading-5 text-slate-500"
-                  >
-                    {t("register_confirm_help")}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* رقم الهاتف (إلزامي) */}
-            <div>
-              <Label htmlFor="phoneNumber" required>
-                {t("phone")}
-              </Label>
-              <div className="grid gap-2 sm:grid-cols-2">
-                <CountrySearchInput
-                  value={formData.phoneCountryCode}
-                  onChange={(value) =>
-                    setFormData((current) => ({
-                      ...current,
-                      phoneCountryCode: value,
-                    }))
-                  }
-                  mode="phone"
-                  placeholder={t("phone_search_placeholder")}
-                />
+                <Label htmlFor="confirmPassword" required>{t("confirm_password")}</Label>
                 <input
-                  id="phoneNumber"
-                  name="phoneNumber"
-                  type="tel"
-                  value={formData.phoneNumber}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  value={formData.confirmPassword}
                   onChange={handleChange}
-                  onBlur={handleBlur("phoneNumber")}
-                  aria-invalid={!!errors.phoneNumber}
-                  aria-describedby={
-                    errors.phoneNumber ? "phoneNumber-error" : "phone-help"
-                  }
-                  className={inputClass(!!errors.phoneNumber)}
-                  placeholder={t("register_phone_placeholder")}
-                  autoComplete="tel-national"
-                  inputMode="tel"
+                  minLength={8}
+                  className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
                   required
                 />
               </div>
-              <FieldError id="phoneNumber-error" message={errors.phoneNumber} />
-              {!errors.phoneNumber && (
-                <p
-                  id="phone-help"
-                  className="mt-1.5 text-xs leading-5 text-slate-500"
-                >
-                  {t("register_phone_help")}
-                </p>
-              )}
             </div>
           </div>
 
-          {/* ═══════ قسم البيانات الاختيارية ═══════ */}
           <div className="mb-8 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/50">
             <button
               type="button"
@@ -678,53 +409,46 @@ export default function NewUserPage() {
             >
               <div>
                 <div className="text-sm font-bold text-slate-800">
-                  {showOptional
-                    ? t("register_hide_optional")
-                    : t("register_show_optional")}
+                  {showOptional ? t("register_hide_optional") : t("register_show_optional")}
                 </div>
                 <div className="mt-0.5 text-xs text-slate-500">
                   {t("register_optional_help")}
                 </div>
               </div>
-              <span
-                className={`text-xl text-slate-400 transition-transform ${
-                  showOptional ? "rotate-90" : ""
-                }`}
-              >
-                ›
-              </span>
+              <span className={`text-xl text-slate-400 transition-transform ${showOptional ? "rotate-90" : ""}`}>›</span>
             </button>
 
             {showOptional && (
               <div className="space-y-5 border-t border-slate-200 p-5">
-                {/* الاسم الكامل */}
                 <div>
-                  <Label htmlFor="fullName" optional>
-                    {t("full_name")}
-                  </Label>
-                  <input
-                    id="fullName"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleChange}
-                    className={inputClass(false)}
-                    autoComplete="name"
-                  />
-                  <p className="mt-1.5 text-xs leading-5 text-slate-500">
-                    {t("register_full_name_help")}
-                  </p>
+                  <Label htmlFor="phoneNumber">{t("phone")}</Label>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    <CountrySearchInput
+                      value={formData.phoneCountryCode}
+                      onChange={(value) =>
+                        setFormData((current) => ({ ...current, phoneCountryCode: value }))
+                      }
+                      mode="phone"
+                      placeholder={t("phone_search_placeholder")}
+                    />
+                    <input
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      type="tel"
+                      value={formData.phoneNumber}
+                      onChange={handleChange}
+                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10"
+                      placeholder={t("phone_number")}
+                    />
+                  </div>
                 </div>
 
-                {/* بلد الأصل */}
                 <div>
-                  <Label optional>{t("origin_country")}</Label>
+                  <Label>{t("origin_country")}</Label>
                   <CountrySearchInput
                     value={formData.originCountry}
                     onChange={(value) =>
-                      setFormData((current) => ({
-                        ...current,
-                        originCountry: value,
-                      }))
+                      setFormData((current) => ({ ...current, originCountry: value }))
                     }
                     mode="country"
                     placeholder={t("country_search_placeholder")}
@@ -734,96 +458,44 @@ export default function NewUserPage() {
             )}
           </div>
 
-          {/* صندوق اللغة */}
           <div className="mb-6 flex items-start gap-3 rounded-2xl border border-emerald-100 bg-emerald-50/60 px-4 py-3 text-sm leading-6 text-slate-700">
             <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-black text-emerald-700">
               i
             </span>
             <div>
-              <span className="font-bold text-slate-900">
-                {t("register_language_label")}:{" "}
-              </span>
+              <span className="font-bold text-slate-900">{t("register_language_label")}: </span>
               {t("register_language_note")}
             </div>
           </div>
 
-          {/* الموافقة القانونية */}
-          <label
-            className={`mb-2 flex items-start gap-3 rounded-2xl border p-4 text-sm leading-6 text-slate-700 transition ${
-              errors.legalConsent
-                ? "border-red-300 bg-red-50/50"
-                : "border-slate-200 bg-slate-50/50 hover:border-slate-300"
-            }`}
-          >
+          <label className="mb-6 flex items-start gap-3 rounded-2xl border border-slate-200 p-4 text-sm leading-6 text-slate-700">
             <input
               type="checkbox"
               name="legalConsentAccepted"
               checked={formData.legalConsentAccepted}
               onChange={handleChange}
-              onBlur={handleBlur("legalConsent")}
-              aria-invalid={!!errors.legalConsent}
-              aria-describedby={
-                errors.legalConsent ? "legalConsent-error" : undefined
-              }
               className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
             />
             <span>
               {t("legal_consent_text")}{" "}
-              <Link
-                to="/condiciones"
-                className="font-bold text-emerald-700 underline"
-              >
+              <Link to="/condiciones" className="font-bold text-emerald-700 underline">
                 {t("legal_terms_link")}
               </Link>
             </span>
           </label>
-          <FieldError id="legalConsent-error" message={errors.legalConsent} />
 
-          {/* ملخص ما ينقص (يظهر بعد الإرسال) */}
-          {!isReady && submitted && (
-            <div
-              className="mt-5 mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900"
-              role="status"
-            >
-              <div className="font-bold">{t("register_missing_fields")}</div>
-              <ul className="mt-1 list-inside list-disc space-y-0.5 text-xs">
-                {errors.displayName && <li>{errors.displayName}</li>}
-                {errors.email && <li>{errors.email}</li>}
-                {errors.password && <li>{errors.password}</li>}
-                {errors.confirmPassword && <li>{errors.confirmPassword}</li>}
-                {errors.phoneNumber && <li>{errors.phoneNumber}</li>}
-                {errors.legalConsent && <li>{errors.legalConsent}</li>}
-              </ul>
+          {error && (
+            <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+              {error}
             </div>
           )}
-
-          {/* أخطاء الباكند */}
-          {apiError && (
-            <div
-              role="alert"
-              aria-live="assertive"
-              className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
-            >
-              <div className="flex items-start gap-2">
-                <span aria-hidden>⚠</span>
-                <span>{apiError}</span>
-              </div>
-            </div>
-          )}
-
-          {/* رسالة النجاح */}
           {success && (
-            <div
-              role="status"
-              aria-live="polite"
-              className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700"
-            >
+            <div className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
               {success}
             </div>
           )}
 
-          {/* أزرار التحكم */}
-          <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
             <Link
               to="/"
               className="rounded-xl border border-slate-200 px-5 py-3 text-center text-sm font-bold text-slate-700 transition hover:bg-slate-50"
@@ -832,8 +504,8 @@ export default function NewUserPage() {
             </Link>
             <button
               type="submit"
-              disabled={saving}
-              className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-black text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={!isReady || saving}
+              className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-black text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300"
             >
               {saving ? t("saving") : t("register_submit")}
             </button>

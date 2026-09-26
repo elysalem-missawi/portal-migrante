@@ -17,7 +17,7 @@ const router = Router();
 
 router.use(
   requireAuth,
-  requirePlatformRoles("moderator", "admin", "super_admin")
+  requirePlatformRoles("moderator", "admin")
 );
 
 router.get("/queue", getReviewQueue);
