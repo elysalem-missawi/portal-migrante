@@ -1,124 +1,150 @@
-import { useState } from "react";
+import {
+  useMemo,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { usersService } from "../services/users.service";
 import { useI18n } from "../i18n";
 
+/* ─────────────────────────────────────────
+   قائمة الدول
+   ───────────────────────────────────────── */
 const countries = [
   ["AF", "Afghanistan", "+93"], ["AL", "Albania", "+355"], ["DZ", "Algeria", "+213"],
-  ["AD", "Andorra", "+376"], ["AO", "Angola", "+244"], ["AR", "Argentina", "+54"],
-  ["AM", "Armenia", "+374"], ["AU", "Australia", "+61"], ["AT", "Austria", "+43"],
-  ["AZ", "Azerbaijan", "+994"], ["BH", "Bahrain", "+973"], ["BD", "Bangladesh", "+880"],
-  ["BY", "Belarus", "+375"], ["BE", "Belgium", "+32"], ["BJ", "Benin", "+229"],
-  ["BO", "Bolivia", "+591"], ["BA", "Bosnia and Herzegovina", "+387"], ["BR", "Brazil", "+55"],
-  ["BG", "Bulgaria", "+359"], ["BF", "Burkina Faso", "+226"], ["BI", "Burundi", "+257"],
-  ["KH", "Cambodia", "+855"], ["CM", "Cameroon", "+237"], ["CA", "Canada", "+1"],
-  ["CV", "Cape Verde", "+238"], ["CF", "Central African Republic", "+236"], ["TD", "Chad", "+235"],
-  ["CL", "Chile", "+56"], ["CN", "China", "+86"], ["CO", "Colombia", "+57"],
-  ["KM", "Comoros", "+269"], ["CG", "Congo", "+242"], ["CD", "Congo DR", "+243"],
-  ["CR", "Costa Rica", "+506"], ["CI", "Cote d'Ivoire", "+225"], ["HR", "Croatia", "+385"],
-  ["CU", "Cuba", "+53"], ["CY", "Cyprus", "+357"], ["CZ", "Czech Republic", "+420"],
-  ["DK", "Denmark", "+45"], ["DJ", "Djibouti", "+253"], ["DO", "Dominican Republic", "+1"],
-  ["EC", "Ecuador", "+593"], ["EG", "Egypt", "+20"], ["SV", "El Salvador", "+503"],
-  ["GQ", "Equatorial Guinea", "+240"], ["ER", "Eritrea", "+291"], ["EE", "Estonia", "+372"],
-  ["ET", "Ethiopia", "+251"], ["FI", "Finland", "+358"], ["FR", "France", "+33"],
-  ["GA", "Gabon", "+241"], ["GM", "Gambia", "+220"], ["GE", "Georgia", "+995"],
-  ["DE", "Germany", "+49"], ["GH", "Ghana", "+233"], ["GR", "Greece", "+30"],
-  ["GT", "Guatemala", "+502"], ["GN", "Guinea", "+224"], ["GW", "Guinea-Bissau", "+245"],
-  ["HT", "Haiti", "+509"], ["HN", "Honduras", "+504"], ["HU", "Hungary", "+36"],
-  ["IS", "Iceland", "+354"], ["IN", "India", "+91"], ["ID", "Indonesia", "+62"],
-  ["IR", "Iran", "+98"], ["IQ", "Iraq", "+964"], ["IE", "Ireland", "+353"],
-  ["IL", "Israel", "+972"], ["IT", "Italy", "+39"], ["JM", "Jamaica", "+1"],
-  ["JP", "Japan", "+81"], ["JO", "Jordan", "+962"], ["KZ", "Kazakhstan", "+7"],
-  ["KE", "Kenya", "+254"], ["KW", "Kuwait", "+965"], ["KG", "Kyrgyzstan", "+996"],
-  ["LA", "Laos", "+856"], ["LV", "Latvia", "+371"], ["LB", "Lebanon", "+961"],
-  ["LR", "Liberia", "+231"], ["LY", "Libya", "+218"], ["LI", "Liechtenstein", "+423"],
-  ["LT", "Lithuania", "+370"], ["LU", "Luxembourg", "+352"], ["MG", "Madagascar", "+261"],
-  ["MW", "Malawi", "+265"], ["MY", "Malaysia", "+60"], ["ML", "Mali", "+223"],
-  ["MT", "Malta", "+356"], ["MR", "Mauritania", "+222"], ["MU", "Mauritius", "+230"],
-  ["MX", "Mexico", "+52"], ["MD", "Moldova", "+373"], ["MC", "Monaco", "+377"],
-  ["MN", "Mongolia", "+976"], ["ME", "Montenegro", "+382"], ["MA", "Morocco", "+212"],
-  ["MZ", "Mozambique", "+258"], ["MM", "Myanmar", "+95"], ["NA", "Namibia", "+264"],
-  ["NP", "Nepal", "+977"], ["NL", "Netherlands", "+31"], ["NZ", "New Zealand", "+64"],
-  ["NI", "Nicaragua", "+505"], ["NE", "Niger", "+227"], ["NG", "Nigeria", "+234"],
-  ["KP", "North Korea", "+850"], ["MK", "North Macedonia", "+389"], ["NO", "Norway", "+47"],
-  ["OM", "Oman", "+968"], ["PK", "Pakistan", "+92"], ["PS", "Palestine", "+970"],
-  ["PA", "Panama", "+507"], ["PY", "Paraguay", "+595"], ["PE", "Peru", "+51"],
-  ["PH", "Philippines", "+63"], ["PL", "Poland", "+48"], ["PT", "Portugal", "+351"],
-  ["QA", "Qatar", "+974"], ["RO", "Romania", "+40"], ["RU", "Russia", "+7"],
-  ["RW", "Rwanda", "+250"], ["SA", "Saudi Arabia", "+966"], ["SN", "Senegal", "+221"],
-  ["RS", "Serbia", "+381"], ["SL", "Sierra Leone", "+232"], ["SG", "Singapore", "+65"],
-  ["SK", "Slovakia", "+421"], ["SI", "Slovenia", "+386"], ["SO", "Somalia", "+252"],
-  ["ZA", "South Africa", "+27"], ["KR", "South Korea", "+82"], ["ES", "Spain", "+34"],
-  ["LK", "Sri Lanka", "+94"], ["SD", "Sudan", "+249"], ["SE", "Sweden", "+46"],
-  ["CH", "Switzerland", "+41"], ["SY", "Syria", "+963"], ["TW", "Taiwan", "+886"],
-  ["TJ", "Tajikistan", "+992"], ["TZ", "Tanzania", "+255"], ["TH", "Thailand", "+66"],
-  ["TG", "Togo", "+228"], ["TN", "Tunisia", "+216"], ["TR", "Turkey", "+90"],
-  ["TM", "Turkmenistan", "+993"], ["UG", "Uganda", "+256"], ["UA", "Ukraine", "+380"],
-  ["AE", "United Arab Emirates", "+971"], ["GB", "United Kingdom", "+44"],
-  ["US", "United States", "+1"], ["UY", "Uruguay", "+598"], ["UZ", "Uzbekistan", "+998"],
-  ["VE", "Venezuela", "+58"], ["VN", "Vietnam", "+84"], ["YE", "Yemen", "+967"],
-  ["ZM", "Zambia", "+260"], ["ZW", "Zimbabwe", "+263"],
+  ["AR", "Argentina", "+54"], ["BE", "Belgium", "+32"], ["BR", "Brazil", "+55"],
+  ["CM", "Cameroon", "+237"], ["CA", "Canada", "+1"], ["CL", "Chile", "+56"],
+  ["CO", "Colombia", "+57"], ["CI", "Cote d'Ivoire", "+225"], ["EG", "Egypt", "+20"],
+  ["FR", "France", "+33"], ["DE", "Germany", "+49"], ["GH", "Ghana", "+233"],
+  ["GN", "Guinea", "+224"], ["GW", "Guinea-Bissau", "+245"], ["IT", "Italy", "+39"],
+  ["ML", "Mali", "+223"], ["MR", "Mauritania", "+222"], ["MA", "Morocco", "+212"],
+  ["NL", "Netherlands", "+31"], ["NG", "Nigeria", "+234"], ["PK", "Pakistan", "+92"],
+  ["PS", "Palestine", "+970"], ["PT", "Portugal", "+351"], ["SN", "Senegal", "+221"],
+  ["ES", "Spain", "+34"], ["SD", "Sudan", "+249"], ["SY", "Syria", "+963"],
+  ["TN", "Tunisia", "+216"], ["TR", "Turkey", "+90"], ["UA", "Ukraine", "+380"],
+  ["GB", "United Kingdom", "+44"], ["US", "United States", "+1"], ["VE", "Venezuela", "+58"],
 ] as const;
 
 type Country = (typeof countries)[number];
 
-const flagUrl = (iso: string) => `https://flagcdn.com/w40/${iso.toLowerCase()}.png`;
+const flagUrl = (iso: string) =>
+  `https://flagcdn.com/w40/${iso.toLowerCase()}.png`;
 
 const countryLabel = ([, name]: Country) => name;
-
 const phoneLabel = (country: Country) => `${countryLabel(country)} ${country[2]}`;
 
+/* ─────────────────────────────────────────
+   نمط حقول الإدخال (يتغير حسب وجود خطأ)
+   ───────────────────────────────────────── */
+const inputClass = (hasError: boolean) =>
+  `w-full rounded-xl border bg-white px-4 py-3.5 text-base text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-4 ${
+    hasError
+      ? "border-red-400 focus:border-red-500 focus:ring-red-500/10"
+      : "border-slate-200 focus:border-emerald-500 focus:ring-emerald-500/10"
+  }`;
+
+/* ─────────────────────────────────────────
+   مكونات مساعدة
+   ───────────────────────────────────────── */
+function Label({
+  children,
+  required = false,
+  optional = false,
+  htmlFor,
+}: {
+  children: ReactNode;
+  required?: boolean;
+  optional?: boolean;
+  htmlFor?: string;
+}) {
+  return (
+    <label
+      htmlFor={htmlFor}
+      className="mb-2 flex flex-wrap items-center gap-2 text-sm font-semibold text-slate-800"
+    >
+      <span>
+        {children}
+        {required && <span className="ms-1 text-emerald-600">*</span>}
+      </span>
+      {optional && (
+        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          Opcional
+        </span>
+      )}
+    </label>
+  );
+}
+
+function SectionTitle({ children }: { children: ReactNode }) {
+  return (
+    <div className="mb-5 flex items-center gap-3">
+      <span className="h-px w-6 bg-emerald-500" />
+      <h3 className="text-xs font-black uppercase tracking-[0.15em] text-slate-600">
+        {children}
+      </h3>
+    </div>
+  );
+}
+
+/* عرض الخطأ أسفل الحقل */
+function FieldError({ id, message }: { id: string; message?: string }) {
+  if (!message) return null;
+  return (
+    <p
+      id={id}
+      role="alert"
+      className="mt-1.5 flex items-start gap-1.5 text-xs font-medium text-red-600"
+    >
+      <span aria-hidden className="mt-0.5 shrink-0">
+        ⚠
+      </span>
+      <span>{message}</span>
+    </p>
+  );
+}
+
+/* ─────────────────────────────────────────
+   منتقي الدولة
+   ───────────────────────────────────────── */
 function CountrySearchInput({
   value,
   onChange,
   mode,
   placeholder,
-  hint,
-  required,
-  ariaLabel,
+  hasError = false,
 }: {
   value: string;
   onChange: (value: string) => void;
   mode: "country" | "phone";
   placeholder: string;
-  hint: string;
-  required?: boolean;
-  ariaLabel?: string;
+  hasError?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const query = value.trim().toLowerCase();
   const valueFor = (country: Country) =>
     mode === "phone" ? phoneLabel(country) : countryLabel(country);
-  const selectedCountry = countries.find((country) => valueFor(country) === value);
-  const filteredCountries = countries
-    .filter(([iso, name, code]) => {
-      const haystack = `${iso} ${name} ${code}`.toLowerCase();
-      return !query || haystack.includes(query);
-    })
+  const selected = countries.find((country) => valueFor(country) === value);
+  const filtered = countries
+    .filter(
+      ([iso, name, code]) =>
+        !query || `${iso} ${name} ${code}`.toLowerCase().includes(query)
+    )
     .slice(0, 12);
 
   return (
-    <div className="position-relative">
-      {selectedCountry && (
+    <div className="relative">
+      {selected && (
         <img
-          src={flagUrl(selectedCountry[0])}
+          src={flagUrl(selected[0])}
           alt=""
-          width={24}
-          height={18}
-          className="position-absolute rounded-1 border"
-          style={{
-            insetInlineStart: 14,
-            top: "50%",
-            transform: "translateY(-50%)",
-            objectFit: "cover",
-            zIndex: 2,
-          }}
+          className="pointer-events-none absolute start-4 top-1/2 h-4 w-6 -translate-y-1/2 rounded-sm object-cover ring-1 ring-slate-200"
         />
       )}
       <input
-        className={`form-control form-control-lg pe-5 ${
-          selectedCountry ? "ps-5" : ""
-        }`}
+        type="text"
         value={value}
         onChange={(event) => {
           onChange(event.target.value);
@@ -127,53 +153,37 @@ function CountrySearchInput({
         onFocus={() => setOpen(true)}
         onBlur={() => window.setTimeout(() => setOpen(false), 120)}
         placeholder={placeholder}
-        required={required}
-        aria-label={ariaLabel}
+        role="combobox"
+        aria-expanded={open}
+        aria-autocomplete="list"
+        aria-invalid={hasError}
+        className={`${inputClass(hasError)} ${selected ? "ps-14 pe-4" : "px-4"}`}
         autoComplete="off"
       />
-      <span
-        aria-hidden="true"
-        className="position-absolute text-secondary"
-        style={{
-          insetInlineEnd: 14,
-          top: "50%",
-          transform: "translateY(-50%)",
-          zIndex: 2,
-          pointerEvents: "none",
-        }}
-      >
-        {"\u2315"}
-      </span>
-      {open && filteredCountries.length > 0 && (
+      {open && filtered.length > 0 && (
         <div
-          className="position-absolute start-0 end-0 mt-1 overflow-auto rounded-3 border bg-white shadow-sm"
-          style={{ zIndex: 30, maxHeight: 260 }}
+          role="listbox"
+          className="absolute z-40 mt-1 max-h-72 w-full overflow-auto rounded-xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10"
         >
-          <div className="border-bottom bg-light px-3 py-2 small text-secondary">
-            {hint}
-          </div>
-          {filteredCountries.map((country) => (
+          {filtered.map((country) => (
             <button
               key={`${mode}-${country[0]}-${country[2]}`}
               type="button"
-              className="btn btn-light d-flex w-100 align-items-center gap-2 rounded-0 border-0 px-3 py-2 text-start"
               onMouseDown={(event) => {
                 event.preventDefault();
                 onChange(valueFor(country));
                 setOpen(false);
               }}
+              className="flex w-full items-center gap-3 px-4 py-2.5 text-start text-sm transition hover:bg-slate-50"
             >
               <img
                 src={flagUrl(country[0])}
                 alt=""
-                width={24}
-                height={18}
-                className="rounded-1 border"
-                style={{ objectFit: "cover" }}
+                className="h-4 w-6 rounded-sm object-cover ring-1 ring-slate-200"
               />
-              <span className="flex-grow-1">{country[1]}</span>
+              <span className="flex-1 font-medium text-slate-800">{country[1]}</span>
               {mode === "phone" && (
-                <span className="fw-semibold text-secondary">{country[2]}</span>
+                <span className="font-mono text-xs text-slate-500">{country[2]}</span>
               )}
             </button>
           ))}
@@ -183,240 +193,465 @@ function CountrySearchInput({
   );
 }
 
-const nativeLanguages = [
-  "Arabic / العربية",
-  "English",
-  "French / Français",
-  "Spanish / Español",
-];
+/* ─────────────────────────────────────────
+   أنواع أخطاء الحقول
+   ───────────────────────────────────────── */
+type FieldErrors = {
+  displayName?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+  legalConsent?: string;
+};
 
-function RequiredLabel({
-  children,
-  required = true,
-}: {
-  children: React.ReactNode;
-  required?: boolean;
-}) {
-  return (
-    <span className="d-inline-flex align-items-center gap-1">
-      <span>{children}</span>
-      {required && (
-        <span className="text-danger" aria-label="required">
-          *
-        </span>
-      )}
-    </span>
-  );
-}
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/* ─────────────────────────────────────────
+   الصفحة الرئيسية
+   ───────────────────────────────────────── */
 export default function NewUserPage() {
   const navigate = useNavigate();
   const { t, locale } = useI18n();
 
+  const [showOptional, setShowOptional] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: "",
     displayName: "",
+    fullName: "",
     email: "",
+    password: "",
+    confirmPassword: "",
     phoneCountryCode: phoneLabel(["ES", "Spain", "+34"]),
     phoneNumber: "",
     originCountry: "",
-    nativeLanguage: "",
-    password: "",
-    confirmPassword: "",
     legalConsentAccepted: false,
   });
-
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value, type } = event.target;
+  /* هل حاول المستخدم الإرسال؟ (لإظهار الأخطاء) */
+  const [submitted, setSubmitted] = useState(false);
 
+  /* أخطاء الحقول (بعد blur) */
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+
+  /* أخطاء الباكند (من API) */
+  const [apiError, setApiError] = useState("");
+
+  /* مرجع للتمرير إلى الخطأ الأول */
+  const formRef = useRef<HTMLFormElement>(null);
+
+  /* ─────────────────────────────────────────
+     التحقق من كل الحقول
+     ───────────────────────────────────────── */
+  const validate = (data = formData): FieldErrors => {
+    const errors: FieldErrors = {};
+
+    if (data.displayName.trim().length < 2) {
+      errors.displayName = t("register_display_name_error");
+    }
+
+    if (!data.email.trim()) {
+      errors.email = t("register_error_email_required");
+    } else if (!EMAIL_REGEX.test(data.email.trim())) {
+      errors.email = t("register_error_email");
+    }
+
+    if (data.password.length < 8) {
+      errors.password = t("password_min_error");
+    }
+
+    if (data.password !== data.confirmPassword) {
+      errors.confirmPassword = t("password_match_error");
+    }
+
+    if (!data.legalConsentAccepted) {
+      errors.legalConsent = t("legal_consent_required");
+    }
+
+    return errors;
+  };
+
+  /* إعادة حساب الأخطاء عند تغيّر الحقول (فقط بعد الإرسال الأول) */
+  const currentErrors = useMemo(
+    () => (submitted ? validate() : {}),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [formData, submitted]
+  );
+
+  /* دمج أخطاء "بعد blur" مع "بعد submit" */
+  const errors: FieldErrors = submitted ? currentErrors : fieldErrors;
+
+  /* هل النموذج جاهز للإرسال؟ */
+  const isReady = Object.keys(validate()).length === 0;
+
+  /* ─────────────────────────────────────────
+     التحقق عند مغادرة الحقل (blur)
+     ───────────────────────────────────────── */
+  const handleBlur = (field: keyof FieldErrors) => () => {
+    const allErrors = validate();
+    setFieldErrors((current) => ({ ...current, [field]: allErrors[field] }));
+  };
+
+  /* ─────────────────────────────────────────
+     تحديث الحقول
+     ───────────────────────────────────────── */
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = event.target;
     setFormData((current) => ({
       ...current,
       [name]:
-        type === "checkbox" ? (event.target as HTMLInputElement).checked : value,
+        type === "checkbox"
+          ? (event.target as HTMLInputElement).checked
+          : value,
     }));
+
+    /* امسح خطأ الحقل عند الكتابة */
+    if (fieldErrors[name as keyof FieldErrors]) {
+      setFieldErrors((current) => ({ ...current, [name]: undefined }));
+    }
+
+    /* امسح خطأ API عند الكتابة */
+    if (apiError) setApiError("");
   };
 
-  const phoneDialCode = formData.phoneCountryCode.match(/\+\d+/)?.[0] || "";
-  const phoneNumber = `${phoneDialCode}${formData.phoneNumber.replace(/\D/g, "")}`;
-  const isFormReady =
-    formData.fullName.trim().length > 0 &&
-    formData.email.trim().length > 0 &&
-    phoneDialCode.length > 0 &&
-    formData.phoneNumber.replace(/\D/g, "").length > 0 &&
-    formData.originCountry.trim().length > 0 &&
-    formData.nativeLanguage.length > 0 &&
-    formData.password.length >= 8 &&
-    formData.password === formData.confirmPassword &&
-    formData.legalConsentAccepted;
-  const handleSubmit = async (event: React.FormEvent) => {
+  /* ─────────────────────────────────────────
+     الإرسال
+     ───────────────────────────────────────── */
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    setSaving(true);
-    setError("");
+    setSubmitted(true);
+    setApiError("");
     setSuccess("");
 
+    /* افحص الأخطاء */
+    const validation = validate();
+    setFieldErrors(validation);
+
+    if (Object.keys(validation).length > 0) {
+      /* مرّر إلى أول خطأ */
+      window.setTimeout(() => {
+        const firstError = formRef.current?.querySelector(
+          '[aria-invalid="true"]'
+        );
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+          (firstError as HTMLElement).focus({ preventScroll: true });
+        }
+      }, 50);
+      return;
+    }
+
+    setSaving(true);
+
     try {
-      if (formData.password.length < 8) {
-        setError(t("password_min_error"));
-        return;
-      }
-
-      if (formData.password !== formData.confirmPassword) {
-        setError(t("password_match_error"));
-        return;
-      }
-
-      if (!formData.legalConsentAccepted) {
-        setError(t("legal_consent_required"));
-        return;
-      }
-
-      if (!phoneDialCode) {
-        setError(t("phone_country_code_required"));
-        return;
-      }
+      const phoneDialCode =
+        formData.phoneCountryCode.match(/\+\d+/)?.[0] || "";
+      const phoneNumber = formData.phoneNumber
+        .replace(/\D/g, "")
+        .replace(/^0+/, "");
+      const phone =
+        phoneDialCode && phoneNumber ? `${phoneDialCode}${phoneNumber}` : undefined;
 
       await usersService.register({
-        accountType: "individual",
-        fullName: formData.fullName.trim(),
-        displayName: formData.displayName.trim() || undefined,
+        displayName: formData.displayName.trim(),
+        fullName: formData.fullName.trim() || undefined,
         email: formData.email.trim(),
-        phone: phoneNumber,
         password: formData.password,
+        phone,
+        originCountry: formData.originCountry.trim() || undefined,
         preferredLanguage: locale,
-        originCountry: formData.originCountry,
-        nativeLanguage: formData.nativeLanguage,
-        legalConsentAccepted: formData.legalConsentAccepted,
+        legalConsentAccepted: true,
       });
 
       setSuccess(t("user_create_success"));
       window.setTimeout(
         () =>
           navigate("/login", {
-            state: {
-              registered: true,
-              email: formData.email.trim(),
-            },
+            state: { registered: true, email: formData.email.trim() },
           }),
-        700
+        1200
       );
-    } catch (err: any) {
-      setError(err.message || t("user_create_error"));
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "";
+
+      if (/email.*already|ya.*registrado|already.*exists/i.test(message)) {
+        setFieldErrors({ email: t("register_error_email_taken") });
+      } else if (/password.*weak|contraseña.*débil/i.test(message)) {
+        setFieldErrors({ password: t("register_error_password_weak") });
+      } else {
+        setApiError(message || t("user_create_error"));
+      }
     } finally {
       setSaving(false);
     }
   };
 
+  /* ─────────────────────────────────────────
+     الرسم
+     ───────────────────────────────────────── */
   return (
-    <main
-      className="min-h-screen"
-      style={{
-        background:
-          "radial-gradient(circle at 15% 20%, rgba(34,197,94,0.12), transparent 28%), linear-gradient(180deg, #f8fafc 0%, #eef6f1 100%)",
-      }}
-    >
-      <div className="container py-4 py-lg-5">
-        <div className="row g-4 align-items-stretch">
-          <aside className="col-12 col-xl-4">
-            <div
-              className="h-100 overflow-hidden rounded-3 border shadow-sm text-white"
-              style={{
-                minHeight: 560,
-                backgroundImage:
-                  "linear-gradient(180deg, rgba(2,44,23,0.12), rgba(2,44,23,0.88)), url('/images/registration-migrant-travel-hero.png')",
-                backgroundPosition: "center top",
-                backgroundSize: "cover",
-              }}
-            >
-              <div className="d-flex h-100 flex-column justify-content-end p-4 p-lg-5">
-                <div className="mb-3 d-inline-flex align-items-center gap-2 rounded-pill bg-white bg-opacity-25 px-3 py-2 text-sm fw-semibold">
-                  <span aria-hidden="true">{"\uD83D\uDCF1"}</span>
-                  {t("phone_verify_title")}
-                </div>
-                <h1 className="display-6 fw-bold mb-3">
-                  {t("registration_panel_title")}
-                </h1>
-                <p className="lead mb-4 text-white-50">
-                  {t("registration_panel_desc")}
+    <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
+      <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+        {/* الرأس */}
+        <div className="mb-8">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            {t("register_title")}
+          </div>
+          <h1 className="text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
+            {t("user_new_title")}
+          </h1>
+          <p className="mt-3 text-base leading-relaxed text-slate-600">
+            {t("user_new_subtitle")}
+          </p>
+        </div>
+
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          noValidate
+          className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8 md:p-9"
+        >
+          {/* صندوق معلوماتي */}
+          <div className="mb-8 rounded-2xl border border-blue-100 bg-blue-50/70 px-5 py-4 text-sm leading-6 text-blue-950">
+            <div className="flex items-start gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-lg ring-1 ring-blue-100">
+                🏛️
+              </span>
+              <div>
+                <p className="font-bold">{t("register_org_link_title")}</p>
+                <p className="mt-1 text-blue-900/80">
+                  {t("register_org_link_desc")}
                 </p>
-                <div className="d-grid gap-3">
-                  {[1, 2, 3].map((item) => (
-                    <div key={item} className="rounded-3 bg-white bg-opacity-10 p-3">
-                      <div className="small fw-bold text-white-50 mb-1">0{item}</div>
-                      <div>{t(`registration_panel_point_${item}`)}</div>
-                    </div>
-                  ))}
+              </div>
+            </div>
+          </div>
+
+          {/* ═══════ قسم المعلومات الأساسية ═══════ */}
+          <div className="mb-8 space-y-5">
+            <SectionTitle>{t("register_personal_data")}</SectionTitle>
+
+            {/* الاسم العلني */}
+            <div>
+              <Label htmlFor="displayName" required>
+                {t("register_public_name")}
+              </Label>
+              <input
+                id="displayName"
+                name="displayName"
+                value={formData.displayName}
+                onChange={handleChange}
+                onBlur={handleBlur("displayName")}
+                placeholder={t("register_public_name_placeholder")}
+                aria-invalid={!!errors.displayName}
+                aria-describedby={
+                  errors.displayName ? "displayName-error" : "displayName-help"
+                }
+                className={inputClass(!!errors.displayName)}
+                autoComplete="username"
+                required
+              />
+              <FieldError id="displayName-error" message={errors.displayName} />
+              {!errors.displayName && (
+                <p
+                  id="displayName-help"
+                  className="mt-1.5 text-xs leading-5 text-slate-500"
+                >
+                  {t("register_public_name_help")}
+                </p>
+              )}
+            </div>
+
+            {/* البريد الإلكتروني */}
+            <div>
+              <Label htmlFor="email" required>
+                {t("email")}
+              </Label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                onBlur={handleBlur("email")}
+                placeholder={t("register_email_placeholder")}
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? "email-error" : "email-help"}
+                className={inputClass(!!errors.email)}
+                autoComplete="email"
+                required
+              />
+              <FieldError id="email-error" message={errors.email} />
+              {!errors.email && (
+                <p
+                  id="email-help"
+                  className="mt-1.5 text-xs leading-5 text-slate-500"
+                >
+                  {t("register_email_help")}
+                </p>
+              )}
+            </div>
+
+            {/* كلمة المرور + التأكيد */}
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <Label htmlFor="password" required>
+                  {t("password")}
+                </Label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur("password")}
+                    minLength={8}
+                    placeholder={t("register_password_placeholder")}
+                    aria-invalid={!!errors.password}
+                    aria-describedby={
+                      errors.password ? "password-error" : "password-help"
+                    }
+                    className={`${inputClass(!!errors.password)} pe-24`}
+                    autoComplete="new-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((value) => !value)}
+                    className="absolute end-2 top-1/2 -translate-y-1/2 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                    aria-label={
+                      showPassword
+                        ? t("register_password_hide")
+                        : t("register_password_show")
+                    }
+                  >
+                    {showPassword
+                      ? t("register_password_hide")
+                      : t("register_password_show")}
+                  </button>
+                </div>
+                <FieldError id="password-error" message={errors.password} />
+                {!errors.password && (
+                  <p
+                    id="password-help"
+                    className="mt-1.5 text-xs leading-5 text-slate-500"
+                  >
+                    {t("password_help")}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="confirmPassword" required>
+                  {t("confirm_password")}
+                </Label>
+                <div className="relative">
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    onBlur={handleBlur("confirmPassword")}
+                    minLength={8}
+                    placeholder={t("register_confirm_placeholder")}
+                    aria-invalid={!!errors.confirmPassword}
+                    aria-describedby={
+                      errors.confirmPassword
+                        ? "confirmPassword-error"
+                        : "confirmPassword-help"
+                    }
+                    className={`${inputClass(!!errors.confirmPassword)} pe-24`}
+                    autoComplete="new-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword((value) => !value)}
+                    className="absolute end-2 top-1/2 -translate-y-1/2 rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                    aria-label={
+                      showConfirmPassword
+                        ? t("register_password_hide")
+                        : t("register_password_show")
+                    }
+                  >
+                    {showConfirmPassword
+                      ? t("register_password_hide")
+                      : t("register_password_show")}
+                  </button>
+                </div>
+                <FieldError
+                  id="confirmPassword-error"
+                  message={errors.confirmPassword}
+                />
+                {!errors.confirmPassword && (
+                  <p
+                    id="confirmPassword-help"
+                    className="mt-1.5 text-xs leading-5 text-slate-500"
+                  >
+                    {t("register_confirm_help")}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* ═══════ قسم البيانات الاختيارية ═══════ */}
+          <div className="mb-8 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/50">
+            <button
+              type="button"
+              onClick={() => setShowOptional((value) => !value)}
+              className="flex w-full items-center justify-between gap-3 px-5 py-4 text-start transition hover:bg-slate-100/60"
+              aria-expanded={showOptional}
+            >
+              <div>
+                <div className="text-sm font-bold text-slate-800">
+                  {showOptional
+                    ? t("register_hide_optional")
+                    : t("register_show_optional")}
+                </div>
+                <div className="mt-0.5 text-xs text-slate-500">
+                  {t("register_optional_help")}
                 </div>
               </div>
-            </div>
-          </aside>
+              <span
+                className={`text-xl text-slate-400 transition-transform ${
+                  showOptional ? "rotate-90" : ""
+                }`}
+              >
+                ›
+              </span>
+            </button>
 
-          <div className="col-12 col-xl-8">
-            <div className="mb-4">
-              <h1 className="display-6 fw-bold text-vitoria-black mb-2">
-                {t("user_new_title")}
-              </h1>
-              <p className="lead text-secondary mb-0">{t("user_new_subtitle")}</p>
-              <p className="small text-secondary mt-2 mb-0">
-                <span className="text-danger">*</span> {t("required_fields_note")}
-              </p>
-            </div>
-          <form
-            onSubmit={handleSubmit}
-            className="rounded-3 border bg-white p-4 p-lg-5 shadow-sm"
-          >
-            <div className="row g-4">
-              <div className="col-12 col-md-6">
-                <label className="form-label fw-semibold">
-                  <RequiredLabel>{t("full_name")}</RequiredLabel>
-                </label>
-                <input
-                  name="fullName"
-                  className="form-control form-control-lg"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+            {showOptional && (
+              <div className="space-y-5 border-t border-slate-200 p-5">
+                {/* الاسم الكامل */}
+                <div>
+                  <Label htmlFor="fullName" optional>
+                    {t("full_name")}
+                  </Label>
+                  <input
+                    id="fullName"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    className={inputClass(false)}
+                    autoComplete="name"
+                  />
+                  <p className="mt-1.5 text-xs leading-5 text-slate-500">
+                    {t("register_full_name_help")}
+                  </p>
+                </div>
 
-              <div className="col-12 col-md-6">
-                <label className="form-label fw-semibold">
-                  <RequiredLabel required={false}>{t("display_name")}</RequiredLabel>
-                </label>
-                <input
-                  name="displayName"
-                  className="form-control form-control-lg"
-                  value={formData.displayName}
-                  onChange={handleChange}
-                  placeholder={t("display_name_help")}
-                />
-              </div>
-
-              <div className="col-12 col-md-6">
-                <label className="form-label fw-semibold">
-                  <RequiredLabel>{t("email")}</RequiredLabel>
-                </label>
-                <input
-                  type="email"
-                  name="email"
-                  className="form-control form-control-lg"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="col-12 col-md-6">
-                <label className="form-label fw-semibold">
-                  <RequiredLabel>{t("phone")}</RequiredLabel>
-                </label>
-                <div className="row g-2">
-                  <div className="col-12 col-lg-6">
+                {/* الهاتف */}
+                <div>
+                  <Label htmlFor="phoneNumber" optional>
+                    {t("phone")}
+                  </Label>
+                  <div className="grid gap-2 sm:grid-cols-2">
                     <CountrySearchInput
                       value={formData.phoneCountryCode}
                       onChange={(value) =>
@@ -427,153 +662,158 @@ export default function NewUserPage() {
                       }
                       mode="phone"
                       placeholder={t("phone_search_placeholder")}
-                      hint={t("phone_search_hint")}
-                      aria-label={t("phone_country_code")}
-                      required
                     />
-                  </div>
-                  <div className="col-12 col-lg-6">
                     <input
+                      id="phoneNumber"
                       name="phoneNumber"
-                      className="form-control form-control-lg"
+                      type="tel"
                       value={formData.phoneNumber}
                       onChange={handleChange}
+                      className={inputClass(false)}
+                      placeholder={t("register_phone_placeholder")}
+                      autoComplete="tel-national"
                       inputMode="tel"
-                      placeholder={t("phone_number")}
-                      required
+                      aria-describedby="phone-help"
                     />
                   </div>
-                </div>
-                <div className="form-text">{t("phone_sms_help")}</div>
-              </div>
-
-              <div className="col-12 col-md-6">
-                <label className="form-label fw-semibold">
-                  <RequiredLabel>{t("origin_country")}</RequiredLabel>
-                </label>
-                <CountrySearchInput
-                  value={formData.originCountry}
-                  onChange={(value) =>
-                    setFormData((current) => ({
-                      ...current,
-                      originCountry: value,
-                    }))
-                  }
-                  mode="country"
-                  placeholder={t("country_search_placeholder")}
-                  hint={t("country_search_hint")}
-                  required
-                />
-              </div>
-
-              <div className="col-12 col-md-6">
-                <label className="form-label fw-semibold">
-                  <RequiredLabel>{t("native_language")}</RequiredLabel>
-                </label>
-                <select
-                  name="nativeLanguage"
-                  className="form-select form-select-lg"
-                  value={formData.nativeLanguage}
-                  onChange={handleChange}
-                  required
-                >
-                  <option value="">{t("select_option")}</option>
-                  {nativeLanguages.map((language) => (
-                    <option key={language} value={language}>
-                      {language}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="col-12 col-md-6">
-                <label className="form-label fw-semibold">
-                  <RequiredLabel>{t("password")}</RequiredLabel>
-                </label>
-                <input
-                  type="password"
-                  name="password"
-                  className="form-control form-control-lg"
-                  value={formData.password}
-                  onChange={handleChange}
-                  minLength={8}
-                  required
-                />
-                <div className="form-text">{t("password_help")}</div>
-              </div>
-
-              <div className="col-12 col-md-6">
-                <label className="form-label fw-semibold">
-                  <RequiredLabel>{t("confirm_password")}</RequiredLabel>
-                </label>
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  className="form-control form-control-lg"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  minLength={8}
-                  required
-                />
-              </div>
-
-              <div className="col-12">
-                <div className="d-flex align-items-start gap-3 rounded-3 border bg-light p-3">
-                  <input
-                    id="legalConsentAccepted"
-                    type="checkbox"
-                    name="legalConsentAccepted"
-                    className="form-check-input flex-shrink-0 mt-1"
-                    checked={formData.legalConsentAccepted}
-                    onChange={handleChange}
-                    required
-                  />
-                  <label
-                    className="text-secondary"
-                    htmlFor="legalConsentAccepted"
+                  <p
+                    id="phone-help"
+                    className="mt-1.5 text-xs leading-5 text-slate-500"
                   >
-                    <RequiredLabel>{t("legal_consent_text")}</RequiredLabel>
-                    <div className="mt-2">
-                      <Link
-                        to="/condiciones"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="fw-semibold text-primary text-decoration-underline"
-                        onClick={(event) => event.stopPropagation()}
-                      >
-                        {t("legal_terms_link")}
-                      </Link>
-                    </div>
-                  </label>
+                    {t("register_phone_help")}
+                  </p>
+                </div>
+
+                {/* بلد الأصل */}
+                <div>
+                  <Label optional>{t("origin_country")}</Label>
+                  <CountrySearchInput
+                    value={formData.originCountry}
+                    onChange={(value) =>
+                      setFormData((current) => ({
+                        ...current,
+                        originCountry: value,
+                      }))
+                    }
+                    mode="country"
+                    placeholder={t("country_search_placeholder")}
+                  />
                 </div>
               </div>
-            </div>
-
-            {error && <div className="alert alert-danger mt-4 mb-0">{error}</div>}
-            {success && (
-              <div className="alert alert-success mt-4 mb-0">{success}</div>
             )}
-
-            <div className="mt-4 d-grid d-md-flex justify-content-md-end gap-2">
-              <button
-                type="button"
-                className="btn btn-outline-secondary btn-lg rounded-pill px-4"
-                onClick={() => navigate("/foro")}
-              >
-                {t("cancel")}
-              </button>
-              <button
-                type="submit"
-                className="btn btn-success btn-lg rounded-pill px-5 fw-semibold"
-                disabled={saving || !isFormReady}
-              >
-                {saving ? t("saving") : t("create_user")}
-              </button>
-            </div>
-          </form>
-
           </div>
-        </div>
+
+          {/* صندوق اللغة */}
+          <div className="mb-6 flex items-start gap-3 rounded-2xl border border-emerald-100 bg-emerald-50/60 px-4 py-3 text-sm leading-6 text-slate-700">
+            <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-black text-emerald-700">
+              i
+            </span>
+            <div>
+              <span className="font-bold text-slate-900">
+                {t("register_language_label")}:{" "}
+              </span>
+              {t("register_language_note")}
+            </div>
+          </div>
+
+          {/* الموافقة القانونية */}
+          <label
+            className={`mb-2 flex items-start gap-3 rounded-2xl border p-4 text-sm leading-6 text-slate-700 transition ${
+              errors.legalConsent
+                ? "border-red-300 bg-red-50/50"
+                : "border-slate-200 bg-slate-50/50 hover:border-slate-300"
+            }`}
+          >
+            <input
+              type="checkbox"
+              name="legalConsentAccepted"
+              checked={formData.legalConsentAccepted}
+              onChange={handleChange}
+              onBlur={handleBlur("legalConsent")}
+              aria-invalid={!!errors.legalConsent}
+              aria-describedby={
+                errors.legalConsent ? "legalConsent-error" : undefined
+              }
+              className="mt-1 h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
+            />
+            <span>
+              {t("legal_consent_text")}{" "}
+              <Link
+                to="/condiciones"
+                className="font-bold text-emerald-700 underline"
+              >
+                {t("legal_terms_link")}
+              </Link>
+            </span>
+          </label>
+          <FieldError id="legalConsent-error" message={errors.legalConsent} />
+
+          {/* ملخص ما ينقص (يظهر بعد الإرسال) */}
+          {!isReady && submitted && (
+            <div
+              className="mt-5 mb-5 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900"
+              role="status"
+            >
+              <div className="font-bold">{t("register_missing_fields")}</div>
+              <ul className="mt-1 list-inside list-disc space-y-0.5 text-xs">
+                {errors.displayName && <li>{errors.displayName}</li>}
+                {errors.email && <li>{errors.email}</li>}
+                {errors.password && <li>{errors.password}</li>}
+                {errors.confirmPassword && <li>{errors.confirmPassword}</li>}
+                {errors.legalConsent && <li>{errors.legalConsent}</li>}
+              </ul>
+            </div>
+          )}
+
+          {/* أخطاء الباكند */}
+          {apiError && (
+            <div
+              role="alert"
+              aria-live="assertive"
+              className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700"
+            >
+              <div className="flex items-start gap-2">
+                <span aria-hidden>⚠</span>
+                <span>{apiError}</span>
+              </div>
+            </div>
+          )}
+
+          {/* رسالة النجاح */}
+          {success && (
+            <div
+              role="status"
+              aria-live="polite"
+              className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700"
+            >
+              {success}
+            </div>
+          )}
+
+          {/* أزرار التحكم */}
+          <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <Link
+              to="/"
+              className="rounded-xl border border-slate-200 px-5 py-3 text-center text-sm font-bold text-slate-700 transition hover:bg-slate-50"
+            >
+              {t("cancel")}
+            </Link>
+            <button
+              type="submit"
+              disabled={saving}
+              className="rounded-xl bg-emerald-600 px-6 py-3 text-sm font-black text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {saving ? t("saving") : t("register_submit")}
+            </button>
+          </div>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-slate-500">
+          {t("register_already_have")}{" "}
+          <Link to="/login" className="font-bold text-emerald-700 hover:underline">
+            {t("login_button")}
+          </Link>
+        </p>
       </div>
     </main>
   );
