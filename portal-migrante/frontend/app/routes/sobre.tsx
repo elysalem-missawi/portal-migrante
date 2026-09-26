@@ -262,7 +262,7 @@ export default function Sobre() {
             ))}
           </div>
         </div>
-      </Section>
+      </section>
 
       {/* ═══════════ 01 · ORIGEN ═══════════ */}
       <Section number="01" label={t("about_origin_label")}>
