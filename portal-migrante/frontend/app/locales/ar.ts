@@ -509,6 +509,8 @@ export const ar: Dict = {
   register_email_help: "ستستخدمه لتسجيل الدخول إلى Portal Migrante.",
   register_confirm_help: "يجب أن يطابق كلمة المرور السابقة.",
   register_phone_help: "اختياري. أدخل الرقم فقط، بدون رمز الدولة.",
+  register_error_phone_required: "رقم الهاتف مطلوب.",
+  
 
   // ───── Legal (terms page) ─────
   legal_summary_title: "ملخص سريع",

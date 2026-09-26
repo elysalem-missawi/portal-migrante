@@ -509,6 +509,7 @@ export const eu: Dict = {
   register_email_help: "Portal Migrante-n saioa hasteko erabiliko duzu.",
   register_confirm_help: "Aurreko pasahitzarekin bat etorri behar du.",
   register_phone_help: "Aukerakoa. Zenbakia bakarrik, herrialdearen aurrizkirik gabe.",
+register_error_phone_required: "Telefono zenbakia derrigorrezkoa da.",
 
   // ───── Legal (página de condiciones) ─────
   legal_summary_title: "Laburpena",

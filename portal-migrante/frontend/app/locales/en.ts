@@ -510,6 +510,8 @@ export const en: Dict = {
   register_confirm_help: "Must match the previous password.",
   register_phone_help: "Optional. Enter only the number, without the country prefix.",
 
+  register_error_phone_required: "Phone number is required.",
+  
   // ───── Legal (terms page) ─────
   legal_summary_title: "Quick summary",
   legal_required_label: "Required data",

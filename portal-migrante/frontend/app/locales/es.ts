@@ -507,6 +507,7 @@ export const es: Dict = {
   register_email_help: "Lo utilizarás para iniciar sesión en Portal Migrante.",
   register_confirm_help: "Debe coincidir con la contraseña anterior.",
   register_phone_help: "Opcional. Introduce solo el número, sin el prefijo del país.",
+  register_error_phone_required: "El número de teléfono es obligatorio.",
 
   // ───── Legal (página de condiciones) ─────
   legal_summary_title: "Resumen rápido",

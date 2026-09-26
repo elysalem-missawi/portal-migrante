@@ -201,6 +201,7 @@ type FieldErrors = {
   email?: string;
   password?: string;
   confirmPassword?: string;
+  phoneNumber?: string;
   legalConsent?: string;
 };
 
@@ -264,6 +265,10 @@ export default function NewUserPage() {
 
     if (data.password !== data.confirmPassword) {
       errors.confirmPassword = t("password_match_error");
+    }
+
+    if (!data.phoneNumber.trim()) {
+      errors.phoneNumber = t("register_error_phone_required");
     }
 
     if (!data.legalConsentAccepted) {
@@ -376,12 +381,28 @@ export default function NewUserPage() {
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "";
 
+      /* ترجمة رسائل الباكند المعروفة */
       if (/email.*already|ya.*registrado|already.*exists/i.test(message)) {
         setFieldErrors({ email: t("register_error_email_taken") });
       } else if (/password.*weak|contraseña.*débil/i.test(message)) {
         setFieldErrors({ password: t("register_error_password_weak") });
+      } else if (
+        /phone.*required|tel[eé]fono.*requerido|tel[eé]fono.*obligatorio|móvil.*requerido/i.test(
+          message
+        )
+      ) {
+        setFieldErrors({ phoneNumber: t("register_error_phone_required") });
+      } else if (/email.*required|correo.*requerido/i.test(message)) {
+        setFieldErrors({ email: t("register_error_email_required") });
+      } else if (
+        /name.*required|nombre.*requerido|nombre.*necesario/i.test(message)
+      ) {
+        setFieldErrors({ displayName: t("register_display_name_error") });
+      } else if (/password.*required|contraseña.*requerida/i.test(message)) {
+        setFieldErrors({ password: t("password_min_error") });
       } else {
-        setApiError(message || t("user_create_error"));
+        /* رسالة عامة مترجمة — لا نعرض رسائل الباكند الخام */
+        setApiError(t("user_create_error"));
       }
     } finally {
       setSaving(false);
@@ -597,6 +618,52 @@ export default function NewUserPage() {
                 )}
               </div>
             </div>
+
+            {/* رقم الهاتف (إلزامي) */}
+            <div>
+              <Label htmlFor="phoneNumber" required>
+                {t("phone")}
+              </Label>
+              <div className="grid gap-2 sm:grid-cols-2">
+                <CountrySearchInput
+                  value={formData.phoneCountryCode}
+                  onChange={(value) =>
+                    setFormData((current) => ({
+                      ...current,
+                      phoneCountryCode: value,
+                    }))
+                  }
+                  mode="phone"
+                  placeholder={t("phone_search_placeholder")}
+                />
+                <input
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  type="tel"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  onBlur={handleBlur("phoneNumber")}
+                  aria-invalid={!!errors.phoneNumber}
+                  aria-describedby={
+                    errors.phoneNumber ? "phoneNumber-error" : "phone-help"
+                  }
+                  className={inputClass(!!errors.phoneNumber)}
+                  placeholder={t("register_phone_placeholder")}
+                  autoComplete="tel-national"
+                  inputMode="tel"
+                  required
+                />
+              </div>
+              <FieldError id="phoneNumber-error" message={errors.phoneNumber} />
+              {!errors.phoneNumber && (
+                <p
+                  id="phone-help"
+                  className="mt-1.5 text-xs leading-5 text-slate-500"
+                >
+                  {t("register_phone_help")}
+                </p>
+              )}
+            </div>
           </div>
 
           {/* ═══════ قسم البيانات الاختيارية ═══════ */}
@@ -643,44 +710,6 @@ export default function NewUserPage() {
                   />
                   <p className="mt-1.5 text-xs leading-5 text-slate-500">
                     {t("register_full_name_help")}
-                  </p>
-                </div>
-
-                {/* الهاتف */}
-                <div>
-                  <Label htmlFor="phoneNumber" optional>
-                    {t("phone")}
-                  </Label>
-                  <div className="grid gap-2 sm:grid-cols-2">
-                    <CountrySearchInput
-                      value={formData.phoneCountryCode}
-                      onChange={(value) =>
-                        setFormData((current) => ({
-                          ...current,
-                          phoneCountryCode: value,
-                        }))
-                      }
-                      mode="phone"
-                      placeholder={t("phone_search_placeholder")}
-                    />
-                    <input
-                      id="phoneNumber"
-                      name="phoneNumber"
-                      type="tel"
-                      value={formData.phoneNumber}
-                      onChange={handleChange}
-                      className={inputClass(false)}
-                      placeholder={t("register_phone_placeholder")}
-                      autoComplete="tel-national"
-                      inputMode="tel"
-                      aria-describedby="phone-help"
-                    />
-                  </div>
-                  <p
-                    id="phone-help"
-                    className="mt-1.5 text-xs leading-5 text-slate-500"
-                  >
-                    {t("register_phone_help")}
                   </p>
                 </div>
 
@@ -760,6 +789,7 @@ export default function NewUserPage() {
                 {errors.email && <li>{errors.email}</li>}
                 {errors.password && <li>{errors.password}</li>}
                 {errors.confirmPassword && <li>{errors.confirmPassword}</li>}
+                {errors.phoneNumber && <li>{errors.phoneNumber}</li>}
                 {errors.legalConsent && <li>{errors.legalConsent}</li>}
               </ul>
             </div>
