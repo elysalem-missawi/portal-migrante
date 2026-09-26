@@ -218,42 +218,42 @@ export default function Home() {
   const services = [
     {
       icon: "briefcase" as IconName,
-      title: t("f_work"),
+      title: t("home_area_jobs_title"),
       description: t("home_area_jobs_desc"),
-      to: "/servicios?c=empleo",
+      to: "/servicios",
       color: "bg-emerald-50 text-emerald-700",
     },
     {
       icon: "graduation" as IconName,
-      title: t("f_education"),
+      title: t("home_area_training_title"),
       description: t("home_area_training_desc"),
       to: "/servicios?c=educacion",
       color: "bg-blue-50 text-blue-700",
     },
     {
       icon: "home" as IconName,
-      title: t("f_housing"),
+      title: t("home_area_housing_title"),
       description: t("home_area_housing_desc"),
       to: "/servicios?c=vivienda",
       color: "bg-violet-50 text-violet-700",
     },
     {
       icon: "health" as IconName,
-      title: t("f_health"),
+      title: t("home_area_health_title"),
       description: t("home_area_health_desc"),
       to: "/servicios?c=salud",
       color: "bg-rose-50 text-rose-700",
     },
     {
       icon: "scale" as IconName,
-      title: t("f_legal"),
+      title: t("home_area_admin_title"),
       description: t("home_area_admin_desc"),
       to: "/servicios?c=legal",
       color: "bg-amber-50 text-amber-700",
     },
     {
       icon: "building" as IconName,
-      title: t("f_municipalities"),
+      title: t("home_area_local_title"),
       description: t("home_area_local_desc"),
       to: "/ayuntamientos",
       color: "bg-cyan-50 text-cyan-700",
@@ -615,7 +615,7 @@ export default function Home() {
                   to="/servicios"
                   className="mt-6 inline-flex font-semibold text-emerald-700 hover:text-emerald-800"
                 >
-                  {t("view_information")} →
+                  {t("home_social_cta")} →
                 </Link>
               </div>
             </article>
@@ -644,7 +644,7 @@ export default function Home() {
                   to="/foro"
                   className="mt-6 inline-flex font-semibold text-blue-700 hover:text-blue-800"
                 >
-                  {t("view_information")} →
+                  {t("home_work_cta")} →
                 </Link>
               </div>
             </article>
@@ -793,6 +793,10 @@ export default function Home() {
                 </div>
               </div>
             </div>
+
+            <p className="mt-4 text-xs leading-5 text-slate-500">
+              {t("home_demo_note")}
+            </p>
           </div>
         </div>
       </section>
@@ -843,10 +847,10 @@ export default function Home() {
 
           <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
             <Link
-              to="/users/new"
+              to="/servicios"
               className="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-6 py-3.5 font-semibold text-white transition hover:bg-emerald-400"
             >
-              {t("create_account_link")}
+              {t("home_final_primary_cta")}
             </Link>
 
             <Link
