@@ -19,6 +19,7 @@ const Servicios = lazy(() => import("./routes/servicios"));
 const Users = lazy(() => import("./routes/users"));
 const NewUser = lazy(() => import("./routes/users.new"));
 const LoginUser = lazy(() => import("./routes/users.login"));
+const UserProfile = lazy(() => import("./routes/users.profile"));
 const Contacto = lazy(() => import("./routes/contacto"));
 const Sobre = lazy(() => import("./routes/sobre"));
 const Anuncios = lazy(() => import("./routes/anuncios"));
@@ -104,6 +105,14 @@ const router = createBrowserRouter([
       { path: "users/new", element: <NewUser /> },
       { path: "users/login", element: <LoginUser /> },
       { path: "login", element: <LoginUser /> },
+      {
+        path: "profile",
+        element: (
+          <ProtectedAuthenticatedRoute>
+            <UserProfile />
+          </ProtectedAuthenticatedRoute>
+        ),
+      },
       { path: "unauthorized", element: <UnauthorizedPage /> },
       {
         path: "admin/moderation",
