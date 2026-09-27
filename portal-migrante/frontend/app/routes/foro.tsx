@@ -687,23 +687,16 @@ export default function ForoMigrantesPage() {
                 {visiblePosts.map((post) => (
                   <article
                     key={post._id}
-                    className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:border-emerald-200 hover:shadow-md sm:p-6"
+                    className="group rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:border-slate-300 hover:shadow-md"
                   >
-                    <div className="flex gap-4">
-                      <div className="hidden shrink-0 sm:flex">
-                        <div
-                          className={`flex h-12 w-12 items-center justify-center rounded-2xl text-lg font-black ${
-                            post.type === "announcement"
-                              ? "bg-blue-50 text-blue-600"
-                              : "bg-emerald-50 text-emerald-600"
-                          }`}
-                        >
-                          {post.type === "announcement" ? "!" : "?"}
+                    <div className="p-4 sm:p-5">
+                      <div className="flex items-start gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-sm font-black text-slate-700">
+                          {(post.authorName || "U").charAt(0).toUpperCase()}
                         </div>
-                      </div>
 
-                      <div className="min-w-0 flex-1">
-                        <div className="mb-3 flex flex-wrap items-center gap-2">
+                        <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
                           <span
                             className={`rounded-full px-3 py-1 text-xs font-bold ${
                               post.type === "announcement"
@@ -723,11 +716,7 @@ export default function ForoMigrantesPage() {
                           )}
                         </div>
 
-                        <h2 className="text-xl font-black leading-snug text-slate-950 transition group-hover:text-emerald-700 sm:text-2xl">
-                          {post.title}
-                        </h2>
-
-                        <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-slate-400">
+                        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-medium text-slate-400">
                           <span className="font-bold text-slate-600">
                             {post.authorName}
                           </span>
@@ -748,13 +737,16 @@ export default function ForoMigrantesPage() {
                       </div>
                     </div>
 
-                    <div className="mt-5">
-                      <p className="whitespace-pre-line text-[15px] leading-7 text-slate-600">
-                        {post.body}
-                      </p>
+                    <h2 className="mt-4 text-lg font-black leading-snug text-slate-950 transition group-hover:text-emerald-700 sm:text-xl">
+                      {post.title}
+                    </h2>
+
+                    <p className="mt-2 whitespace-pre-line text-[15px] leading-7 text-slate-700">
+                      {post.body}
+                    </p>
                     </div>
 
-                    <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
+                    <div className="flex items-center justify-between border-t border-slate-100 px-4 py-2.5 sm:px-5">
                       <button
                         type="button"
                         onClick={() =>
@@ -762,7 +754,7 @@ export default function ForoMigrantesPage() {
                             current === post._id ? null : post._id
                           )
                         }
-                        className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700"
+                        className="inline-flex items-center gap-2 rounded-lg px-2 py-1.5 text-xs font-bold text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700"
                       >
                         <span>♡</span>
                         {post.comments.length.toLocaleString(locale)}{" "}
@@ -777,8 +769,8 @@ export default function ForoMigrantesPage() {
                     </div>
 
                     {expandedPostId === post._id && (
-                      <div className="mt-4 rounded-2xl bg-slate-50 p-4 sm:p-5">
-                        <div className="space-y-3">
+                      <div className="border-t border-slate-100 bg-slate-50/70 px-4 py-3 sm:px-5">
+                        <div className="space-y-2">
                           {post.comments.length === 0 ? (
                             <p className="text-sm text-slate-500">
                               {copy.commentPlaceholder}
@@ -790,39 +782,31 @@ export default function ForoMigrantesPage() {
                                   comment._id ||
                                   `${comment.authorName}-${comment.createdAt}`
                                 }
-                                className="rounded-xl border border-slate-200 bg-white p-4"
+                                className="flex items-start gap-2"
                               >
-                                <div className="flex items-start justify-between gap-3">
-                                  <div>
-                                    <p className="m-0 text-sm font-bold text-slate-800">
+                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-200 text-[11px] font-black text-slate-600">
+                                  {(comment.authorName || "U").charAt(0).toUpperCase()}
+                                </div>
+                                <div className="min-w-0 max-w-[90%]">
+                                  <div className="rounded-2xl rounded-tl-md bg-white px-3 py-2 shadow-sm ring-1 ring-slate-200">
+                                    <p className="m-0 text-xs font-bold text-slate-800">
                                       {comment.authorName}
-                                      {comment.authorCity
-                                        ? ` · ${comment.authorCity}`
-                                        : ""}
+                                      {comment.authorCity ? ` · ${comment.authorCity}` : ""}
                                     </p>
-
-                                    <p className="mt-1 text-xs text-slate-400">
-                                      {formatDate(
-                                        comment.createdAt,
-                                        locale
-                                      )}
+                                    <p className="mb-0 mt-1 text-sm leading-5 text-slate-700">
+                                      {comment.body}
                                     </p>
                                   </div>
-
-                                  <span className="text-emerald-500">
-                                    ●
-                                  </span>
+                                  <p className="mt-1 px-2 text-[10px] text-slate-400">
+                                    {formatDate(comment.createdAt, locale)}
+                                  </p>
                                 </div>
-
-                                <p className="mb-0 mt-3 text-sm leading-6 text-slate-600">
-                                  {comment.body}
-                                </p>
                               </div>
                             ))
                           )}
                         </div>
 
-                        <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+                        <div className="mt-3 flex gap-2">
                           <input
                             value={commentDrafts[post._id] || ""}
                             onChange={(event) =>
@@ -833,14 +817,14 @@ export default function ForoMigrantesPage() {
                             }
                             placeholder={copy.commentPlaceholder}
                             maxLength={1200}
-                            className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                            className="min-w-0 flex-1 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
                           />
 
                           <button
                             type="button"
                             onClick={() => void addComment(post._id)}
                             disabled={!canParticipate}
-                            className="rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
+                            className="rounded-full bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
                           >
                             {copy.addComment}
                           </button>
@@ -854,6 +838,70 @@ export default function ForoMigrantesPage() {
           </section>
 
         </div>
+
+        {showChat && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) setShowChat(false);
+            }}
+          >
+            <div className="flex max-h-[80vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+              <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
+                <div>
+                  <h2 className="text-lg font-black text-slate-950">{copy.chatTitle}</h2>
+                  <p className="mt-1 text-xs text-slate-500">{copy.chatIntro}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowChat(false)}
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-lg text-slate-500 hover:bg-slate-200"
+                  aria-label="Close"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="flex-1 space-y-2 overflow-y-auto bg-slate-50 p-4">
+                {messages.length === 0 ? (
+                  <div className="py-12 text-center text-sm text-slate-400">{copy.emptyChat}</div>
+                ) : (
+                  messages.map((message) => (
+                    <div key={message._id} className="flex items-start gap-2">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-[11px] font-black text-slate-600 shadow-sm">
+                        {(message.authorName || "U").charAt(0).toUpperCase()}
+                      </div>
+                      <div className="max-w-[82%] rounded-2xl rounded-tl-md bg-white px-3 py-2 shadow-sm ring-1 ring-slate-200">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold text-slate-800">{message.authorName}</span>
+                          <span className="text-[10px] text-slate-400">{formatDate(message.createdAt, locale)}</span>
+                        </div>
+                        <p className="mt-1 text-sm leading-5 text-slate-700">{message.body}</p>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              <form onSubmit={sendMessage} className="flex gap-2 border-t border-slate-100 bg-white p-4">
+                <input
+                  value={chatDraft}
+                  onChange={(event) => setChatDraft(event.target.value)}
+                  placeholder={copy.chatPlaceholder}
+                  maxLength={1000}
+                  className="min-w-0 flex-1 rounded-full border border-slate-200 px-4 py-2.5 text-sm outline-none focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                />
+                <button
+                  type="submit"
+                  disabled={!canParticipate}
+                  className="rounded-full bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-700 disabled:opacity-40"
+                >
+                  {copy.send}
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
 
         {/* =======================================================
             CREATE POST MODAL
