@@ -303,28 +303,6 @@ const text: Record<Locale, ForumText> = {
   },
 };
 
-const quickLinks = [
-  {
-    labelKey: "f_health",
-    to: "/servicios/salud",
-    icon: "♥",
-  },
-  {
-    labelKey: "f_housing",
-    to: "/servicios/vivienda",
-    icon: "⌂",
-  },
-  {
-    labelKey: "f_municipalities",
-    to: "/ayuntamientos",
-    icon: "▦",
-  },
-  {
-    labelKey: "f_charities",
-    to: "/servicios/asociaciones",
-    icon: "♡",
-  },
-];
 
 const formatDate = (value: string, locale: string) =>
   new Intl.DateTimeFormat(locale, {
@@ -366,6 +344,7 @@ export default function ForoMigrantesPage() {
   const [chatDraft, setChatDraft] = useState("");
 
   const [showComposer, setShowComposer] = useState(false);
+  const [showChat, setShowChat] = useState(false);
 
   const [postDraft, setPostDraft] = useState({
     type: "question" as ForumPostType,
@@ -507,154 +486,30 @@ export default function ForoMigrantesPage() {
       dir={isArabic ? "rtl" : "ltr"}
       className="min-h-screen bg-[#fafbfc] text-slate-950"
     >
-      {/* =========================================================
-          HERO — simple community entry
-      ========================================================= */}
-      <section className="relative overflow-hidden border-b border-slate-200 bg-white">
-        <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-emerald-100/50 blur-3xl" />
-        <div className="pointer-events-none absolute -left-32 bottom-0 h-80 w-80 rounded-full bg-blue-100/40 blur-3xl" />
-
-        <div className="relative mx-auto max-w-6xl px-4 py-7 sm:px-6 sm:py-9 lg:px-8 lg:py-10">
-          <div className="grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-8">
-            {/* LEFT — TEXT */}
-            <div className="flex flex-col justify-center lg:pe-4">
-              <div className="mb-5 w-fit inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-700">
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="max-w-2xl">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700">
                 <span className="h-2 w-2 rounded-full bg-emerald-500" />
-                <span>{copy.eyebrow}</span>
+                {copy.eyebrow}
               </div>
-
-              <h1 className="max-w-2xl text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-4xl">
+              <h1 className="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
                 {copy.title}
               </h1>
-
-              <p className="mt-4 max-w-xl text-base leading-7 text-slate-600">
+              <p className="mt-2 text-sm leading-6 text-slate-600 sm:text-base">
                 {copy.intro}
               </p>
-
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (currentUser) {
-                      setShowComposer(true);
-
-                      setTimeout(() => {
-                        document
-                          .getElementById("forum-content")
-                          ?.scrollIntoView({
-                            behavior: "smooth",
-                            block: "start",
-                          });
-                      }, 50);
-                    } else {
-                      window.location.href = "/users/new";
-                    }
-                  }}
-                  className="inline-flex items-center justify-center rounded-2xl bg-slate-950 px-6 py-3.5 font-bold text-white shadow-lg shadow-slate-900/10 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-800"
-                >
-                  {currentUser
-                    ? copy.composerTitle
-                    : copy.registerLink}
-
-                  <span className="ms-2 text-lg">→</span>
-                </button>
-
-                {!currentUser && (
-                  <Link
-                    to="/login"
-                    className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3.5 font-bold text-slate-800 no-underline shadow-sm transition duration-200 hover:border-slate-300 hover:bg-slate-50"
-                  >
-                    {copy.login}
-                  </Link>
-                )}
-              </div>
-
-              <div className="mt-7 flex flex-wrap gap-2">
-                {quickLinks.map((link) => (
-                  <Link
-                    key={link.to}
-                    to={link.to}
-                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-slate-600 no-underline shadow-sm transition duration-200 hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
-                  >
-                    <span className="text-emerald-600">{link.icon}</span>
-                    <span>{t(link.labelKey)}</span>
-                  </Link>
-                ))}
-              </div>
             </div>
 
-            {/* RIGHT — CARD */}
-            <div className="relative lg:ps-2">
-              <div className="pointer-events-none absolute -right-3 -top-3 z-0 h-20 w-20 rounded-3xl bg-emerald-100/70" />
-
-              <div className="relative z-10 overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_24px_60px_-30px_rgba(15,23,42,0.30)]">
-                <div className="relative h-52 overflow-hidden sm:h-56">
-                  <img
-                    src="/images/registration-migrant-travel-hero.png"
-                    alt=""
-                    className="h-full w-full object-cover"
-                    style={{
-                      objectPosition: "center 35%",
-                    }}
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent" />
-
-                  <div className="absolute bottom-4 start-4">
-                    <div className="flex items-center gap-3 rounded-2xl border border-white/50 bg-white/90 px-4 py-3 shadow-lg backdrop-blur-md">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 font-black text-emerald-600">
-                        ✓
-                      </div>
-
-                      <div>
-                        <p className="m-0 text-[10px] font-black uppercase tracking-[0.15em] text-emerald-600">
-                          Zubia
-                        </p>
-
-                        <p className="m-0 mt-0.5 text-sm font-bold text-slate-900">
-                          {copy.communityRulesTitle}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-5 sm:p-6">
-                  <div className="mb-4 flex items-center justify-between">
-                    <div>
-                      <p className="m-0 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-600">
-                        Zubia
-                      </p>
-
-                      <h2 className="m-0 mt-1 text-lg font-black text-slate-950">
-                        {copy.communityRulesTitle}
-                      </h2>
-                    </div>
-
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 font-black text-emerald-600">
-                      ✓
-                    </div>
-                  </div>
-
-                  <div className="grid gap-2">
-                    {copy.communityRules.map((rule, index) => (
-                      <div
-                        key={rule}
-                        className="flex items-start gap-3 rounded-xl bg-slate-50 px-3 py-2.5"
-                      >
-                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white text-[10px] font-black text-emerald-600 shadow-sm">
-                          0{index + 1}
-                        </span>
-
-                        <p className="m-0 text-xs font-medium leading-5 text-slate-600">
-                          {rule}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <button
+              type="button"
+              onClick={() => setShowChat(true)}
+              className="inline-flex items-center justify-center gap-2 self-start rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 shadow-sm transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 sm:self-auto"
+            >
+              <span className="text-emerald-600">●</span>
+              {copy.chatTitle}
+            </button>
           </div>
         </div>
       </section>
@@ -694,7 +549,7 @@ export default function ForoMigrantesPage() {
           </div>
         )}
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <div className="mx-auto max-w-3xl">
           {/* =====================================================
               POSTS
           ===================================================== */}
@@ -732,20 +587,12 @@ export default function ForoMigrantesPage() {
                       {copy.allPosts}
                     </h2>
 
-                    <p className="mt-1 text-sm text-slate-500">
-                      {copy.intro}
+                    <p className="mt-1 text-xs text-slate-500">
+                      {visiblePosts.length.toLocaleString(locale)} · {copy.eyebrow}
                     </p>
                   </div>
 
-                  {currentUser && (
-                    <button
-                      type="button"
-                      onClick={() => setShowComposer(true)}
-                      className="rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-emerald-700"
-                    >
-                      + {copy.composerTitle}
-                    </button>
-                  )}
+
                 </div>
 
                 <div className="grid gap-3 md:grid-cols-[auto_180px_1fr]">
@@ -1006,175 +853,6 @@ export default function ForoMigrantesPage() {
             )}
           </section>
 
-          {/* =====================================================
-              SIDEBAR
-          ===================================================== */}
-          <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
-            {currentUser ? (
-              <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">
-                      {copy.profileTitle}
-                    </p>
-
-                    <h2 className="mt-1 text-lg font-black text-slate-950">
-                      {currentUser.displayName ||
-                        currentUser.fullName}
-                    </h2>
-                  </div>
-
-                  {currentUser.profileImage ? (
-                  <img
-                    src={currentUser.profileImage}
-                    alt=""
-                    className="h-12 w-12 rounded-full object-cover ring-2 ring-emerald-50"
-                  />
-                ) : (
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-950 font-black text-white">
-                    {(currentUser.displayName ||
-                      currentUser.fullName ||
-                      "U")
-                      .charAt(0)
-                      .toUpperCase()}
-                  </div>
-                )}
-                </div>
-
-                <p className="mt-1 text-sm text-slate-500">
-                  {currentUser.email}
-                </p>
-
-                {currentUser.municipality && (
-                  <p className="mt-1 text-sm text-slate-500">
-                    {currentUser.municipality}
-                  </p>
-                )}
-
-
-                <div className="mt-5 grid gap-2">
-                  <Link
-                    to="/profile"
-                    className="w-full rounded-xl bg-slate-950 px-4 py-2.5 text-center text-sm font-bold text-white no-underline transition hover:bg-slate-800"
-                  >
-                    {copy.profileTitle}
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={logout}
-                    className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
-                  >
-                    {copy.logout}
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-5 shadow-sm">
-                <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">
-                  Zubia
-                </p>
-                <h2 className="mt-1 text-xl font-black text-slate-950">
-                  {copy.loginTitle}
-                </h2>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  {copy.loginIntro}
-                </p>
-                <div className="mt-5 grid gap-2">
-                  <Link
-                    to="/login"
-                    state={{ from: "/foro" }}
-                    className="rounded-xl bg-slate-950 px-4 py-3 text-center font-bold text-white no-underline transition hover:bg-slate-800"
-                  >
-                    {copy.login}
-                  </Link>
-                  <Link
-                    to="/users/new"
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-center text-sm font-bold text-slate-700 no-underline transition hover:bg-slate-50"
-                  >
-                    {copy.registerLink}
-                  </Link>
-                </div>
-              </div>
-            )}
-
-            {/* Chat */}
-            <details className="rounded-2xl border border-slate-200 bg-white shadow-sm">
-              <summary className="cursor-pointer list-none p-5">
-                <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-                    ●
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-black text-slate-950">
-                      {copy.chatTitle}
-                    </h2>
-                    <p className="mt-1 text-xs leading-5 text-slate-500">
-                      {copy.chatIntro}
-                    </p>
-                  </div>
-                </div>
-              </summary>
-              <div className="border-t border-slate-100 p-5">
-              <div className="mt-4 flex max-h-80 flex-col gap-2 overflow-auto rounded-xl bg-slate-50 p-3">
-                {messages.length === 0 ? (
-                  <div className="py-8 text-center text-sm text-slate-400">
-                    {copy.emptyChat}
-                  </div>
-                ) : (
-                  messages.map((message) => (
-                    <div
-                      key={message._id}
-                      className="rounded-xl border border-slate-200 bg-white p-3"
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-xs font-bold text-slate-800">
-                          {message.authorName}
-                        </span>
-
-                        <span className="text-[10px] text-slate-400">
-                          {formatDate(message.createdAt, locale)}
-                        </span>
-                      </div>
-
-                      {message.authorCity && (
-                        <div className="mt-1 text-[10px] text-slate-400">
-                          {message.authorCity}
-                        </div>
-                      )}
-
-                      <p className="mb-0 mt-2 text-sm leading-6 text-slate-600">
-                        {message.body}
-                      </p>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              <form
-                onSubmit={sendMessage}
-                className="mt-3 flex gap-2"
-              >
-                <input
-                  value={chatDraft}
-                  onChange={(event) =>
-                    setChatDraft(event.target.value)
-                  }
-                  placeholder={copy.chatPlaceholder}
-                  maxLength={1000}
-                  className="min-w-0 flex-1 rounded-xl border border-slate-200 px-3 py-2.5 text-sm outline-none focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
-                />
-
-                <button
-                  type="submit"
-                  disabled={!canParticipate}
-                  className="rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  {copy.send}
-                </button>
-              </form>
-              </div>
-            </details>
-          </aside>
         </div>
 
         {/* =======================================================
@@ -1355,36 +1033,6 @@ export default function ForoMigrantesPage() {
           </div>
         )}
 
-        {/* =======================================================
-            QUICK LINKS
-        ======================================================= */}
-        <section className="mt-6">
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {quickLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                className="group rounded-2xl border border-slate-200 bg-white p-4 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-lg text-emerald-600">
-                    {link.icon}
-                  </div>
-
-                  <div>
-                    <p className="m-0 text-sm font-bold text-slate-800 group-hover:text-emerald-700">
-                      {t(link.labelKey)}
-                    </p>
-
-                    <p className="m-0 mt-1 text-xs text-slate-400">
-                      {copy.otherPages}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
       </div>
     </main>
   );
