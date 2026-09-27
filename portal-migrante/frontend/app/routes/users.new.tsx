@@ -312,8 +312,12 @@ export default function NewUserPage() {
     [formData, submitted]
   );
 
-  /* دمج أخطاء "بعد blur" مع "بعد submit" */
-  const errors: FieldErrors = submitted ? currentErrors : fieldErrors;
+  /* دمج أخطاء التحقق المحلي مع أخطاء الـ API.
+     مهم: بعد أول submit لا نهمل fieldErrors، لأن أخطاء السيرفر
+     (مثل البريد المسجل مسبقًا 409) تُحفظ هناك. */
+  const errors: FieldErrors = submitted
+    ? { ...currentErrors, ...fieldErrors }
+    : fieldErrors;
 
   /* هل النموذج جاهز للإرسال؟ */
   const isReady = Object.keys(validate()).length === 0;
