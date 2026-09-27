@@ -1,98 +1,201 @@
+import { useRef, useState } from "react";
+import type { ChangeEvent } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth";
 import { useI18n } from "../i18n";
+import { usersService } from "../services/users.service";
 
 type Locale = "es" | "ar" | "eu" | "en";
 
 const copy = {
   es: {
     eyebrow: "Mi cuenta",
-    title: "Tu perfil en Portal Migrante",
-    intro: "Consulta tu información principal y accede rápidamente a los espacios que forman parte de tu experiencia en la plataforma.",
-    account: "Información de la cuenta",
-    community: "Comunidad",
-    communityDesc: "Publica preguntas, comparte información útil y participa en las conversaciones.",
+    title: "Perfil y cuenta",
+    intro: "Gestiona tu identidad en Portal Migrante y accede rápidamente a tus espacios.",
+    photo: "Foto de perfil",
+    changePhoto: "Cambiar foto",
+    removePhoto: "Quitar",
+    photoHelp: "JPG, PNG o WebP. La imagen se optimiza antes de guardarse.",
+    saving: "Guardando...",
+    saved: "Foto actualizada.",
+    photoError: "No se pudo guardar la imagen.",
+    account: "Datos de la cuenta",
+    dashboard: "Panel de cuenta",
+    community: "Mi comunidad",
+    communityDesc: "Consulta tus publicaciones y participa en el foro.",
     services: "Servicios",
-    servicesDesc: "Explora recursos y orientación organizados según tus necesidades.",
-    editSoon: "La edición completa del perfil estará disponible en una siguiente fase.",
+    servicesDesc: "Encuentra recursos y orientación según tus necesidades.",
     name: "Nombre",
     email: "Correo electrónico",
     municipality: "Municipio",
     origin: "País de origen",
-    language: "Idioma preferido",
-    role: "Tipo de cuenta",
-    goForum: "Ir a la comunidad",
+    language: "Idioma",
+    role: "Cuenta",
+    goForum: "Abrir comunidad",
     goServices: "Explorar servicios",
+    security: "Seguridad y privacidad",
+    securityDesc: "Tu correo identifica tu cuenta. No compartas tu contraseña.",
   },
   ar: {
     eyebrow: "حسابي",
-    title: "ملفك الشخصي في Portal Migrante",
-    intro: "اطّلع على معلومات حسابك الأساسية وانتقل بسرعة إلى أهم مساحات المنصة.",
-    account: "معلومات الحساب",
-    community: "المجتمع",
-    communityDesc: "اطرح الأسئلة وشارك المعلومات المفيدة وشارك في النقاشات.",
+    title: "الملف الشخصي والحساب",
+    intro: "تحكم في هويتك داخل Portal Migrante وانتقل بسرعة إلى مساحاتك.",
+    photo: "الصورة الشخصية",
+    changePhoto: "تغيير الصورة",
+    removePhoto: "حذف",
+    photoHelp: "JPG أو PNG أو WebP. يتم تحسين الصورة قبل حفظها.",
+    saving: "جارٍ الحفظ...",
+    saved: "تم تحديث الصورة.",
+    photoError: "تعذر حفظ الصورة.",
+    account: "بيانات الحساب",
+    dashboard: "لوحة الحساب",
+    community: "مجتمعي",
+    communityDesc: "راجع منشوراتك وشارك في المنتدى.",
     services: "الخدمات",
-    servicesDesc: "استكشف الموارد والتوجيهات المنظمة حسب احتياجاتك.",
-    editSoon: "سيصبح التعديل الكامل للملف الشخصي متاحًا في مرحلة لاحقة.",
+    servicesDesc: "ابحث عن الموارد والتوجيهات حسب احتياجاتك.",
     name: "الاسم",
     email: "البريد الإلكتروني",
     municipality: "البلدية",
     origin: "بلد الأصل",
-    language: "اللغة المفضلة",
-    role: "نوع الحساب",
-    goForum: "الذهاب إلى المجتمع",
+    language: "اللغة",
+    role: "الحساب",
+    goForum: "فتح المجتمع",
     goServices: "استكشاف الخدمات",
+    security: "الأمان والخصوصية",
+    securityDesc: "بريدك الإلكتروني يعرّف حسابك. لا تشارك كلمة المرور.",
   },
   eu: {
     eyebrow: "Nire kontua",
-    title: "Zure profila Portal Migranten",
-    intro: "Ikusi zure kontuko informazio nagusia eta sartu plataformako espazio garrantzitsuenetara.",
-    account: "Kontuaren informazioa",
-    community: "Komunitatea",
-    communityDesc: "Egin galderak, partekatu informazio erabilgarria eta parte hartu elkarrizketetan.",
+    title: "Profila eta kontua",
+    intro: "Kudeatu zure identitatea Portal Migranten eta sartu azkar zure espazioetara.",
+    photo: "Profileko argazkia",
+    changePhoto: "Aldatu argazkia",
+    removePhoto: "Kendu",
+    photoHelp: "JPG, PNG edo WebP. Irudia gorde aurretik optimizatzen da.",
+    saving: "Gordetzen...",
+    saved: "Argazkia eguneratu da.",
+    photoError: "Ezin izan da irudia gorde.",
+    account: "Kontuaren datuak",
+    dashboard: "Kontu-panela",
+    community: "Nire komunitatea",
+    communityDesc: "Ikusi zure argitalpenak eta parte hartu foroan.",
     services: "Zerbitzuak",
-    servicesDesc: "Arakatu zure beharretara antolatutako baliabideak eta orientazioa.",
-    editSoon: "Profila osorik editatzeko aukera hurrengo fase batean egongo da.",
+    servicesDesc: "Bilatu baliabideak eta orientazioa zure beharren arabera.",
     name: "Izena",
     email: "Posta elektronikoa",
     municipality: "Udalerria",
     origin: "Jatorrizko herrialdea",
-    language: "Hobetsitako hizkuntza",
-    role: "Kontu mota",
-    goForum: "Joan komunitatera",
+    language: "Hizkuntza",
+    role: "Kontua",
+    goForum: "Ireki komunitatea",
     goServices: "Arakatu zerbitzuak",
+    security: "Segurtasuna eta pribatutasuna",
+    securityDesc: "Zure posta elektronikoak kontua identifikatzen du. Ez partekatu pasahitza.",
   },
   en: {
     eyebrow: "My account",
-    title: "Your Portal Migrante profile",
-    intro: "Review your main account information and quickly access the spaces that are part of your experience on the platform.",
-    account: "Account information",
-    community: "Community",
-    communityDesc: "Ask questions, share useful information and join conversations.",
+    title: "Profile and account",
+    intro: "Manage your identity on Portal Migrante and quickly access your spaces.",
+    photo: "Profile photo",
+    changePhoto: "Change photo",
+    removePhoto: "Remove",
+    photoHelp: "JPG, PNG or WebP. The image is optimized before saving.",
+    saving: "Saving...",
+    saved: "Photo updated.",
+    photoError: "The image could not be saved.",
+    account: "Account details",
+    dashboard: "Account dashboard",
+    community: "My community",
+    communityDesc: "Review your posts and take part in the forum.",
     services: "Services",
-    servicesDesc: "Explore resources and guidance organised around your needs.",
-    editSoon: "Full profile editing will be available in a later phase.",
+    servicesDesc: "Find resources and guidance around your needs.",
     name: "Name",
     email: "Email",
     municipality: "Municipality",
     origin: "Country of origin",
-    language: "Preferred language",
-    role: "Account type",
-    goForum: "Go to community",
+    language: "Language",
+    role: "Account",
+    goForum: "Open community",
     goServices: "Explore services",
+    security: "Security and privacy",
+    securityDesc: "Your email identifies your account. Never share your password.",
   },
 } satisfies Record<Locale, Record<string, string>>;
 
+async function optimizeAvatar(file: File): Promise<string> {
+  if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+    throw new Error("unsupported");
+  }
+
+  const dataUrl = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result));
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+
+  const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = dataUrl;
+  });
+
+  const max = 512;
+  const scale = Math.min(1, max / Math.max(image.width, image.height));
+  const width = Math.max(1, Math.round(image.width * scale));
+  const height = Math.max(1, Math.round(image.height * scale));
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const context = canvas.getContext("2d");
+  if (!context) throw new Error("canvas");
+  context.drawImage(image, 0, 0, width, height);
+  return canvas.toDataURL("image/jpeg", 0.82);
+}
+
 export default function UserProfilePage() {
-  const { currentUser } = useAuth();
+  const { currentUser, refreshSession } = useAuth();
   const { locale } = useI18n();
   const c = copy[(locale as Locale) in copy ? (locale as Locale) : "es"];
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [savingPhoto, setSavingPhoto] = useState(false);
+  const [notice, setNotice] = useState("");
+  const [error, setError] = useState("");
 
   if (!currentUser) return null;
 
   const displayName =
     currentUser.displayName || currentUser.fullName || currentUser.email;
   const initial = displayName.charAt(0).toUpperCase();
+
+  const savePhoto = async (profileImage: string) => {
+    setSavingPhoto(true);
+    setNotice("");
+    setError("");
+    try {
+      await usersService.update(currentUser._id, { profileImage });
+      await refreshSession();
+      setNotice(c.saved);
+    } catch {
+      setError(c.photoError);
+    } finally {
+      setSavingPhoto(false);
+    }
+  };
+
+  const onPhotoChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    try {
+      const optimized = await optimizeAvatar(file);
+      await savePhoto(optimized);
+    } catch {
+      setError(c.photoError);
+    }
+  };
 
   const details = [
     [c.name, displayName],
@@ -104,42 +207,92 @@ export default function UserProfilePage() {
   ];
 
   return (
-    <main className="min-h-screen bg-slate-50 py-8 sm:py-12">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <section className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-          <div className="border-b border-slate-100 bg-gradient-to-br from-emerald-50 via-white to-sky-50 p-6 sm:p-8 lg:p-10">
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
-              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-3xl bg-slate-950 text-3xl font-black text-white shadow-lg shadow-slate-900/10">
-                {initial}
-              </div>
-              <div className="min-w-0">
-                <p className="m-0 text-xs font-black uppercase tracking-[0.18em] text-emerald-600">
-                  {c.eyebrow}
-                </p>
-                <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-                  {c.title}
-                </h1>
-                <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
-                  {c.intro}
-                </p>
-              </div>
-            </div>
-          </div>
+    <main className="min-h-screen bg-slate-50 py-6 sm:py-10">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <header className="mb-6">
+          <p className="m-0 text-xs font-black uppercase tracking-[0.18em] text-emerald-600">
+            {c.eyebrow}
+          </p>
+          <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
+            {c.title}
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-600 sm:text-base">
+            {c.intro}
+          </p>
+        </header>
 
-          <div className="grid gap-8 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:p-10">
-            <section>
-              <div className="mb-5 flex items-center justify-between gap-4">
-                <h2 className="m-0 text-xl font-black text-slate-950">
-                  {c.account}
+        <div className="grid gap-6 lg:grid-cols-[300px_minmax(0,1fr)]">
+          <aside className="space-y-4">
+            <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <div className="flex flex-col items-center text-center">
+                {currentUser.profileImage ? (
+                  <img
+                    src={currentUser.profileImage}
+                    alt=""
+                    className="h-28 w-28 rounded-full object-cover ring-4 ring-emerald-50"
+                  />
+                ) : (
+                  <div className="flex h-28 w-28 items-center justify-center rounded-full bg-slate-950 text-4xl font-black text-white ring-4 ring-emerald-50">
+                    {initial}
+                  </div>
+                )}
+
+                <h2 className="mt-4 text-xl font-black text-slate-950">
+                  {displayName}
                 </h2>
-              </div>
+                <p className="mt-1 break-all text-sm text-slate-500">
+                  {currentUser.email}
+                </p>
 
-              <dl className="grid gap-3 sm:grid-cols-2">
-                {details.map(([label, value]) => (
-                  <div
-                    key={label}
-                    className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4"
+                <input
+                  ref={inputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  onChange={onPhotoChange}
+                />
+
+                <div className="mt-5 grid w-full gap-2">
+                  <button
+                    type="button"
+                    disabled={savingPhoto}
+                    onClick={() => inputRef.current?.click()}
+                    className="rounded-xl bg-slate-950 px-4 py-3 text-sm font-bold text-white transition hover:bg-slate-800 disabled:opacity-50"
                   >
+                    {savingPhoto ? c.saving : c.changePhoto}
+                  </button>
+                  {currentUser.profileImage && (
+                    <button
+                      type="button"
+                      disabled={savingPhoto}
+                      onClick={() => void savePhoto("")}
+                      className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-600 transition hover:bg-slate-50 disabled:opacity-50"
+                    >
+                      {c.removePhoto}
+                    </button>
+                  )}
+                </div>
+
+                <p className="mt-3 text-xs leading-5 text-slate-400">
+                  {c.photoHelp}
+                </p>
+                {notice && <p className="mt-2 text-sm font-bold text-emerald-700">{notice}</p>}
+                {error && <p className="mt-2 text-sm font-bold text-red-600">{error}</p>}
+              </div>
+            </section>
+
+            <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h2 className="text-sm font-black text-slate-900">{c.security}</h2>
+              <p className="mt-2 text-xs leading-5 text-slate-500">{c.securityDesc}</p>
+            </section>
+          </aside>
+
+          <section className="space-y-6">
+            <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+              <h2 className="text-xl font-black text-slate-950">{c.account}</h2>
+              <dl className="mt-5 grid gap-3 sm:grid-cols-2">
+                {details.map(([label, value]) => (
+                  <div key={label} className="rounded-2xl bg-slate-50 p-4">
                     <dt className="text-xs font-bold uppercase tracking-wide text-slate-400">
                       {label}
                     </dt>
@@ -149,51 +302,34 @@ export default function UserProfilePage() {
                   </div>
                 ))}
               </dl>
+            </div>
 
-              <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900">
-                {c.editSoon}
+            <div>
+              <h2 className="mb-4 text-xl font-black text-slate-950">{c.dashboard}</h2>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Link
+                  to="/foro"
+                  className="group rounded-3xl border border-slate-200 bg-white p-6 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md"
+                >
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-50 text-xl text-emerald-700">◌</div>
+                  <h3 className="mt-4 text-lg font-black text-slate-950">{c.community}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-500">{c.communityDesc}</p>
+                  <span className="mt-4 inline-flex text-sm font-bold text-emerald-700">{c.goForum} →</span>
+                </Link>
+
+                <Link
+                  to="/servicios"
+                  className="group rounded-3xl border border-slate-200 bg-white p-6 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-md"
+                >
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-50 text-xl text-sky-700">+</div>
+                  <h3 className="mt-4 text-lg font-black text-slate-950">{c.services}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-500">{c.servicesDesc}</p>
+                  <span className="mt-4 inline-flex text-sm font-bold text-sky-700">{c.goServices} →</span>
+                </Link>
               </div>
-            </section>
-
-            <aside className="space-y-4">
-              <Link
-                to="/foro"
-                className="block rounded-2xl border border-slate-200 bg-white p-5 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md"
-              >
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-xl text-emerald-700">
-                  ◌
-                </div>
-                <h2 className="mt-4 text-lg font-black text-slate-950">
-                  {c.community}
-                </h2>
-                <p className="mt-2 text-sm leading-6 text-slate-500">
-                  {c.communityDesc}
-                </p>
-                <span className="mt-4 inline-flex font-bold text-emerald-700">
-                  {c.goForum} →
-                </span>
-              </Link>
-
-              <Link
-                to="/servicios"
-                className="block rounded-2xl border border-slate-200 bg-white p-5 no-underline shadow-sm transition hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-md"
-              >
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-50 text-xl text-sky-700">
-                  +
-                </div>
-                <h2 className="mt-4 text-lg font-black text-slate-950">
-                  {c.services}
-                </h2>
-                <p className="mt-2 text-sm leading-6 text-slate-500">
-                  {c.servicesDesc}
-                </p>
-                <span className="mt-4 inline-flex font-bold text-sky-700">
-                  {c.goServices} →
-                </span>
-              </Link>
-            </aside>
-          </div>
-        </section>
+            </div>
+          </section>
+        </div>
       </div>
     </main>
   );
