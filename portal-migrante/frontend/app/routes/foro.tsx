@@ -3,6 +3,7 @@ import type { FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth";
 import { useI18n } from "../i18n";
+import CommunityAccountNav from "../components/CommunityAccountNav";
 import {
   forumService,
   type ForumMessage,
@@ -513,7 +514,7 @@ export default function ForoMigrantesPage() {
         <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-emerald-100/50 blur-3xl" />
         <div className="pointer-events-none absolute -left-32 bottom-0 h-80 w-80 rounded-full bg-blue-100/40 blur-3xl" />
 
-        <div className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
+        <div className="relative mx-auto max-w-6xl px-4 py-7 sm:px-6 sm:py-9 lg:px-8 lg:py-10">
           <div className="grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-8">
             {/* LEFT — TEXT */}
             <div className="flex flex-col justify-center lg:pe-4">
@@ -663,8 +664,9 @@ export default function ForoMigrantesPage() {
       ========================================================= */}
       <div
         id="forum-content"
-        className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10"
+        className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8"
       >
+        {currentUser && <CommunityAccountNav />}
         {notice && (
           <div className="mb-6 flex items-center justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800">
             <div className="flex items-center gap-3">
@@ -697,6 +699,31 @@ export default function ForoMigrantesPage() {
               POSTS
           ===================================================== */}
           <section className="min-w-0">
+            {currentUser && (
+              <button
+                type="button"
+                onClick={() => setShowComposer(true)}
+                className="mb-4 flex w-full items-center gap-3 rounded-2xl border border-slate-200 bg-white p-3 text-start shadow-sm transition hover:border-emerald-200 hover:shadow-md"
+              >
+                {currentUser.profileImage ? (
+                  <img
+                    src={currentUser.profileImage}
+                    alt=""
+                    className="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-emerald-50"
+                  />
+                ) : (
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-emerald-100 font-black text-emerald-700">
+                    {(currentUser.displayName || currentUser.fullName || "U").charAt(0).toUpperCase()}
+                  </span>
+                )}
+                <span className="min-w-0 flex-1 rounded-xl bg-slate-50 px-4 py-3 text-sm font-medium text-slate-500">
+                  {copy.modalIntro}
+                </span>
+                <span className="hidden rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-bold text-white sm:inline">
+                  + {copy.publish}
+                </span>
+              </button>
+            )}
             <div className="mb-5 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
