@@ -355,23 +355,31 @@ export default function Header() {
               >
                 {/* Avatar */}
 
-                <span
-                  className="
-                    flex
-                    h-8
-                    w-8
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-full
-                    bg-emerald-100
-                    text-sm
-                    font-semibold
-                    text-emerald-700
-                  "
-                >
-                  {avatarLetter}
-                </span>
+                {currentUser.profileImage ? (
+                  <img
+                    src={currentUser.profileImage}
+                    alt=""
+                    className="h-8 w-8 shrink-0 rounded-full object-cover ring-2 ring-emerald-50"
+                  />
+                ) : (
+                  <span
+                    className="
+                      flex
+                      h-8
+                      w-8
+                      shrink-0
+                      items-center
+                      justify-center
+                      rounded-full
+                      bg-emerald-100
+                      text-sm
+                      font-semibold
+                      text-emerald-700
+                    "
+                  >
+                    {avatarLetter}
+                  </span>
+                )}
 
                 {/* Name */}
 
@@ -471,7 +479,7 @@ export default function Header() {
                   {/* Profile */}
 
                   <Link
-                    to="/perfil"
+                    to="/profile"
                     onClick={closeMenus}
                     className="
                       flex
@@ -803,23 +811,31 @@ export default function Header() {
                   p-3
                 "
               >
-                <div
-                  className="
-                    flex
-                    h-11
-                    w-11
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-full
-                    bg-emerald-100
-                    text-base
-                    font-semibold
-                    text-emerald-700
-                  "
-                >
-                  {avatarLetter}
-                </div>
+                {currentUser.profileImage ? (
+                  <img
+                    src={currentUser.profileImage}
+                    alt=""
+                    className="h-11 w-11 shrink-0 rounded-full object-cover ring-2 ring-emerald-50"
+                  />
+                ) : (
+                  <div
+                    className="
+                      flex
+                      h-11
+                      w-11
+                      shrink-0
+                      items-center
+                      justify-center
+                      rounded-full
+                      bg-emerald-100
+                      text-base
+                      font-semibold
+                      text-emerald-700
+                    "
+                  >
+                    {avatarLetter}
+                  </div>
+                )}
 
                 <div className="min-w-0">
                   <p
@@ -848,7 +864,7 @@ export default function Header() {
               {/* Profile */}
 
               <Link
-                to="/perfil"
+                to="/profile"
                 onClick={closeMenus}
                 className="
                   flex
