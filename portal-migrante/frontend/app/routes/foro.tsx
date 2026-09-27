@@ -9,7 +9,6 @@ import {
   type ForumPost,
   type ForumPostType,
 } from "../services/forum.service";
-import { usersService } from "../services/users.service";
 
 type Locale = "eu" | "es" | "en" | "ar";
 
@@ -30,12 +29,6 @@ type ForumText = {
   logout: string;
   registerLink: string;
   signedInAs: string;
-  phoneNotVerified: string;
-  phoneCodeLabel: string;
-  phoneCodeSent: string;
-  verifyPhone: string;
-  resendCode: string;
-  phoneVerified: string;
   composerTitle: string;
   typeLabel: string;
   announcement: string;
@@ -66,13 +59,6 @@ type ForumText = {
   communityRulesTitle: string;
   communityRules: string[];
   otherPages: string;
-  verifiedBadge: string;
-  unverifiedBadge: string;
-  verifyToBoost: string;
-  dailyLimitInfo: string;
-  dailyLimitReached: string;
-  remainingPosts: string;
-  unlimited: string;
   modalEyebrow: string;
   modalIntro: string;
 };
@@ -98,13 +84,6 @@ const text: Record<Locale, ForumText> = {
     logout: "Salir",
     registerLink: "Crear cuenta",
     signedInAs: "Sesión iniciada como",
-    phoneNotVerified:
-      "Verifica tu teléfono para proteger tu cuenta.",
-    phoneCodeLabel: "Código SMS",
-    phoneCodeSent: "Código enviado.",
-    verifyPhone: "Verificar teléfono",
-    resendCode: "Reenviar código",
-    phoneVerified: "Teléfono verificado",
     composerTitle: "Crear publicación",
     typeLabel: "Tipo de publicación",
     announcement: "Anuncio",
@@ -140,16 +119,6 @@ const text: Record<Locale, ForumText> = {
       "Para asuntos legales urgentes, busca orientación profesional.",
     ],
     otherPages: "También puedes consultar",
-    verifiedBadge: "Verificado",
-    unverifiedBadge: "Sin verificar",
-    verifyToBoost:
-      "Verifica tu teléfono para proteger tu cuenta, ganar visibilidad y publicar sin límites.",
-    dailyLimitInfo:
-      "Las cuentas sin verificar pueden publicar hasta 3 veces al día.",
-    dailyLimitReached:
-      "Has alcanzado el límite diario. Verifica tu teléfono para seguir publicando hoy.",
-    remainingPosts: "Publicaciones restantes hoy",
-    unlimited: "Sin límite",
     modalEyebrow: "Comunidad",
     modalIntro:
       "Comparte algo que pueda ser útil para otras personas.",
@@ -175,12 +144,6 @@ const text: Record<Locale, ForumText> = {
     logout: "خروج",
     registerLink: "إنشاء حساب",
     signedInAs: "تم الدخول باسم",
-    phoneNotVerified: "تحقق من هاتفك لحماية حسابك.",
-    phoneCodeLabel: "كود SMS",
-    phoneCodeSent: "تم إرسال الكود.",
-    verifyPhone: "تحقق من الهاتف",
-    resendCode: "إعادة إرسال الكود",
-    phoneVerified: "الهاتف موثق",
     composerTitle: "إنشاء منشور",
     typeLabel: "نوع المنشور",
     announcement: "إعلان",
@@ -215,16 +178,6 @@ const text: Record<Locale, ForumText> = {
       "في القضايا القانونية العاجلة، اطلب توجيهاً مهنياً.",
     ],
     otherPages: "يمكنك أيضاً الاطلاع على",
-    verifiedBadge: "موثق",
-    unverifiedBadge: "غير موثق",
-    verifyToBoost:
-      "تحقق من هاتفك لحماية حسابك، وزيادة ظهورك، والنشر بلا حدود.",
-    dailyLimitInfo:
-      "الحسابات غير الموثقة يمكنها النشر حتى 3 مرات يومياً.",
-    dailyLimitReached:
-      "وصلت إلى الحد اليومي. تحقق من هاتفك لمتابعة النشر اليوم.",
-    remainingPosts: "المنشورات المتبقية اليوم",
-    unlimited: "غير محدود",
     modalEyebrow: "المجتمع",
     modalIntro: "شارك شيئاً قد يكون مفيداً للآخرين.",
   },
@@ -249,12 +202,6 @@ const text: Record<Locale, ForumText> = {
     logout: "Log out",
     registerLink: "Create account",
     signedInAs: "Signed in as",
-    phoneNotVerified: "Verify your phone to protect your account.",
-    phoneCodeLabel: "SMS code",
-    phoneCodeSent: "Code sent.",
-    verifyPhone: "Verify phone",
-    resendCode: "Resend code",
-    phoneVerified: "Phone verified",
     composerTitle: "Create post",
     typeLabel: "Post type",
     announcement: "Announcement",
@@ -290,16 +237,6 @@ const text: Record<Locale, ForumText> = {
       "For urgent legal matters, seek professional guidance.",
     ],
     otherPages: "You may also explore",
-    verifiedBadge: "Verified",
-    unverifiedBadge: "Unverified",
-    verifyToBoost:
-      "Verify your phone to protect your account, gain visibility, and post without limits.",
-    dailyLimitInfo:
-      "Unverified accounts can post up to 3 times per day.",
-    dailyLimitReached:
-      "Daily limit reached. Verify your phone to keep posting today.",
-    remainingPosts: "Posts remaining today",
-    unlimited: "Unlimited",
     modalEyebrow: "Community",
     modalIntro: "Share something that may be useful to others.",
   },
@@ -324,13 +261,6 @@ const text: Record<Locale, ForumText> = {
     logout: "Irten",
     registerLink: "Sortu kontua",
     signedInAs: "Saioa hasita",
-    phoneNotVerified:
-      "Egiaztatu zure telefonoa zure kontua babesteko.",
-    phoneCodeLabel: "SMS kodea",
-    phoneCodeSent: "Kodea bidali da.",
-    verifyPhone: "Egiaztatu telefonoa",
-    resendCode: "Birbidali kodea",
-    phoneVerified: "Telefonoa egiaztatuta",
     composerTitle: "Argitalpena sortu",
     typeLabel: "Argitalpen mota",
     announcement: "Iragarkia",
@@ -366,16 +296,6 @@ const text: Record<Locale, ForumText> = {
       "Premiazko gai juridikoetarako, bilatu orientazio profesionala.",
     ],
     otherPages: "Beste orriak",
-    verifiedBadge: "Egiaztatuta",
-    unverifiedBadge: "Egiaztatu gabea",
-    verifyToBoost:
-      "Egiaztatu telefonoa zure kontua babesteko, ikusgarritasuna irabazteko eta mugarik gabe argitaratzeko.",
-    dailyLimitInfo:
-      "Egiaztatu gabeko kontuek egunean 3 aldiz argitaratu dezakete.",
-    dailyLimitReached:
-      "Eguneko muga lortu duzu. Egiaztatu zure telefonoa gaur argitaratzen jarraitzeko.",
-    remainingPosts: "Gaurko argitalpenak falta dira",
-    unlimited: "Mugarik gabe",
     modalEyebrow: "Komunitatea",
     modalIntro:
       "Partekatu beste batzuentzat erabilgarria izan daitekeen zerbait.",
@@ -413,46 +333,6 @@ const formatDate = (value: string, locale: string) =>
     minute: "2-digit",
   }).format(new Date(value));
 
-// ============================================================
-// DAILY POST QUOTA — Unverified users
-// ============================================================
-const DAILY_LIMIT_UNVERIFIED = 3;
-const QUOTA_STORAGE_KEY = "forum:post-quota";
-
-const todayKey = () => new Date().toISOString().slice(0, 10);
-
-const getDailyCount = (userId: string): number => {
-  try {
-    const raw = localStorage.getItem(QUOTA_STORAGE_KEY);
-    const data: Record<string, { date: string; count: number }> = raw
-      ? JSON.parse(raw)
-      : {};
-    const entry = data[userId];
-    if (!entry || entry.date !== todayKey()) return 0;
-    return entry.count || 0;
-  } catch {
-    return 0;
-  }
-};
-
-const incrementDailyCount = (userId: string): number => {
-  try {
-    const raw = localStorage.getItem(QUOTA_STORAGE_KEY);
-    const data: Record<string, { date: string; count: number }> = raw
-      ? JSON.parse(raw)
-      : {};
-    const current = data[userId];
-    const base =
-      current && current.date === todayKey() ? current.count : 0;
-    const next = base + 1;
-    data[userId] = { date: todayKey(), count: next };
-    localStorage.setItem(QUOTA_STORAGE_KEY, JSON.stringify(data));
-    return next;
-  } catch {
-    return 0;
-  }
-};
-
 export default function ForoMigrantesPage() {
   const { locale, t } = useI18n();
 
@@ -460,7 +340,6 @@ export default function ForoMigrantesPage() {
     currentUser,
     signIn,
     signOut,
-    refreshSession,
   } = useAuth();
 
   const copy =
@@ -478,8 +357,6 @@ export default function ForoMigrantesPage() {
     email: "",
     password: "",
   });
-
-  const [phoneCode, setPhoneCode] = useState("");
 
   const [activeView, setActiveView] = useState<"all" | "mine">("all");
 
@@ -507,25 +384,7 @@ export default function ForoMigrantesPage() {
 
   const canParticipate = Boolean(currentUser);
 
-  const isVerified = Boolean(
-    currentUser?.phoneVerified || currentUser?.isVerified
-  );
-
-  const [dailyCount, setDailyCount] = useState(0);
-
-  useEffect(() => {
-    if (currentUser && !isVerified) {
-      setDailyCount(getDailyCount(currentUser._id));
-    } else {
-      setDailyCount(0);
-    }
-  }, [currentUser, isVerified]);
-
-  const remainingPosts = isVerified
-    ? Infinity
-    : Math.max(0, DAILY_LIMIT_UNVERIFIED - dailyCount);
-
-  const canCreatePost = canParticipate && remainingPosts > 0;
+  const canCreatePost = canParticipate;
 
   const loadForum = async () => {
     setError("");
@@ -588,11 +447,6 @@ export default function ForoMigrantesPage() {
       return;
     }
 
-    if (!isVerified && remainingPosts <= 0) {
-      setNotice(copy.dailyLimitReached);
-      return;
-    }
-
     const created = await forumService.createPost({
       userId: currentUser._id,
       type: postDraft.type,
@@ -600,11 +454,6 @@ export default function ForoMigrantesPage() {
       category: postDraft.category,
       body: postDraft.body,
     });
-
-    if (!isVerified) {
-      const newCount = incrementDailyCount(currentUser._id);
-      setDailyCount(newCount);
-    }
 
     setPosts((current) => [created, ...current]);
 
@@ -674,44 +523,6 @@ export default function ForoMigrantesPage() {
     setNotice(copy.messageCreated);
   };
 
-  // ✅ استدعاء آمن — لن يكسر الكود إذا لم تكن الدالة موجودة بعد
-  const verifyForumPhone = async () => {
-    if (!currentUser) return;
-
-    const svc = usersService as any;
-
-    if (typeof svc.verifyPhone !== "function") {
-      setNotice(
-        "⚠️ Phone verification is not available yet. Please contact support."
-      );
-      return;
-    }
-
-    await svc.verifyPhone(currentUser._id, phoneCode);
-
-    await refreshSession();
-
-    setPhoneCode("");
-    setNotice(copy.phoneVerified);
-  };
-
-  const resendForumCode = async () => {
-    if (!currentUser) return;
-
-    const svc = usersService as any;
-
-    if (typeof svc.sendPhoneCode !== "function") {
-      setNotice(
-        "⚠️ Sending code is not available yet. Please contact support."
-      );
-      return;
-    }
-
-    await svc.sendPhoneCode(currentUser._id);
-
-    setNotice(copy.phoneCodeSent);
-  };
-
   return (
     <main
       dir={isArabic ? "rtl" : "ltr"}
@@ -771,7 +582,7 @@ export default function ForoMigrantesPage() {
 
                 {!currentUser && (
                   <Link
-                    to="/users/login"
+                    to="/login"
                     className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3.5 font-bold text-slate-800 no-underline shadow-sm transition duration-200 hover:border-slate-300 hover:bg-slate-50"
                   >
                     {copy.login}
@@ -1227,86 +1038,6 @@ export default function ForoMigrantesPage() {
                   </p>
                 )}
 
-                <div className="mt-4 flex flex-wrap items-center gap-2">
-                  <span
-                    className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold ${
-                      isVerified
-                        ? "bg-emerald-50 text-emerald-700"
-                        : "bg-amber-50 text-amber-700"
-                    }`}
-                  >
-                    <span
-                      className={`h-1.5 w-1.5 rounded-full ${
-                        isVerified
-                          ? "bg-emerald-500"
-                          : "bg-amber-500"
-                      }`}
-                    />
-
-                    {isVerified
-                      ? copy.verifiedBadge
-                      : copy.unverifiedBadge}
-                  </span>
-
-                  {!isVerified && (
-                    <span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-600">
-                      {remainingPosts} / {DAILY_LIMIT_UNVERIFIED}
-                    </span>
-                  )}
-                </div>
-
-                {!isVerified && (
-                  <div
-                    data-verify-section
-                    className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4"
-                  >
-                    <div className="flex items-start gap-2">
-                      <span className="text-lg">✨</span>
-                      <div className="flex-1">
-                        <p className="text-xs font-bold leading-5 text-emerald-800">
-                          {copy.verifyToBoost}
-                        </p>
-
-                        <p className="mt-2 text-xs leading-5 text-emerald-700">
-                          {copy.dailyLimitInfo}
-                        </p>
-
-                        <label className="mt-3 block text-xs font-bold text-emerald-900">
-                          {copy.phoneCodeLabel}
-                        </label>
-
-                        <input
-                          inputMode="numeric"
-                          pattern="[0-9]{6}"
-                          maxLength={6}
-                          value={phoneCode}
-                          onChange={(event) =>
-                            setPhoneCode(event.target.value)
-                          }
-                          className="mt-2 w-full rounded-xl border border-emerald-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
-                        />
-
-                        <div className="mt-3 grid grid-cols-2 gap-2">
-                          <button
-                            type="button"
-                            onClick={() => void verifyForumPhone()}
-                            className="rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-700"
-                          >
-                            {copy.verifyPhone}
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => void resendForumCode()}
-                            className="rounded-xl border border-emerald-300 bg-white px-3 py-2.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-50"
-                          >
-                            {copy.resendCode}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
 
                 <button
                   type="button"
@@ -1515,7 +1246,7 @@ export default function ForoMigrantesPage() {
                   </p>
 
                   <Link
-                    to="/users/login"
+                    to="/login"
                     onClick={() => setShowComposer(false)}
                     className="mt-4 inline-block rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white no-underline"
                   >
@@ -1524,64 +1255,6 @@ export default function ForoMigrantesPage() {
                 </div>
               ) : (
                 <form onSubmit={createPost} className="mt-6">
-                  {!isVerified && (
-                    <div
-                      className={`mb-5 rounded-xl border p-4 ${
-                        remainingPosts > 0
-                          ? "border-emerald-200 bg-emerald-50"
-                          : "border-amber-200 bg-amber-50"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <p
-                            className={`m-0 text-xs font-bold uppercase tracking-wider ${
-                              remainingPosts > 0
-                                ? "text-emerald-700"
-                                : "text-amber-700"
-                            }`}
-                          >
-                            {copy.remainingPosts}
-                          </p>
-
-                          <p
-                            className={`m-0 mt-1 text-sm font-bold ${
-                              remainingPosts > 0
-                                ? "text-emerald-900"
-                                : "text-amber-900"
-                            }`}
-                          >
-                            {remainingPosts} / {DAILY_LIMIT_UNVERIFIED}
-                          </p>
-                        </div>
-
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setShowComposer(false);
-                            setTimeout(() => {
-                              document
-                                .querySelector(
-                                  "[data-verify-section]"
-                                )
-                                ?.scrollIntoView({
-                                  behavior: "smooth",
-                                });
-                            }, 100);
-                          }}
-                          className="rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-emerald-700"
-                        >
-                          {copy.verifyPhone}
-                        </button>
-                      </div>
-
-                      {remainingPosts <= 0 && (
-                        <p className="mt-3 text-xs leading-5 text-amber-800">
-                          {copy.dailyLimitReached}
-                        </p>
-                      )}
-                    </div>
-                  )}
 
                   <div>
                     <label className="mb-2 block text-sm font-bold text-slate-700">
