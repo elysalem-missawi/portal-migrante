@@ -1356,40 +1356,6 @@ export default function ForoMigrantesPage() {
         )}
 
         {/* =======================================================
-            COMMUNITY CARE
-        ======================================================= */}
-        <section className="mt-10">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-            <div className="max-w-2xl">
-              <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">
-                Zubia · {copy.eyebrow}
-              </p>
-
-              <h2 className="mt-2 text-2xl font-black text-slate-950 sm:text-3xl">
-                {copy.communityRulesTitle}
-              </h2>
-            </div>
-
-            <div className="mt-7 grid gap-4 md:grid-cols-3">
-              {copy.communityRules.map((rule, index) => (
-                <div
-                  key={rule}
-                  className="rounded-2xl bg-slate-50 p-5"
-                >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white font-black text-emerald-600 shadow-sm">
-                    0{index + 1}
-                  </div>
-
-                  <p className="mt-4 text-sm font-medium leading-6 text-slate-600">
-                    {rule}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* =======================================================
             QUICK LINKS
         ======================================================= */}
         <section className="mt-6">
