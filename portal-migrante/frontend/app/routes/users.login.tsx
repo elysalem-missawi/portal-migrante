@@ -54,9 +54,7 @@ export default function LoginUserPage() {
         password: formData.password,
       });
       setSuccess(t("login_success"));
-      const from =
-        (location.state as { from?: string } | null)?.from || "/foro";
-      setTimeout(() => navigate(from), 400);
+      setTimeout(() => navigate("/profile", { replace: true }), 250);
     } catch (err: any) {
       setError(err.message || t("login_error"));
     } finally {
