@@ -267,13 +267,39 @@ export default function UserProfilePage() {
     }
   };
 
+  const languageLabel =
+    currentUser.preferredLanguage === "ar"
+      ? "العربية"
+      : currentUser.preferredLanguage === "eu"
+        ? "Euskara"
+        : currentUser.preferredLanguage === "en"
+          ? "English"
+          : "Español";
+
+  const accountLabel =
+    currentUser.accountType === "organization_account"
+      ? locale === "ar"
+        ? "حساب مؤسسة"
+        : locale === "eu"
+          ? "Erakunde-kontua"
+          : locale === "en"
+            ? "Organization account"
+            : "Cuenta de organización"
+      : locale === "ar"
+        ? "حساب فردي"
+        : locale === "eu"
+          ? "Banakako kontua"
+          : locale === "en"
+            ? "Individual account"
+            : "Cuenta individual";
+
   const details = [
     [c.name, displayName],
     [c.email, currentUser.email],
     [c.municipality, currentUser.municipality || "—"],
     [c.origin, currentUser.originCountry || "—"],
-    [c.language, currentUser.preferredLanguage || locale || "—"],
-    [c.role, currentUser.accountType || currentUser.role || "—"],
+    [c.language, languageLabel],
+    [c.role, accountLabel],
   ];
 
   return (
