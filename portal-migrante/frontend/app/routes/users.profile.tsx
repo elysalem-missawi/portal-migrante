@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../auth";
 import { useI18n } from "../i18n";
 import { usersService } from "../services/users.service";
+import CommunityAccountNav from "../components/CommunityAccountNav";
 
 type Locale = "es" | "ar" | "eu" | "en";
 
@@ -35,6 +36,16 @@ const copy = {
     goServices: "Explorar servicios",
     security: "Seguridad y privacidad",
     securityDesc: "Tu correo identifica tu cuenta. No compartas tu contraseña.",
+    edit: "Editar perfil",
+    save: "Guardar cambios",
+    cancel: "Cancelar",
+    editIntro: "Actualiza los datos básicos que se muestran en tu perfil.",
+    displayName: "Nombre visible",
+    fullName: "Nombre completo",
+    preferredLanguage: "Idioma preferido",
+    originCountry: "País de origen",
+    updated: "Perfil actualizado.",
+    updateError: "No se pudo actualizar el perfil.",
   },
   ar: {
     eyebrow: "حسابي",
@@ -63,6 +74,16 @@ const copy = {
     goServices: "استكشاف الخدمات",
     security: "الأمان والخصوصية",
     securityDesc: "بريدك الإلكتروني يعرّف حسابك. لا تشارك كلمة المرور.",
+    edit: "تعديل الملف",
+    save: "حفظ التغييرات",
+    cancel: "إلغاء",
+    editIntro: "حدّث المعلومات الأساسية التي تظهر في ملفك.",
+    displayName: "الاسم الظاهر",
+    fullName: "الاسم الكامل",
+    preferredLanguage: "اللغة المفضلة",
+    originCountry: "بلد الأصل",
+    updated: "تم تحديث الملف.",
+    updateError: "تعذر تحديث الملف.",
   },
   eu: {
     eyebrow: "Nire kontua",
@@ -91,6 +112,16 @@ const copy = {
     goServices: "Arakatu zerbitzuak",
     security: "Segurtasuna eta pribatutasuna",
     securityDesc: "Zure posta elektronikoak kontua identifikatzen du. Ez partekatu pasahitza.",
+    edit: "Editatu profila",
+    save: "Gorde aldaketak",
+    cancel: "Utzi",
+    editIntro: "Eguneratu zure profilean agertzen diren oinarrizko datuak.",
+    displayName: "Bistaratzeko izena",
+    fullName: "Izen-abizenak",
+    preferredLanguage: "Hobetsitako hizkuntza",
+    originCountry: "Jatorrizko herrialdea",
+    updated: "Profila eguneratu da.",
+    updateError: "Ezin izan da profila eguneratu.",
   },
   en: {
     eyebrow: "My account",
@@ -119,6 +150,16 @@ const copy = {
     goServices: "Explore services",
     security: "Security and privacy",
     securityDesc: "Your email identifies your account. Never share your password.",
+    edit: "Edit profile",
+    save: "Save changes",
+    cancel: "Cancel",
+    editIntro: "Update the basic information shown on your profile.",
+    displayName: "Display name",
+    fullName: "Full name",
+    preferredLanguage: "Preferred language",
+    originCountry: "Country of origin",
+    updated: "Profile updated.",
+    updateError: "The profile could not be updated.",
   },
 } satisfies Record<Locale, Record<string, string>>;
 
@@ -162,6 +203,14 @@ export default function UserProfilePage() {
   const [savingPhoto, setSavingPhoto] = useState(false);
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [form, setForm] = useState({
+    displayName: currentUser?.displayName || "",
+    fullName: currentUser?.fullName || "",
+    originCountry: currentUser?.originCountry || "",
+    preferredLanguage: currentUser?.preferredLanguage || locale || "es",
+  });
 
   if (!currentUser) return null;
 
@@ -197,6 +246,27 @@ export default function UserProfilePage() {
     }
   };
 
+  const saveProfile = async () => {
+    setSavingProfile(true);
+    setNotice("");
+    setError("");
+    try {
+      await usersService.update(currentUser._id, {
+        displayName: form.displayName.trim(),
+        fullName: form.fullName.trim(),
+        originCountry: form.originCountry.trim(),
+        preferredLanguage: form.preferredLanguage,
+      });
+      await refreshSession();
+      setEditing(false);
+      setNotice(c.updated);
+    } catch {
+      setError(c.updateError);
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
   const details = [
     [c.name, displayName],
     [c.email, currentUser.email],
@@ -209,6 +279,7 @@ export default function UserProfilePage() {
   return (
     <main className="min-h-screen bg-slate-50 py-6 sm:py-10">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <CommunityAccountNav />
         <header className="mb-6">
           <p className="m-0 text-xs font-black uppercase tracking-[0.18em] text-emerald-600">
             {c.eyebrow}
@@ -289,7 +360,91 @@ export default function UserProfilePage() {
 
           <section className="space-y-6">
             <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
-              <h2 className="text-xl font-black text-slate-950">{c.account}</h2>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <h2 className="text-xl font-black text-slate-950">{c.account}</h2>
+                  {editing && (
+                    <p className="mt-1 text-sm text-slate-500">{c.editIntro}</p>
+                  )}
+                </div>
+                {!editing && (
+                  <button
+                    type="button"
+                    onClick={() => setEditing(true)}
+                    className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                  >
+                    {c.edit}
+                  </button>
+                )}
+              </div>
+
+              {editing ? (
+                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  <label className="block">
+                    <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-400">{c.displayName}</span>
+                    <input
+                      value={form.displayName}
+                      onChange={(e) => setForm((v) => ({ ...v, displayName: e.target.value }))}
+                      className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-400">{c.fullName}</span>
+                    <input
+                      value={form.fullName}
+                      onChange={(e) => setForm((v) => ({ ...v, fullName: e.target.value }))}
+                      className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-400">{c.originCountry}</span>
+                    <input
+                      value={form.originCountry}
+                      onChange={(e) => setForm((v) => ({ ...v, originCountry: e.target.value }))}
+                      className="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                    />
+                  </label>
+                  <label className="block">
+                    <span className="mb-2 block text-xs font-bold uppercase tracking-wide text-slate-400">{c.preferredLanguage}</span>
+                    <select
+                      value={form.preferredLanguage}
+                      onChange={(e) => setForm((v) => ({ ...v, preferredLanguage: e.target.value }))}
+                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                    >
+                      <option value="es">Español</option>
+                      <option value="eu">Euskara</option>
+                      <option value="ar">العربية</option>
+                      <option value="en">English</option>
+                    </select>
+                  </label>
+                  <div className="flex gap-2 sm:col-span-2">
+                    <button
+                      type="button"
+                      disabled={savingProfile}
+                      onClick={() => void saveProfile()}
+                      className="rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-emerald-700 disabled:opacity-50"
+                    >
+                      {savingProfile ? c.saving : c.save}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={savingProfile}
+                      onClick={() => {
+                        setEditing(false);
+                        setForm({
+                          displayName: currentUser.displayName || "",
+                          fullName: currentUser.fullName || "",
+                          originCountry: currentUser.originCountry || "",
+                          preferredLanguage: currentUser.preferredLanguage || locale || "es",
+                        });
+                      }}
+                      className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-600 transition hover:bg-slate-50"
+                    >
+                      {c.cancel}
+                    </button>
+                  </div>
+                </div>
+              ) : (
               <dl className="mt-5 grid gap-3 sm:grid-cols-2">
                 {details.map(([label, value]) => (
                   <div key={label} className="rounded-2xl bg-slate-50 p-4">
@@ -302,6 +457,7 @@ export default function UserProfilePage() {
                   </div>
                 ))}
               </dl>
+              )}
             </div>
 
             <div>
