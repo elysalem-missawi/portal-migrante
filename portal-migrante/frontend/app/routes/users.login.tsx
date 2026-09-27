@@ -173,12 +173,6 @@ export default function LoginUserPage() {
                   >
                     {t("password")}
                   </label>
-                  <Link
-                    to="/forgot-password"
-                    className="small text-decoration-none"
-                  >
-                    {t("login_forgot_password")}
-                  </Link>
                 </div>
 
                 {/* ✅ input-group بدل position-relative + absolute */}
