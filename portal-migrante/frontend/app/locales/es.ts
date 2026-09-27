@@ -166,7 +166,7 @@ export const es: Dict = {
   home_final_cta_title: "Construyamos una red útil para la comunidad",
   home_final_cta_desc: "La información se mantiene abierta a toda la ciudadanía; el registro permite participar, publicar y fortalecer la comunidad.",
 
-  // Login
+  // ───── LOGIN ─────
   login_button: "Iniciar sesión",
   login_title: "Iniciar sesión",
   login_subtitle: "Introduce tus datos para acceder al foro y a tu cuenta.",
@@ -181,6 +181,8 @@ export const es: Dict = {
   login_social_divider: "O inicia sesión con",
   login_google_button: "Continuar con Google",
   login_facebook_button: "Continuar con Facebook",
+  login_email_placeholder: "tu@email.com",              // ➕ جديد
+  login_password_placeholder: "Tu contraseña",          // ➕ جديد
 
   registration_login_required: "Cuenta creada con éxito. Ahora puedes iniciar sesión.",
   no_account: "¿Aún no tienes cuenta?",

@@ -166,13 +166,27 @@ export const ar: Dict = {
   home_phase_item_platform: "نموذج أولي يعمل بالخدمات، التسجيل والمنتدى.",
   home_phase_item_partners: "البحث عن تحالفات مع المؤسسات والهيئات الاجتماعية.",
   home_final_cta_title: "لنَبنِ شبكة دعم مفيدة للمهاجرين",
-  
+
   home_final_cta_desc: "تبقى المعلومات مفتوحة للجميع؛ ويُستخدم التسجيل للمشاركة والمطالبة وتعزيز المجتمع.",
+
+  // ───── LOGIN ─────
   login_button: "تسجيل الدخول",
   login_title: "تسجيل الدخول",
   login_subtitle: "أدخل بريدك الإلكتروني وكلمة السر للمتابعة في المنتدى.",
+  login_submit: "تسجيل الدخول",                                              // ➕ جديد
+  login_submitting: "جارٍ تسجيل الدخول...",                                  // ➕ جديد
   login_success: "تم تسجيل الدخول بنجاح. مرحباً بك.",
   login_error: "تعذر تسجيل الدخول.",
+  login_invalid_credentials: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",  // ➕ جديد
+  login_remember_me: "تذكرني على هذا الجهاز",                                 // ➕ جديد
+  login_forgot_password: "هل نسيت كلمة المرور؟",                             // ➕ جديد
+  login_reset_password_link: "إعادة تعيين كلمة المرور",                       // ➕ جديد
+  login_social_divider: "أو سجّل الدخول بواسطة",                             // ➕ جديد
+  login_google_button: "المتابعة عبر Google",                                 // ➕ جديد
+  login_facebook_button: "المتابعة عبر Facebook",                            // ➕ جديد
+  login_email_placeholder: "بريدك@مثال.com",                                  // ➕ جديد
+  login_password_placeholder: "كلمة المرور الخاصة بك",                        // ➕ جديد
+
   registration_login_required: "تم إنشاء الحساب. سجّل الدخول للمتابعة.",
   no_account: "ليس لديك حساب بعد؟",
   create_account_link: "إنشاء حساب",

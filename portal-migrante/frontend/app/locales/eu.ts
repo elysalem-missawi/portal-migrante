@@ -19,7 +19,7 @@ export const eu: Dict = {
   legal_terms_point_3: "Hasierako fase honetan ez dugu nortasun-agiririk eskatzen.",
   legal_terms_point_4: "Zure datuak ikusteko, zuzentzeko edo ezabatzeko eska dezakezu plataformarekin harremanetan jarriz.",
   legal_terms_back: "Itzuli erregistrora",
-  saving: "Gortzen...",
+  saving: "Gordetzen...",  // ✅ صُحّح
   loading: "Kargatzen...",
   retry: "Saiatu berriro",
   session_checking: "Saioa egiaztatzen...",
@@ -168,23 +168,26 @@ export const eu: Dict = {
   home_final_cta_title: "Eraiki dezagun komunitatearentzat erabilgarria den sarea",
   home_final_cta_desc: "Informazioa irekia da herritar guztientzat; erregistroak foroan parte hartzeko aukera ematen du.",
 
-  login_button: "Saioa coxi",
-  login_title: "Saioa coxi",
+  // ───── LOGIN ─────
+  login_button: "Hasi saioa",                                                  // ✅ صُحّح
+  login_title: "Hasi saioa",                                                   // ✅ صُحّح
   login_subtitle: "Sartu zure datuak foroan sartzeko eta zure kontuan sartzeko.",
-  login_submit: "Saioa coxi",
+  login_submit: "Hasi saioa",                                                  // ✅ صُحّح
   login_submitting: "Saioa hasten...",
   login_success: "Saioa ondo hasi da. Ongi etorri.",
-  login_error: "Ezin izan da saioa coxi. Begiratu zure posta elektronikoa eta pasahitza.",
+  login_error: "Ezin izan da saioa hasi. Begiratu zure posta elektronikoa eta pasahitza.", // ✅ صُحّح
   login_invalid_credentials: "Posta elektroniko edo pasahitz okerra.",
   login_remember_me: "Gogoratu gailu honetan",
   login_forgot_password: "Pasahitza ahaztu duzu?",
   login_reset_password_link: "Berrezarri pasahitza",
-  login_social_divider: "Edo saioa coxi honekin",
+  login_social_divider: "Edo hasi saioa honekin",                              // ✅ صُحّح
   login_google_button: "Jarraitu Google-rekin",
   login_facebook_button: "Jarraitu Facebook-ekin",
+  login_email_placeholder: "zure@emaila.com",                                  // ➕ جديد
+  login_password_placeholder: "Zure pasahitza",                                // ➕ جديد
 
   registration_login_required: "Kontua ondo sortu da. Orain saioa has dezakezu.",
-  no_account: "Sustatu gabe zaude oraindik?",
+  no_account: "Oraindik ez duzu konturik?",                                    // ✅ صُحّح
   create_account_link: "Sortu kontu berria",
   logout: "Itxi saioa",
   welcome_user: "Ongi etorri",
@@ -206,7 +209,7 @@ export const eu: Dict = {
   role_super_admin: "Super Administratzailea",
   status_active: "Aktiboa",
   status_inactive: "Inaktiboa",
-  status_pending: "Zuzentzeko",
+  status_pending: "Zain",                                                      // ✅ صُحّح
   status_blocked: "Blokeatuta",
   organization_singular: "Erakundea",
   select_organization: "Hautatu erakundea",
@@ -273,7 +276,7 @@ export const eu: Dict = {
   services_intro: "Arakatu informazio-kategoria nagusiak eta konektatu eskuragarri dauden baliabideekin.",
   services_card_description: "Informazio argia, harremanetarako bide erabilgarriak eta baliabide fidagarriak.",
   services_title_1: "Nola lagun",
-  services_title_2: "zaitazkegu gaur?",
+  services_title_2: "lagun zaitzakegu gaur?",                                   // ✅ صُحّح
   services_description: "Zerbitzuak eta baliabideak zure eguneroko beharren arabera antolatzen ditugu.",
   service_desc_municipalities: "Kontsultatu Euskadiko udalerrien informazioa.",
   service_desc_charities: "Aurkitu laguntza-elkarteak eta gizarte-erakundeak lurraldean.",
@@ -308,7 +311,7 @@ export const eu: Dict = {
   party: "Udal Gobernua",
   view_details: "Ikus xehetasunak",
   result_singular: "emaitza",
-  result_plural: "emaitza",
+  result_plural: "emaitzak",                                                    // ✅ صُحّح
   hero_title: "Pertsona migratzaileak Euskadin",
   hero_description_1: "Informazio erabilgarria aurkitzeko, zerbitzuetara sartzeko eta Euskadiko baliabideekin konektatzeko plataforma.",
   hero_description_2: "Esperientziak partekatzeko eta elkarri laguntzeko komunitate-gunea ere badakar.",

@@ -168,6 +168,7 @@ export const en: Dict = {
   home_final_cta_title: "Let's build a helpful support network together",
   home_final_cta_desc: "Information remains free for everyone; registration enables community interaction.",
 
+  // ───── LOGIN ─────
   login_button: "Sign in",
   login_title: "Sign in",
   login_subtitle: "Enter your credentials to access the forum and your account.",
@@ -182,6 +183,8 @@ export const en: Dict = {
   login_social_divider: "Or sign in with",
   login_google_button: "Continue with Google",
   login_facebook_button: "Continue with Facebook",
+  login_email_placeholder: "you@email.com",           // ➕ جديد
+  login_password_placeholder: "Your password",        // ➕ جديد
 
   registration_login_required: "Account created successfully. You can now sign in.",
   no_account: "Don't have an account yet?",
