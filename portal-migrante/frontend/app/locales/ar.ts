@@ -550,4 +550,7 @@ export const ar: Dict = {
   home_area_local_title: "الخدمات الاجتماعية والإقليم",
   home_demo_note: "تمثيل بصري توضيحي، ولا يعرض بيانات حقيقية للمستخدمين.",
   home_final_primary_cta: "استكشاف Portal Migrante",
+
+  modalEyebrow: "المجتمع",
+modalIntro: "شارك شيئاً قد يكون مفيداً للآخرين.",
 };

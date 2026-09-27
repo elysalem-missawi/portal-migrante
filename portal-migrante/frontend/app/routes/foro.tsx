@@ -66,6 +66,15 @@ type ForumText = {
   communityRulesTitle: string;
   communityRules: string[];
   otherPages: string;
+  verifiedBadge: string;
+  unverifiedBadge: string;
+  verifyToBoost: string;
+  dailyLimitInfo: string;
+  dailyLimitReached: string;
+  remainingPosts: string;
+  unlimited: string;
+  modalEyebrow: string;
+  modalIntro: string;
 };
 
 const text: Record<Locale, ForumText> = {
@@ -90,7 +99,7 @@ const text: Record<Locale, ForumText> = {
     registerLink: "Crear cuenta",
     signedInAs: "Sesión iniciada como",
     phoneNotVerified:
-      "Verifica tu teléfono para publicar, comentar y utilizar el chat.",
+      "Verifica tu teléfono para proteger tu cuenta.",
     phoneCodeLabel: "Código SMS",
     phoneCodeSent: "Código enviado.",
     verifyPhone: "Verificar teléfono",
@@ -119,8 +128,7 @@ const text: Record<Locale, ForumText> = {
     emptyPosts: "Todavía no hay publicaciones con estos filtros.",
     emptyMine: "Cuando publiques algo, aparecerá aquí.",
     emptyChat: "Todavía no hay mensajes en el chat.",
-    completeProfile:
-      "Inicia sesión y verifica tu teléfono antes de participar.",
+    completeProfile: "Inicia sesión antes de participar.",
     loadError: "No se pudo cargar el foro.",
     postCreated: "Publicación creada.",
     commentCreated: "Comentario añadido.",
@@ -132,6 +140,19 @@ const text: Record<Locale, ForumText> = {
       "Para asuntos legales urgentes, busca orientación profesional.",
     ],
     otherPages: "También puedes consultar",
+    verifiedBadge: "Verificado",
+    unverifiedBadge: "Sin verificar",
+    verifyToBoost:
+      "Verifica tu teléfono para proteger tu cuenta, ganar visibilidad y publicar sin límites.",
+    dailyLimitInfo:
+      "Las cuentas sin verificar pueden publicar hasta 3 veces al día.",
+    dailyLimitReached:
+      "Has alcanzado el límite diario. Verifica tu teléfono para seguir publicando hoy.",
+    remainingPosts: "Publicaciones restantes hoy",
+    unlimited: "Sin límite",
+    modalEyebrow: "Comunidad",
+    modalIntro:
+      "Comparte algo que pueda ser útil para otras personas.",
   },
 
   ar: {
@@ -154,8 +175,7 @@ const text: Record<Locale, ForumText> = {
     logout: "خروج",
     registerLink: "إنشاء حساب",
     signedInAs: "تم الدخول باسم",
-    phoneNotVerified:
-      "تحقق من هاتفك حتى تتمكن من النشر والتعليق واستعمال الشات.",
+    phoneNotVerified: "تحقق من هاتفك لحماية حسابك.",
     phoneCodeLabel: "كود SMS",
     phoneCodeSent: "تم إرسال الكود.",
     verifyPhone: "تحقق من الهاتف",
@@ -178,14 +198,12 @@ const text: Record<Locale, ForumText> = {
     commentPlaceholder: "اكتب رداً مفيداً...",
     send: "إرسال",
     chatTitle: "الشات المجتمعي",
-    chatIntro:
-      "مساحة للتعارف وطلب التوجيه السريع والتواصل.",
+    chatIntro: "مساحة للتعارف وطلب التوجيه السريع والتواصل.",
     chatPlaceholder: "اكتب رسالة...",
     emptyPosts: "لا توجد منشورات بهذه الفلاتر بعد.",
     emptyMine: "عندما تنشر شيئاً سيظهر هنا.",
     emptyChat: "لا توجد رسائل في الشات بعد.",
-    completeProfile:
-      "سجل الدخول وتحقق من هاتفك قبل المشاركة.",
+    completeProfile: "سجل الدخول قبل المشاركة.",
     loadError: "تعذر تحميل المنتدى.",
     postCreated: "تم إنشاء المنشور.",
     commentCreated: "تمت إضافة التعليق.",
@@ -197,6 +215,18 @@ const text: Record<Locale, ForumText> = {
       "في القضايا القانونية العاجلة، اطلب توجيهاً مهنياً.",
     ],
     otherPages: "يمكنك أيضاً الاطلاع على",
+    verifiedBadge: "موثق",
+    unverifiedBadge: "غير موثق",
+    verifyToBoost:
+      "تحقق من هاتفك لحماية حسابك، وزيادة ظهورك، والنشر بلا حدود.",
+    dailyLimitInfo:
+      "الحسابات غير الموثقة يمكنها النشر حتى 3 مرات يومياً.",
+    dailyLimitReached:
+      "وصلت إلى الحد اليومي. تحقق من هاتفك لمتابعة النشر اليوم.",
+    remainingPosts: "المنشورات المتبقية اليوم",
+    unlimited: "غير محدود",
+    modalEyebrow: "المجتمع",
+    modalIntro: "شارك شيئاً قد يكون مفيداً للآخرين.",
   },
 
   en: {
@@ -219,8 +249,7 @@ const text: Record<Locale, ForumText> = {
     logout: "Log out",
     registerLink: "Create account",
     signedInAs: "Signed in as",
-    phoneNotVerified:
-      "Verify your phone to publish, comment and use chat.",
+    phoneNotVerified: "Verify your phone to protect your account.",
     phoneCodeLabel: "SMS code",
     phoneCodeSent: "Code sent.",
     verifyPhone: "Verify phone",
@@ -249,8 +278,7 @@ const text: Record<Locale, ForumText> = {
     emptyPosts: "There are no posts with these filters yet.",
     emptyMine: "When you publish something, it will appear here.",
     emptyChat: "There are no chat messages yet.",
-    completeProfile:
-      "Sign in and verify your phone before participating.",
+    completeProfile: "Sign in before participating.",
     loadError: "The forum could not be loaded.",
     postCreated: "Post created.",
     commentCreated: "Comment added.",
@@ -262,6 +290,18 @@ const text: Record<Locale, ForumText> = {
       "For urgent legal matters, seek professional guidance.",
     ],
     otherPages: "You may also explore",
+    verifiedBadge: "Verified",
+    unverifiedBadge: "Unverified",
+    verifyToBoost:
+      "Verify your phone to protect your account, gain visibility, and post without limits.",
+    dailyLimitInfo:
+      "Unverified accounts can post up to 3 times per day.",
+    dailyLimitReached:
+      "Daily limit reached. Verify your phone to keep posting today.",
+    remainingPosts: "Posts remaining today",
+    unlimited: "Unlimited",
+    modalEyebrow: "Community",
+    modalIntro: "Share something that may be useful to others.",
   },
 
   eu: {
@@ -285,7 +325,7 @@ const text: Record<Locale, ForumText> = {
     registerLink: "Sortu kontua",
     signedInAs: "Saioa hasita",
     phoneNotVerified:
-      "Egiaztatu telefonoa argitaratzeko, iruzkintzeko eta txata erabiltzeko.",
+      "Egiaztatu zure telefonoa zure kontua babesteko.",
     phoneCodeLabel: "SMS kodea",
     phoneCodeSent: "Kodea bidali da.",
     verifyPhone: "Egiaztatu telefonoa",
@@ -314,8 +354,7 @@ const text: Record<Locale, ForumText> = {
     emptyPosts: "Oraindik ez dago argitalpenik iragazki hauekin.",
     emptyMine: "Zerbait argitaratzen duzunean, hemen agertuko da.",
     emptyChat: "Oraindik ez dago txateko mezurik.",
-    completeProfile:
-      "Hasi saioa eta egiaztatu telefonoa parte hartu aurretik.",
+    completeProfile: "Hasi saioa parte hartu aurretik.",
     loadError: "Ezin izan da foroa kargatu.",
     postCreated: "Argitalpena sortu da.",
     commentCreated: "Iruzkina gehitu da.",
@@ -327,6 +366,19 @@ const text: Record<Locale, ForumText> = {
       "Premiazko gai juridikoetarako, bilatu orientazio profesionala.",
     ],
     otherPages: "Beste orriak",
+    verifiedBadge: "Egiaztatuta",
+    unverifiedBadge: "Egiaztatu gabea",
+    verifyToBoost:
+      "Egiaztatu telefonoa zure kontua babesteko, ikusgarritasuna irabazteko eta mugarik gabe argitaratzeko.",
+    dailyLimitInfo:
+      "Egiaztatu gabeko kontuek egunean 3 aldiz argitaratu dezakete.",
+    dailyLimitReached:
+      "Eguneko muga lortu duzu. Egiaztatu zure telefonoa gaur argitaratzen jarraitzeko.",
+    remainingPosts: "Gaurko argitalpenak falta dira",
+    unlimited: "Mugarik gabe",
+    modalEyebrow: "Komunitatea",
+    modalIntro:
+      "Partekatu beste batzuentzat erabilgarria izan daitekeen zerbait.",
   },
 };
 
@@ -360,6 +412,46 @@ const formatDate = (value: string, locale: string) =>
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(value));
+
+// ============================================================
+// DAILY POST QUOTA — Unverified users
+// ============================================================
+const DAILY_LIMIT_UNVERIFIED = 3;
+const QUOTA_STORAGE_KEY = "forum:post-quota";
+
+const todayKey = () => new Date().toISOString().slice(0, 10);
+
+const getDailyCount = (userId: string): number => {
+  try {
+    const raw = localStorage.getItem(QUOTA_STORAGE_KEY);
+    const data: Record<string, { date: string; count: number }> = raw
+      ? JSON.parse(raw)
+      : {};
+    const entry = data[userId];
+    if (!entry || entry.date !== todayKey()) return 0;
+    return entry.count || 0;
+  } catch {
+    return 0;
+  }
+};
+
+const incrementDailyCount = (userId: string): number => {
+  try {
+    const raw = localStorage.getItem(QUOTA_STORAGE_KEY);
+    const data: Record<string, { date: string; count: number }> = raw
+      ? JSON.parse(raw)
+      : {};
+    const current = data[userId];
+    const base =
+      current && current.date === todayKey() ? current.count : 0;
+    const next = base + 1;
+    data[userId] = { date: todayKey(), count: next };
+    localStorage.setItem(QUOTA_STORAGE_KEY, JSON.stringify(data));
+    return next;
+  } catch {
+    return 0;
+  }
+};
 
 export default function ForoMigrantesPage() {
   const { locale, t } = useI18n();
@@ -413,10 +505,27 @@ export default function ForoMigrantesPage() {
     body: "",
   });
 
-  const canParticipate = Boolean(
-    currentUser &&
-      (currentUser.phoneVerified || currentUser.isVerified)
+  const canParticipate = Boolean(currentUser);
+
+  const isVerified = Boolean(
+    currentUser?.phoneVerified || currentUser?.isVerified
   );
+
+  const [dailyCount, setDailyCount] = useState(0);
+
+  useEffect(() => {
+    if (currentUser && !isVerified) {
+      setDailyCount(getDailyCount(currentUser._id));
+    } else {
+      setDailyCount(0);
+    }
+  }, [currentUser, isVerified]);
+
+  const remainingPosts = isVerified
+    ? Infinity
+    : Math.max(0, DAILY_LIMIT_UNVERIFIED - dailyCount);
+
+  const canCreatePost = canParticipate && remainingPosts > 0;
 
   const loadForum = async () => {
     setError("");
@@ -474,18 +583,28 @@ export default function ForoMigrantesPage() {
   const createPost = async (event: FormEvent) => {
     event.preventDefault();
 
-    if (!canParticipate) {
+    if (!currentUser) {
       setNotice(copy.completeProfile);
       return;
     }
 
+    if (!isVerified && remainingPosts <= 0) {
+      setNotice(copy.dailyLimitReached);
+      return;
+    }
+
     const created = await forumService.createPost({
-      userId: currentUser!._id,
+      userId: currentUser._id,
       type: postDraft.type,
       title: postDraft.title,
       category: postDraft.category,
       body: postDraft.body,
     });
+
+    if (!isVerified) {
+      const newCount = incrementDailyCount(currentUser._id);
+      setDailyCount(newCount);
+    }
 
     setPosts((current) => [created, ...current]);
 
@@ -555,13 +674,20 @@ export default function ForoMigrantesPage() {
     setNotice(copy.messageCreated);
   };
 
+  // ✅ استدعاء آمن — لن يكسر الكود إذا لم تكن الدالة موجودة بعد
   const verifyForumPhone = async () => {
     if (!currentUser) return;
 
-    await usersService.verifyPhone(
-      currentUser._id,
-      phoneCode
-    );
+    const svc = usersService as any;
+
+    if (typeof svc.verifyPhone !== "function") {
+      setNotice(
+        "⚠️ Phone verification is not available yet. Please contact support."
+      );
+      return;
+    }
+
+    await svc.verifyPhone(currentUser._id, phoneCode);
 
     await refreshSession();
 
@@ -572,7 +698,16 @@ export default function ForoMigrantesPage() {
   const resendForumCode = async () => {
     if (!currentUser) return;
 
-    await usersService.sendPhoneCode(currentUser._id);
+    const svc = usersService as any;
+
+    if (typeof svc.sendPhoneCode !== "function") {
+      setNotice(
+        "⚠️ Sending code is not available yet. Please contact support."
+      );
+      return;
+    }
+
+    await svc.sendPhoneCode(currentUser._id);
 
     setNotice(copy.phoneCodeSent);
   };
@@ -582,186 +717,158 @@ export default function ForoMigrantesPage() {
       dir={isArabic ? "rtl" : "ltr"}
       className="min-h-screen bg-[#fafbfc] text-slate-950"
     >
-     {/* =========================================================
-    HERO — Balanced Wix Style
-========================================================= */}
-<section className="relative overflow-hidden border-b border-slate-200/70 bg-white">
-  {/* Background decoration */}
-  <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-emerald-100/50 blur-3xl" />
-  <div className="pointer-events-none absolute -left-32 bottom-0 h-80 w-80 rounded-full bg-blue-100/40 blur-3xl" />
+      {/* =========================================================
+          HERO — Balanced Wix Style
+      ========================================================= */}
+      <section className="relative overflow-hidden border-b border-slate-200/70 bg-white">
+        <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-emerald-100/50 blur-3xl" />
+        <div className="pointer-events-none absolute -left-32 bottom-0 h-80 w-80 rounded-full bg-blue-100/40 blur-3xl" />
 
-  <div className="relative mx-auto max-w-7xl px-5 py-12 sm:px-6 lg:px-8 lg:py-16">
-    <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
-
-      {/* =====================================================
-          LEFT — TEXT
-      ===================================================== */}
-      <div className="flex flex-col justify-center lg:pe-4">
-
-        {/* Eyebrow */}
-        <div className="mb-5 w-fit inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-700">
-          <span className="h-2 w-2 rounded-full bg-emerald-500" />
-          <span>{copy.eyebrow}</span>
-        </div>
-
-        {/* Title */}
-        <h1 className="max-w-2xl text-4xl font-black leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-[3.5rem]">
-          {copy.title}
-        </h1>
-
-        {/* Description */}
-        <p className="mt-5 max-w-xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">
-          {copy.intro}
-        </p>
-
-        {/* Buttons */}
-        <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-          <button
-            type="button"
-            onClick={() => {
-              if (currentUser) {
-                setShowComposer(true);
-
-                setTimeout(() => {
-                  document
-                    .getElementById("forum-content")
-                    ?.scrollIntoView({
-                      behavior: "smooth",
-                      block: "start",
-                    });
-                }, 50);
-              } else {
-                window.location.href = "/users/new";
-              }
-            }}
-            className="inline-flex items-center justify-center rounded-2xl bg-slate-950 px-6 py-3.5 font-bold text-white shadow-lg shadow-slate-900/10 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-800"
-          >
-            {currentUser
-              ? copy.composerTitle
-              : copy.registerLink}
-
-            <span className="ms-2 text-lg">
-              →
-            </span>
-          </button>
-
-          {!currentUser && (
-            <Link
-              to="/users/login"
-              className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3.5 font-bold text-slate-800 no-underline shadow-sm transition duration-200 hover:border-slate-300 hover:bg-slate-50"
-            >
-              {copy.login}
-            </Link>
-          )}
-        </div>
-
-        {/* Quick links */}
-        <div className="mt-7 flex flex-wrap gap-2">
-          {quickLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-slate-600 no-underline shadow-sm transition duration-200 hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
-            >
-              <span className="text-emerald-600">
-                {link.icon}
-              </span>
-
-              <span>
-                {t(link.labelKey)}
-              </span>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* =====================================================
-          RIGHT — IMAGE / COMMUNITY CARD
-      ===================================================== */}
-      <div className="relative lg:ps-2">
-
-        {/* Small decorative shape */}
-        <div className="pointer-events-none absolute -right-3 -top-3 z-0 h-20 w-20 rounded-3xl bg-emerald-100/70" />
-
-        <div className="relative z-10 overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_24px_60px_-30px_rgba(15,23,42,0.30)]">
-
-          {/* Image */}
-          <div className="relative h-64 overflow-hidden sm:h-72">
-            <img
-              src="/images/registration-migrant-travel-hero.png"
-              alt=""
-              className="h-full w-full object-cover"
-              style={{
-                objectPosition: "center 35%",
-              }}
-            />
-
-            {/* Soft overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent" />
-
-            {/* Floating badge */}
-            <div className="absolute bottom-4 start-4">
-              <div className="flex items-center gap-3 rounded-2xl border border-white/50 bg-white/90 px-4 py-3 shadow-lg backdrop-blur-md">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 font-black text-emerald-600">
-                  ✓
-                </div>
-
-                <div>
-                  <p className="m-0 text-[10px] font-black uppercase tracking-[0.15em] text-emerald-600">
-                    Zubia
-                  </p>
-
-                  <p className="m-0 mt-0.5 text-sm font-bold text-slate-900">
-                    {copy.communityRulesTitle}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Community rules */}
-          <div className="p-5 sm:p-6">
-
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <p className="m-0 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-600">
-                  Zubia
-                </p>
-
-                <h2 className="m-0 mt-1 text-lg font-black text-slate-950">
-                  {copy.communityRulesTitle}
-                </h2>
+        <div className="relative mx-auto max-w-7xl px-5 py-12 sm:px-6 lg:px-8 lg:py-16">
+          <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
+            {/* LEFT — TEXT */}
+            <div className="flex flex-col justify-center lg:pe-4">
+              <div className="mb-5 w-fit inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-700">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                <span>{copy.eyebrow}</span>
               </div>
 
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 font-black text-emerald-600">
-                ✓
-              </div>
-            </div>
+              <h1 className="max-w-2xl text-4xl font-black leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-[3.5rem]">
+                {copy.title}
+              </h1>
 
-            <div className="grid gap-2">
-              {copy.communityRules.map((rule, index) => (
-                <div
-                  key={rule}
-                  className="flex items-start gap-3 rounded-xl bg-slate-50 px-3 py-2.5"
+              <p className="mt-5 max-w-xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">
+                {copy.intro}
+              </p>
+
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (currentUser) {
+                      setShowComposer(true);
+
+                      setTimeout(() => {
+                        document
+                          .getElementById("forum-content")
+                          ?.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                          });
+                      }, 50);
+                    } else {
+                      window.location.href = "/users/new";
+                    }
+                  }}
+                  className="inline-flex items-center justify-center rounded-2xl bg-slate-950 px-6 py-3.5 font-bold text-white shadow-lg shadow-slate-900/10 transition duration-200 hover:-translate-y-0.5 hover:bg-slate-800"
                 >
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white text-[10px] font-black text-emerald-600 shadow-sm">
-                    0{index + 1}
-                  </span>
+                  {currentUser
+                    ? copy.composerTitle
+                    : copy.registerLink}
 
-                  <p className="m-0 text-xs font-medium leading-5 text-slate-600">
-                    {rule}
-                  </p>
-                </div>
-              ))}
+                  <span className="ms-2 text-lg">→</span>
+                </button>
+
+                {!currentUser && (
+                  <Link
+                    to="/users/login"
+                    className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3.5 font-bold text-slate-800 no-underline shadow-sm transition duration-200 hover:border-slate-300 hover:bg-slate-50"
+                  >
+                    {copy.login}
+                  </Link>
+                )}
+              </div>
+
+              <div className="mt-7 flex flex-wrap gap-2">
+                {quickLinks.map((link) => (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-slate-600 no-underline shadow-sm transition duration-200 hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700"
+                  >
+                    <span className="text-emerald-600">{link.icon}</span>
+                    <span>{t(link.labelKey)}</span>
+                  </Link>
+                ))}
+              </div>
             </div>
 
+            {/* RIGHT — CARD */}
+            <div className="relative lg:ps-2">
+              <div className="pointer-events-none absolute -right-3 -top-3 z-0 h-20 w-20 rounded-3xl bg-emerald-100/70" />
+
+              <div className="relative z-10 overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_24px_60px_-30px_rgba(15,23,42,0.30)]">
+                <div className="relative h-64 overflow-hidden sm:h-72">
+                  <img
+                    src="/images/registration-migrant-travel-hero.png"
+                    alt=""
+                    className="h-full w-full object-cover"
+                    style={{
+                      objectPosition: "center 35%",
+                    }}
+                  />
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/30 via-transparent to-transparent" />
+
+                  <div className="absolute bottom-4 start-4">
+                    <div className="flex items-center gap-3 rounded-2xl border border-white/50 bg-white/90 px-4 py-3 shadow-lg backdrop-blur-md">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 font-black text-emerald-600">
+                        ✓
+                      </div>
+
+                      <div>
+                        <p className="m-0 text-[10px] font-black uppercase tracking-[0.15em] text-emerald-600">
+                          Zubia
+                        </p>
+
+                        <p className="m-0 mt-0.5 text-sm font-bold text-slate-900">
+                          {copy.communityRulesTitle}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-5 sm:p-6">
+                  <div className="mb-4 flex items-center justify-between">
+                    <div>
+                      <p className="m-0 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-600">
+                        Zubia
+                      </p>
+
+                      <h2 className="m-0 mt-1 text-lg font-black text-slate-950">
+                        {copy.communityRulesTitle}
+                      </h2>
+                    </div>
+
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 font-black text-emerald-600">
+                      ✓
+                    </div>
+                  </div>
+
+                  <div className="grid gap-2">
+                    {copy.communityRules.map((rule, index) => (
+                      <div
+                        key={rule}
+                        className="flex items-start gap-3 rounded-xl bg-slate-50 px-3 py-2.5"
+                      >
+                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white text-[10px] font-black text-emerald-600 shadow-sm">
+                          0{index + 1}
+                        </span>
+
+                        <p className="m-0 text-xs font-medium leading-5 text-slate-600">
+                          {rule}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-    </div>
-  </div>
-</section>
       {/* =========================================================
           MAIN CONTENT
       ========================================================= */}
@@ -769,7 +876,6 @@ export default function ForoMigrantesPage() {
         id="forum-content"
         className="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8 lg:py-14"
       >
-        {/* Notices */}
         {notice && (
           <div className="mb-6 flex items-center justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800">
             <div className="flex items-center gap-3">
@@ -777,9 +883,7 @@ export default function ForoMigrantesPage() {
                 ✓
               </span>
 
-              <span className="font-semibold">
-                {notice}
-              </span>
+              <span className="font-semibold">{notice}</span>
             </div>
 
             <button
@@ -804,7 +908,6 @@ export default function ForoMigrantesPage() {
               POSTS
           ===================================================== */}
           <section className="min-w-0">
-            {/* Toolbar */}
             <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
@@ -867,14 +970,8 @@ export default function ForoMigrantesPage() {
                     }
                     className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
                   >
-                    <option value="all">
-                      {copy.filterAll}
-                    </option>
-
-                    <option value="question">
-                      {copy.question}
-                    </option>
-
+                    <option value="all">{copy.filterAll}</option>
+                    <option value="question">{copy.question}</option>
                     <option value="announcement">
                       {copy.announcement}
                     </option>
@@ -898,7 +995,6 @@ export default function ForoMigrantesPage() {
               </div>
             </div>
 
-            {/* Posts */}
             {loading ? (
               <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
                 <div className="mx-auto h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-emerald-600" />
@@ -930,7 +1026,6 @@ export default function ForoMigrantesPage() {
                     key={post._id}
                     className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg hover:shadow-slate-900/5 sm:p-6"
                   >
-                    {/* Post header */}
                     <div className="flex gap-4">
                       <div className="hidden shrink-0 sm:flex">
                         <div
@@ -940,9 +1035,7 @@ export default function ForoMigrantesPage() {
                               : "bg-emerald-50 text-emerald-600"
                           }`}
                         >
-                          {post.type === "announcement"
-                            ? "!"
-                            : "?"}
+                          {post.type === "announcement" ? "!" : "?"}
                         </div>
                       </div>
 
@@ -986,39 +1079,30 @@ export default function ForoMigrantesPage() {
                           <span>·</span>
 
                           <span>
-                            {formatDate(
-                              post.createdAt,
-                              locale
-                            )}
+                            {formatDate(post.createdAt, locale)}
                           </span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Body */}
                     <div className="mt-5">
                       <p className="whitespace-pre-line text-[15px] leading-7 text-slate-600">
                         {post.body}
                       </p>
                     </div>
 
-                    {/* Footer */}
                     <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
                       <button
                         type="button"
                         onClick={() =>
                           setExpandedPostId((current) =>
-                            current === post._id
-                              ? null
-                              : post._id
+                            current === post._id ? null : post._id
                           )
                         }
                         className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-bold text-slate-500 transition hover:bg-emerald-50 hover:text-emerald-700"
                       >
                         <span>♡</span>
-                        {post.comments.length.toLocaleString(
-                          locale
-                        )}{" "}
+                        {post.comments.length.toLocaleString(locale)}{" "}
                         {copy.comments}
                       </button>
 
@@ -1029,7 +1113,6 @@ export default function ForoMigrantesPage() {
                       </span>
                     </div>
 
-                    {/* Comments */}
                     {expandedPostId === post._id && (
                       <div className="mt-4 rounded-2xl bg-slate-50 p-4 sm:p-5">
                         <div className="space-y-3">
@@ -1078,30 +1161,21 @@ export default function ForoMigrantesPage() {
 
                         <div className="mt-4 flex flex-col gap-2 sm:flex-row">
                           <input
-                            value={
-                              commentDrafts[post._id] || ""
-                            }
+                            value={commentDrafts[post._id] || ""}
                             onChange={(event) =>
-                              setCommentDrafts(
-                                (current) => ({
-                                  ...current,
-                                  [post._id]:
-                                    event.target.value,
-                                })
-                              )
+                              setCommentDrafts((current) => ({
+                                ...current,
+                                [post._id]: event.target.value,
+                              }))
                             }
-                            placeholder={
-                              copy.commentPlaceholder
-                            }
+                            placeholder={copy.commentPlaceholder}
                             maxLength={1200}
                             className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
                           />
 
                           <button
                             type="button"
-                            onClick={() =>
-                              void addComment(post._id)
-                            }
+                            onClick={() => void addComment(post._id)}
                             disabled={!canParticipate}
                             className="rounded-xl bg-emerald-600 px-5 py-3 text-sm font-bold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
                           >
@@ -1120,7 +1194,6 @@ export default function ForoMigrantesPage() {
               SIDEBAR
           ===================================================== */}
           <aside className="space-y-5">
-            {/* Account */}
             {currentUser ? (
               <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div className="flex items-start justify-between gap-3">
@@ -1154,69 +1227,83 @@ export default function ForoMigrantesPage() {
                   </p>
                 )}
 
-                <div className="mt-4">
+                <div className="mt-4 flex flex-wrap items-center gap-2">
                   <span
                     className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold ${
-                      canParticipate
+                      isVerified
                         ? "bg-emerald-50 text-emerald-700"
                         : "bg-amber-50 text-amber-700"
                     }`}
                   >
                     <span
                       className={`h-1.5 w-1.5 rounded-full ${
-                        canParticipate
+                        isVerified
                           ? "bg-emerald-500"
                           : "bg-amber-500"
                       }`}
                     />
 
-                    {canParticipate
-                      ? copy.phoneVerified
-                      : currentUser.status}
+                    {isVerified
+                      ? copy.verifiedBadge
+                      : copy.unverifiedBadge}
                   </span>
+
+                  {!isVerified && (
+                    <span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-600">
+                      {remainingPosts} / {DAILY_LIMIT_UNVERIFIED}
+                    </span>
+                  )}
                 </div>
 
-                {!canParticipate && (
-                  <div className="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4">
-                    <p className="text-sm leading-6 text-amber-800">
-                      {copy.phoneNotVerified}
-                    </p>
+                {!isVerified && (
+                  <div
+                    data-verify-section
+                    className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 p-4"
+                  >
+                    <div className="flex items-start gap-2">
+                      <span className="text-lg">✨</span>
+                      <div className="flex-1">
+                        <p className="text-xs font-bold leading-5 text-emerald-800">
+                          {copy.verifyToBoost}
+                        </p>
 
-                    <label className="mt-3 block text-xs font-bold text-amber-900">
-                      {copy.phoneCodeLabel}
-                    </label>
+                        <p className="mt-2 text-xs leading-5 text-emerald-700">
+                          {copy.dailyLimitInfo}
+                        </p>
 
-                    <input
-                      inputMode="numeric"
-                      pattern="[0-9]{6}"
-                      maxLength={6}
-                      value={phoneCode}
-                      onChange={(event) =>
-                        setPhoneCode(event.target.value)
-                      }
-                      className="mt-2 w-full rounded-xl border border-amber-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-amber-400 focus:ring-4 focus:ring-amber-100"
-                    />
+                        <label className="mt-3 block text-xs font-bold text-emerald-900">
+                          {copy.phoneCodeLabel}
+                        </label>
 
-                    <div className="mt-3 grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          void verifyForumPhone()
-                        }
-                        className="rounded-xl bg-slate-950 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-slate-800"
-                      >
-                        {copy.verifyPhone}
-                      </button>
+                        <input
+                          inputMode="numeric"
+                          pattern="[0-9]{6}"
+                          maxLength={6}
+                          value={phoneCode}
+                          onChange={(event) =>
+                            setPhoneCode(event.target.value)
+                          }
+                          className="mt-2 w-full rounded-xl border border-emerald-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
+                        />
 
-                      <button
-                        type="button"
-                        onClick={() =>
-                          void resendForumCode()
-                        }
-                        className="rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-xs font-bold text-slate-700 transition hover:bg-slate-50"
-                      >
-                        {copy.resendCode}
-                      </button>
+                        <div className="mt-3 grid grid-cols-2 gap-2">
+                          <button
+                            type="button"
+                            onClick={() => void verifyForumPhone()}
+                            className="rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white transition hover:bg-emerald-700"
+                          >
+                            {copy.verifyPhone}
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => void resendForumCode()}
+                            className="rounded-xl border border-emerald-300 bg-white px-3 py-2.5 text-xs font-bold text-emerald-700 transition hover:bg-emerald-50"
+                          >
+                            {copy.resendCode}
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -1339,10 +1426,7 @@ export default function ForoMigrantesPage() {
                         </span>
 
                         <span className="text-[10px] text-slate-400">
-                          {formatDate(
-                            message.createdAt,
-                            locale
-                          )}
+                          {formatDate(message.createdAt, locale)}
                         </span>
                       </div>
 
@@ -1402,7 +1486,7 @@ export default function ForoMigrantesPage() {
               <div className="flex items-start justify-between gap-5">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">
-                    Comunidad
+                    {copy.modalEyebrow}
                   </p>
 
                   <h2 className="mt-1 text-2xl font-black text-slate-950">
@@ -1410,7 +1494,7 @@ export default function ForoMigrantesPage() {
                   </h2>
 
                   <p className="mt-2 text-sm leading-6 text-slate-500">
-                    Comparte algo que pueda ser útil para otras personas.
+                    {copy.modalIntro}
                   </p>
                 </div>
 
@@ -1424,27 +1508,81 @@ export default function ForoMigrantesPage() {
                 </button>
               </div>
 
-              {!canParticipate ? (
+              {!currentUser ? (
                 <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5">
                   <p className="font-bold text-amber-900">
                     {copy.completeProfile}
                   </p>
 
-                  {!currentUser && (
-                    <Link
-                      to="/users/login"
-                      onClick={() => setShowComposer(false)}
-                      className="mt-4 inline-block rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white no-underline"
-                    >
-                      {copy.login}
-                    </Link>
-                  )}
+                  <Link
+                    to="/users/login"
+                    onClick={() => setShowComposer(false)}
+                    className="mt-4 inline-block rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white no-underline"
+                  >
+                    {copy.login}
+                  </Link>
                 </div>
               ) : (
-                <form
-                  onSubmit={createPost}
-                  className="mt-6"
-                >
+                <form onSubmit={createPost} className="mt-6">
+                  {!isVerified && (
+                    <div
+                      className={`mb-5 rounded-xl border p-4 ${
+                        remainingPosts > 0
+                          ? "border-emerald-200 bg-emerald-50"
+                          : "border-amber-200 bg-amber-50"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <p
+                            className={`m-0 text-xs font-bold uppercase tracking-wider ${
+                              remainingPosts > 0
+                                ? "text-emerald-700"
+                                : "text-amber-700"
+                            }`}
+                          >
+                            {copy.remainingPosts}
+                          </p>
+
+                          <p
+                            className={`m-0 mt-1 text-sm font-bold ${
+                              remainingPosts > 0
+                                ? "text-emerald-900"
+                                : "text-amber-900"
+                            }`}
+                          >
+                            {remainingPosts} / {DAILY_LIMIT_UNVERIFIED}
+                          </p>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setShowComposer(false);
+                            setTimeout(() => {
+                              document
+                                .querySelector(
+                                  "[data-verify-section]"
+                                )
+                                ?.scrollIntoView({
+                                  behavior: "smooth",
+                                });
+                            }, 100);
+                          }}
+                          className="rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold text-white transition hover:bg-emerald-700"
+                        >
+                          {copy.verifyPhone}
+                        </button>
+                      </div>
+
+                      {remainingPosts <= 0 && (
+                        <p className="mt-3 text-xs leading-5 text-amber-800">
+                          {copy.dailyLimitReached}
+                        </p>
+                      )}
+                    </div>
+                  )}
+
                   <div>
                     <label className="mb-2 block text-sm font-bold text-slate-700">
                       {copy.typeLabel}
@@ -1548,9 +1686,7 @@ export default function ForoMigrantesPage() {
                   <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
                     <button
                       type="button"
-                      onClick={() =>
-                        setShowComposer(false)
-                      }
+                      onClick={() => setShowComposer(false)}
                       className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-bold text-slate-600 transition hover:bg-slate-50"
                     >
                       ×
@@ -1558,7 +1694,8 @@ export default function ForoMigrantesPage() {
 
                     <button
                       type="submit"
-                      className="rounded-xl bg-slate-950 px-6 py-3 text-sm font-bold text-white transition hover:bg-slate-800"
+                      disabled={!canCreatePost}
+                      className="rounded-xl bg-slate-950 px-6 py-3 text-sm font-bold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       {copy.publish}
                     </button>
@@ -1576,7 +1713,7 @@ export default function ForoMigrantesPage() {
           <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
             <div className="max-w-2xl">
               <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">
-                Zubia · Comunidad
+                Zubia · {copy.eyebrow}
               </p>
 
               <h2 className="mt-2 text-2xl font-black text-slate-950 sm:text-3xl">

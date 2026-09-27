@@ -6,10 +6,10 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
 
-    "baseUrl": ".",
     "paths": {
       "~/*": ["./app/*"]
     },
+
     "rootDirs": [".", "./.react-router/types"],
     "types": ["node", "vite/client"],
 
@@ -27,6 +27,7 @@
     ".react-router/types",
     "vite-env.d.ts"
   ],
+
   "exclude": [
     "node_modules",
     "dist",

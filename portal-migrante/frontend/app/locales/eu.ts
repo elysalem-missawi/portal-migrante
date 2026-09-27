@@ -537,4 +537,7 @@ export const eu: Dict = {
   register_public_name: "Izen publikoa",
   register_public_name_help: "Komunitatean parte hartzen duzunean besteek ikusiko duten izena da.",
   register_public_name_placeholder: "Adib.: Ely Salem",
+
+  modalEyebrow: "Komunitatea",
+modalIntro: "Partekatu beste batzuentzat erabilgarria izan daitekeen zerbait.",
 };

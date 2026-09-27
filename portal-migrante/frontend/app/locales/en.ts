@@ -537,4 +537,7 @@ export const en: Dict = {
   register_public_name: "Public name",
   register_public_name_help: "This is the name other people will see when you participate in the community.",
   register_public_name_placeholder: "E.g. Ely Salem",
+
+  modalEyebrow: "Community",
+modalIntro: "Share something that may be useful to others.",
 };
