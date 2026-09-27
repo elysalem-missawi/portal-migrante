@@ -507,14 +507,14 @@ export default function ForoMigrantesPage() {
       className="min-h-screen bg-[#fafbfc] text-slate-950"
     >
       {/* =========================================================
-          HERO — Balanced Wix Style
+          HERO — simple community entry
       ========================================================= */}
-      <section className="relative overflow-hidden border-b border-slate-200/70 bg-white">
+      <section className="relative overflow-hidden border-b border-slate-200 bg-white">
         <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-emerald-100/50 blur-3xl" />
         <div className="pointer-events-none absolute -left-32 bottom-0 h-80 w-80 rounded-full bg-blue-100/40 blur-3xl" />
 
-        <div className="relative mx-auto max-w-7xl px-5 py-12 sm:px-6 lg:px-8 lg:py-16">
-          <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-10">
+        <div className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
+          <div className="grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-8">
             {/* LEFT — TEXT */}
             <div className="flex flex-col justify-center lg:pe-4">
               <div className="mb-5 w-fit inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-700">
@@ -522,11 +522,11 @@ export default function ForoMigrantesPage() {
                 <span>{copy.eyebrow}</span>
               </div>
 
-              <h1 className="max-w-2xl text-4xl font-black leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-[3.5rem]">
+              <h1 className="max-w-2xl text-3xl font-black leading-tight tracking-tight text-slate-950 sm:text-4xl">
                 {copy.title}
               </h1>
 
-              <p className="mt-5 max-w-xl text-base leading-7 text-slate-600 sm:text-lg sm:leading-8">
+              <p className="mt-4 max-w-xl text-base leading-7 text-slate-600">
                 {copy.intro}
               </p>
 
@@ -587,7 +587,7 @@ export default function ForoMigrantesPage() {
               <div className="pointer-events-none absolute -right-3 -top-3 z-0 h-20 w-20 rounded-3xl bg-emerald-100/70" />
 
               <div className="relative z-10 overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_24px_60px_-30px_rgba(15,23,42,0.30)]">
-                <div className="relative h-64 overflow-hidden sm:h-72">
+                <div className="relative h-52 overflow-hidden sm:h-56">
                   <img
                     src="/images/registration-migrant-travel-hero.png"
                     alt=""
@@ -663,7 +663,7 @@ export default function ForoMigrantesPage() {
       ========================================================= */}
       <div
         id="forum-content"
-        className="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8 lg:py-14"
+        className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10"
       >
         {notice && (
           <div className="mb-6 flex items-center justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800">
@@ -692,12 +692,12 @@ export default function ForoMigrantesPage() {
           </div>
         )}
 
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_330px]">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
           {/* =====================================================
               POSTS
           ===================================================== */}
           <section className="min-w-0">
-            <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+            <div className="mb-5 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                   <div>
@@ -813,7 +813,7 @@ export default function ForoMigrantesPage() {
                 {visiblePosts.map((post) => (
                   <article
                     key={post._id}
-                    className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg hover:shadow-slate-900/5 sm:p-6"
+                    className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition duration-200 hover:border-emerald-200 hover:shadow-md sm:p-6"
                   >
                     <div className="flex gap-4">
                       <div className="hidden shrink-0 sm:flex">
@@ -997,13 +997,21 @@ export default function ForoMigrantesPage() {
                     </h2>
                   </div>
 
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-950 font-black text-white">
+                  {currentUser.profileImage ? (
+                  <img
+                    src={currentUser.profileImage}
+                    alt=""
+                    className="h-12 w-12 rounded-full object-cover ring-2 ring-emerald-50"
+                  />
+                ) : (
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-950 font-black text-white">
                     {(currentUser.displayName ||
                       currentUser.fullName ||
                       "U")
                       .charAt(0)
                       .toUpperCase()}
                   </div>
+                )}
                 </div>
 
                 <p className="mt-1 text-sm text-slate-500">
@@ -1063,23 +1071,23 @@ export default function ForoMigrantesPage() {
             )}
 
             {/* Chat */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
-                  ●
+            <details className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+              <summary className="cursor-pointer list-none p-5">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                    ●
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-black text-slate-950">
+                      {copy.chatTitle}
+                    </h2>
+                    <p className="mt-1 text-xs leading-5 text-slate-500">
+                      {copy.chatIntro}
+                    </p>
+                  </div>
                 </div>
-
-                <div>
-                  <h2 className="text-lg font-black text-slate-950">
-                    {copy.chatTitle}
-                  </h2>
-
-                  <p className="mt-1 text-xs leading-5 text-slate-500">
-                    {copy.chatIntro}
-                  </p>
-                </div>
-              </div>
-
+              </summary>
+              <div className="border-t border-slate-100 p-5">
               <div className="mt-4 flex max-h-80 flex-col gap-2 overflow-auto rounded-xl bg-slate-50 p-3">
                 {messages.length === 0 ? (
                   <div className="py-8 text-center text-sm text-slate-400">
@@ -1137,7 +1145,8 @@ export default function ForoMigrantesPage() {
                   {copy.send}
                 </button>
               </form>
-            </div>
+              </div>
+            </details>
           </aside>
         </div>
 
