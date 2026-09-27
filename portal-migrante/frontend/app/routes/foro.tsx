@@ -336,11 +336,7 @@ const formatDate = (value: string, locale: string) =>
 export default function ForoMigrantesPage() {
   const { locale, t } = useI18n();
 
-  const {
-    currentUser,
-    signIn,
-    signOut,
-  } = useAuth();
+  const { currentUser, signOut } = useAuth();
 
   const copy =
     text[(locale as Locale) in text ? (locale as Locale) : "es"];
@@ -352,11 +348,6 @@ export default function ForoMigrantesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
-  });
 
   const [activeView, setActiveView] = useState<"all" | "mine">("all");
 
@@ -420,19 +411,6 @@ export default function ForoMigrantesPage() {
 
     return posts;
   }, [activeView, currentUser?._id, posts]);
-
-  const login = async (event: FormEvent) => {
-    event.preventDefault();
-
-    await signIn(loginData);
-
-    setLoginData({
-      email: "",
-      password: "",
-    });
-
-    setNotice(copy.profileSaved);
-  };
 
   const logout = () => {
     void signOut();
@@ -1004,7 +982,7 @@ export default function ForoMigrantesPage() {
           {/* =====================================================
               SIDEBAR
           ===================================================== */}
-          <aside className="space-y-5">
+          <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
             {currentUser ? (
               <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div className="flex items-start justify-between gap-3">
@@ -1039,87 +1017,49 @@ export default function ForoMigrantesPage() {
                 )}
 
 
-                <button
-                  type="button"
-                  onClick={logout}
-                  className="mt-5 w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
-                >
-                  {copy.logout}
-                </button>
+                <div className="mt-5 grid gap-2">
+                  <Link
+                    to="/profile"
+                    className="w-full rounded-xl bg-slate-950 px-4 py-2.5 text-center text-sm font-bold text-white no-underline transition hover:bg-slate-800"
+                  >
+                    {copy.profileTitle}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={logout}
+                    className="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900"
+                  >
+                    {copy.logout}
+                  </button>
+                </div>
               </div>
             ) : (
-              <form
-                onSubmit={login}
-                className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
-              >
-                <div className="mb-5">
-                  <p className="text-xs font-bold uppercase tracking-wider text-emerald-600">
-                    Zubia
-                  </p>
-
-                  <h2 className="mt-1 text-xl font-black text-slate-950">
-                    {copy.loginTitle}
-                  </h2>
-
-                  <p className="mt-2 text-sm leading-6 text-slate-500">
-                    {copy.loginIntro}
-                  </p>
+              <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-5 shadow-sm">
+                <p className="text-xs font-bold uppercase tracking-wider text-emerald-700">
+                  Zubia
+                </p>
+                <h2 className="mt-1 text-xl font-black text-slate-950">
+                  {copy.loginTitle}
+                </h2>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  {copy.loginIntro}
+                </p>
+                <div className="mt-5 grid gap-2">
+                  <Link
+                    to="/login"
+                    state={{ from: "/foro" }}
+                    className="rounded-xl bg-slate-950 px-4 py-3 text-center font-bold text-white no-underline transition hover:bg-slate-800"
+                  >
+                    {copy.login}
+                  </Link>
+                  <Link
+                    to="/users/new"
+                    className="rounded-xl border border-slate-200 bg-white px-4 py-3 text-center text-sm font-bold text-slate-700 no-underline transition hover:bg-slate-50"
+                  >
+                    {copy.registerLink}
+                  </Link>
                 </div>
-
-                <div className="space-y-4">
-                  <div>
-                    <label className="mb-2 block text-sm font-bold text-slate-700">
-                      {t("email")}
-                    </label>
-
-                    <input
-                      type="email"
-                      value={loginData.email}
-                      onChange={(event) =>
-                        setLoginData((current) => ({
-                          ...current,
-                          email: event.target.value,
-                        }))
-                      }
-                      required
-                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="mb-2 block text-sm font-bold text-slate-700">
-                      {copy.passwordLabel}
-                    </label>
-
-                    <input
-                      type="password"
-                      value={loginData.password}
-                      onChange={(event) =>
-                        setLoginData((current) => ({
-                          ...current,
-                          password: event.target.value,
-                        }))
-                      }
-                      required
-                      className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-emerald-400 focus:ring-4 focus:ring-emerald-100"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="mt-5 w-full rounded-xl bg-slate-950 px-4 py-3 font-bold text-white transition hover:bg-slate-800"
-                >
-                  {copy.login}
-                </button>
-
-                <Link
-                  to="/users/new"
-                  className="mt-2 block rounded-xl border border-slate-200 px-4 py-3 text-center text-sm font-bold text-slate-700 no-underline transition hover:bg-slate-50"
-                >
-                  {copy.registerLink}
-                </Link>
-              </form>
+              </div>
             )}
 
             {/* Chat */}
