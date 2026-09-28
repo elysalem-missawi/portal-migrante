@@ -290,21 +290,21 @@ export default function Home() {
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-slate-950/95 via-slate-950/68 to-slate-950/10" />
         <div className="absolute inset-0 -z-10 bg-gradient-to-t from-slate-950/35 via-transparent to-slate-950/5" />
 
-        <div className="mx-auto flex min-h-[590px] max-w-7xl items-center px-5 py-16 sm:px-6 lg:px-8 lg:py-20">
-          <div className="max-w-3xl text-start">
+        <div className="mx-auto flex min-h-[590px] max-w-7xl items-center justify-center px-5 py-16 text-center sm:px-6 lg:px-8 lg:py-20">
+          <div className="max-w-3xl text-center">
             <div className="inline-flex rounded-full border border-emerald-300/40 bg-slate-950/35 px-4 py-2 text-sm font-semibold text-emerald-200 backdrop-blur">
               {t("home_dt_badge")}
             </div>
 
-            <h1 className="mt-7 max-w-[820px] text-4xl font-bold leading-[1.06] tracking-tight text-white sm:text-5xl lg:text-[3.55rem]">
+            <h1 className="mx-auto mt-7 max-w-[820px] text-4xl font-bold leading-[1.06] tracking-tight text-white sm:text-5xl lg:text-[3.55rem]">
               {t("home_dt_title")}
             </h1>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-100 sm:text-xl">
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-slate-100 sm:text-xl">
               {t("home_dt_subtitle")}
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
                 to="/servicios"
                 className="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-7 py-3.5 font-semibold text-white shadow-xl shadow-black/10 transition hover:bg-emerald-400"
@@ -323,14 +323,16 @@ export default function Home() {
               </Link>
             </div>
 
-            <div className="mt-9 grid max-w-4xl gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mx-auto mt-9 grid max-w-4xl gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
               {quickNeeds.map((item) => (
                 <div
                   key={item.title}
-                  className="flex items-center gap-3 rounded-xl border border-white/15 bg-slate-950/25 px-3 py-3 backdrop-blur-sm"
+                  className="flex items-center justify-center gap-3 rounded-xl border border-white/15 bg-slate-950/25 px-3 py-3 backdrop-blur-sm"
                 >
                   <Icon name={item.icon} className="h-5 w-5 text-emerald-300" />
-                  <span className="font-medium text-slate-100">{item.title}</span>
+                  <span className="font-medium text-slate-100">
+                    {item.title}
+                  </span>
                 </div>
               ))}
             </div>
@@ -366,10 +368,38 @@ export default function Home() {
               <path d="M263 260 H296" stroke="#93C5FD" strokeWidth="2" />
               <path d="M464 260 H497" stroke="#C4B5FD" strokeWidth="2" />
               <path d="M380 344 V376" stroke="#67E8F9" strokeWidth="2" />
-              <circle cx="380" cy="173" r="4" fill="#34D399" stroke="white" strokeWidth="2" />
-              <circle cx="293" cy="260" r="4" fill="#60A5FA" stroke="white" strokeWidth="2" />
-              <circle cx="467" cy="260" r="4" fill="#A78BFA" stroke="white" strokeWidth="2" />
-              <circle cx="380" cy="347" r="4" fill="#22D3EE" stroke="white" strokeWidth="2" />
+              <circle
+                cx="380"
+                cy="173"
+                r="4"
+                fill="#34D399"
+                stroke="white"
+                strokeWidth="2"
+              />
+              <circle
+                cx="293"
+                cy="260"
+                r="4"
+                fill="#60A5FA"
+                stroke="white"
+                strokeWidth="2"
+              />
+              <circle
+                cx="467"
+                cy="260"
+                r="4"
+                fill="#A78BFA"
+                stroke="white"
+                strokeWidth="2"
+              />
+              <circle
+                cx="380"
+                cy="347"
+                r="4"
+                fill="#22D3EE"
+                stroke="white"
+                strokeWidth="2"
+              />
             </svg>
 
             {/* Social: top node */}
@@ -410,9 +440,8 @@ export default function Home() {
                   <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-emerald-300">
                     <Icon name="network" className="h-5 w-5" />
                   </span>
-                  <div className="mt-3 text-xl font-bold tracking-tight">Portal Migrante</div>
-                  <div className="mt-1 text-xs font-medium leading-snug text-slate-200">
-                    {t("home_ecosystem_center")}
+                  <div className="mt-3 text-xl font-bold tracking-tight">
+                    Portal Migrante
                   </div>
                 </div>
               </div>
@@ -498,7 +527,9 @@ export default function Home() {
                   to={item.to}
                   className={`flex aspect-square min-w-0 flex-col items-center justify-center rounded-full border p-3 text-center shadow-sm transition-transform duration-200 motion-safe:hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-200 ${item.wrapper}`}
                 >
-                  <span className={`flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-sm ${item.iconStyle}`}>
+                  <span
+                    className={`flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-sm ${item.iconStyle}`}
+                  >
                     <Icon name={item.icon} className="h-4 w-4" />
                   </span>
                   <span className="mt-2 px-1 text-xs font-bold leading-tight text-slate-950 sm:text-sm">
@@ -539,7 +570,9 @@ export default function Home() {
                   <span
                     className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-full border bg-white shadow-sm transition duration-200 group-hover:scale-105 ${actor.outline}`}
                   >
-                    <span className={`flex h-10 w-10 items-center justify-center rounded-full ${actor.color}`}>
+                    <span
+                      className={`flex h-10 w-10 items-center justify-center rounded-full ${actor.color}`}
+                    >
                       <Icon name={actor.icon} className="h-5 w-5" />
                     </span>
                   </span>
@@ -571,7 +604,9 @@ export default function Home() {
                 <Icon name="network" className="h-6 w-6" />
               </span>
               <span className="min-w-0 text-start">
-                <span className="block text-base font-bold">Portal Migrante</span>
+                <span className="block text-base font-bold">
+                  Portal Migrante
+                </span>
                 <span className="block text-sm text-slate-300">
                   {t("home_ecosystem_center")}
                 </span>
@@ -580,7 +615,13 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+      <section className="relative w-full">
+        <div
+          className="h-[380px] w-full bg-cover bg-center bg-fixed sm:h-[480px] lg:h-[560px]"
+          style={{ backgroundImage: "url('/images/hiroSobreNodotros.png')" }}
+          aria-hidden="true"
+        />
+      </section>
       {/* SOCIAL + LABOUR */}
       <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
@@ -673,11 +714,15 @@ export default function Home() {
                 to={service.to}
                 className="group min-h-[210px] rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:shadow-lg"
               >
-                <div className={`flex h-11 w-11 items-center justify-center rounded-xl ${service.color}`}>
+                <div
+                  className={`flex h-11 w-11 items-center justify-center rounded-xl ${service.color}`}
+                >
                   <Icon name={service.icon} className="h-5 w-5" />
                 </div>
 
-                <h3 className="mt-4 font-bold text-slate-950">{service.title}</h3>
+                <h3 className="mt-4 font-bold text-slate-950">
+                  {service.title}
+                </h3>
 
                 <p className="mt-2 text-sm leading-6 text-slate-600">
                   {service.description}
@@ -831,7 +876,13 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+      <section className="relative w-full">
+        <div
+          className="h-[380px] w-full bg-cover bg-center bg-fixed sm:h-[480px] lg:h-[560px]"
+          style={{ backgroundImage: "url('/images/hiroSobreNodotros.png')" }}
+          aria-hidden="true"
+        />
+      </section>
       {/* FINAL CTA */}
       <section className="bg-gradient-to-r from-blue-950 via-slate-950 to-emerald-950 py-16 text-white">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
