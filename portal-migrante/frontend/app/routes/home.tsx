@@ -876,13 +876,13 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="relative w-full">
-        <div
-          className="h-[380px] w-full bg-cover bg-center bg-fixed sm:h-[480px] lg:h-[560px]"
-          style={{ backgroundImage: "url('/images/hiroSobreNodotros.png')" }}
-          aria-hidden="true"
-        />
-      </section>
+<section className="relative w-full">
+  <div
+    className="h-[380px] w-full bg-cover bg-center bg-fixed sm:h-[480px] lg:h-[560px]"
+    style={{ backgroundImage: "url('/images/hiroSobreNodotros.png')" }}
+    aria-hidden="true"
+  />
+</section>
       {/* FINAL CTA */}
       <section className="bg-gradient-to-r from-blue-950 via-slate-950 to-emerald-950 py-16 text-white">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
