@@ -5,7 +5,7 @@ services:
     plan: free
     region: frankfurt
     branch: database-redesign
-    rootDir: portal-migrante/backend
+    rootDir: backend
     buildCommand: npm ci --include=dev && npm run build
     startCommand: npm run start:municipal-demo
     healthCheckPath: /api/health
@@ -30,7 +30,7 @@ services:
     name: zubia-social-euskadi-demo
     runtime: static
     branch: database-redesign
-    rootDir: portal-migrante/frontend
+    rootDir: frontend
     buildCommand: npm ci && npm run build
     staticPublishPath: dist
     autoDeployTrigger: checksPass
@@ -43,3 +43,4 @@ services:
         value: https://zubia-social-euskadi-demo-api.onrender.com/api
       - key: VITE_ENABLE_DEMO_FALLBACK
         value: "false"
+

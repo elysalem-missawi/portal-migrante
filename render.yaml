@@ -27,7 +27,7 @@ services:
 
   - type: static
     name: portal-migrante-frontend
-    rootDir: portal-migrante/frontend
+    rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     routes:
@@ -39,3 +39,4 @@ services:
         value: https://portal-migrante.onrender.com/api
       - key: VITE_ENABLE_DEMO_FALLBACK
         value: false
+
