@@ -1,29 +1,40 @@
 import type { ReactNode } from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { AuthGateStatus, useAuth } from "../../auth";
 import {
-  type PlatformRole,
-  type User,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+
+import {
+  AuthGateStatus,
+  useAuth,
+} from "../../auth";
+
+import type {
+  User,
 } from "../../services/users.service";
 
-function effectivePlatformRole(user: User): PlatformRole {
-  if (user.platformRole) return user.platformRole;
-  if (user.role === "super_admin") return "super_admin";
-  if (user.role === "admin") return "admin";
-  return "user";
-}
+export function isPlatformStaffUser(
+  user: User | null
+) {
+  if (!user) {
+    return false;
+  }
 
-export function isPlatformStaffUser(user: User | null) {
-  if (!user) return false;
-  return ["moderator", "admin", "super_admin"].includes(
-    effectivePlatformRole(user)
+  return (
+    user.platformRole === "moderator" ||
+    user.platformRole === "admin"
   );
 }
 
-export function isPlatformAdminUser(user: User | null) {
-  if (!user) return false;
-  return ["admin", "super_admin"].includes(
-    effectivePlatformRole(user)
+export function isPlatformAdminUser(
+  user: User | null
+) {
+  if (!user) {
+    return false;
+  }
+
+  return (
+    user.platformRole === "admin"
   );
 }
 
@@ -32,14 +43,25 @@ export default function ProtectedPlatformStaffRoute({
 }: {
   children: ReactNode;
 }) {
-  const location = useLocation();
-  const { currentUser, status, refreshSession } = useAuth();
+  const location =
+    useLocation();
 
-  if (status === "checking" || status === "unavailable") {
+  const {
+    currentUser,
+    status,
+    refreshSession,
+  } = useAuth();
+
+  if (
+    status === "checking" ||
+    status === "unavailable"
+  ) {
     return (
       <AuthGateStatus
         status={status}
-        retry={() => void refreshSession()}
+        retry={() =>
+          void refreshSession()
+        }
       />
     );
   }
@@ -49,13 +71,25 @@ export default function ProtectedPlatformStaffRoute({
       <Navigate
         to="/login"
         replace
-        state={{ from: location.pathname }}
+        state={{
+          from:
+            location.pathname,
+        }}
       />
     );
   }
 
-  if (!isPlatformStaffUser(currentUser)) {
-    return <Navigate to="/unauthorized" replace />;
+  if (
+    !isPlatformStaffUser(
+      currentUser
+    )
+  ) {
+    return (
+      <Navigate
+        to="/unauthorized"
+        replace
+      />
+    );
   }
 
   return <>{children}</>;

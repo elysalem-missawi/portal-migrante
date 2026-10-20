@@ -7,7 +7,7 @@ import { Types } from "mongoose";
 import User, {
   PreferredLanguage,
 } from "../models/user.model";
-
+import Municipality from "../models/municipality.model";
 import AuthSession from "../models/authSession.model";
 
 /* =========================================================
@@ -88,6 +88,29 @@ function isDuplicateKeyError(error: any): boolean {
   return error?.code === 11000;
 }
 
+async function resolveMunicipalityId(
+  value: unknown
+): Promise<Types.ObjectId | null> {
+  if (value === undefined || value === null || value === "") {
+    return null;
+  }
+
+  if (
+    typeof value !== "string" ||
+    !Types.ObjectId.isValid(value)
+  ) {
+    throw new Error("INVALID_MUNICIPALITY_ID");
+  }
+
+  const municipality = await Municipality.findById(value).select("_id");
+
+  if (!municipality) {
+    throw new Error("MUNICIPALITY_NOT_FOUND");
+  }
+
+  return new Types.ObjectId(value);
+}
+
 /* =========================================================
    REGISTER USER
    POST /api/users/register
@@ -130,10 +153,6 @@ export const registerUser = async (
 
     const legalConsentAccepted =
       req.body.legalConsentAccepted === true;
-
-    /* -----------------------------------------------------
-       Required fields
-       ----------------------------------------------------- */
 
     if (!displayName) {
       res.status(400).json({
@@ -182,9 +201,7 @@ export const registerUser = async (
       return;
     }
 
-    if (
-      !isValidLanguage(preferredLanguage)
-    ) {
+    if (!isValidLanguage(preferredLanguage)) {
       res.status(400).json({
         message:
           "Preferred language must be es, eu, ar or en",
@@ -192,35 +209,27 @@ export const registerUser = async (
       return;
     }
 
-    /* -----------------------------------------------------
-       Municipality
-       ----------------------------------------------------- */
+    let municipalityId: Types.ObjectId | null = null;
 
-    let municipalityId: Types.ObjectId | null =
-      null;
-
-    if (req.body.municipalityId) {
-      if (
-        typeof req.body.municipalityId !==
-          "string" ||
-        !Types.ObjectId.isValid(
-          req.body.municipalityId
-        )
-      ) {
+    try {
+      municipalityId = await resolveMunicipalityId(req.body.municipalityId);
+    } catch (error: any) {
+      if (error.message === "INVALID_MUNICIPALITY_ID") {
         res.status(400).json({
           message: "Invalid municipalityId",
         });
         return;
       }
 
-      municipalityId = new Types.ObjectId(
-        req.body.municipalityId
-      );
-    }
+      if (error.message === "MUNICIPALITY_NOT_FOUND") {
+        res.status(400).json({
+          message: "Municipality does not exist",
+        });
+        return;
+      }
 
-    /* -----------------------------------------------------
-       Duplicate email
-       ----------------------------------------------------- */
+      throw error;
+    }
 
     const existingUser =
       await User.findOne({ email }).select("_id");
@@ -232,30 +241,18 @@ export const registerUser = async (
       return;
     }
 
-    /* -----------------------------------------------------
-       Create user
-       ----------------------------------------------------- */
-
     const user = await User.create({
       displayName,
       fullName,
-
       email,
       phone,
-
-      passwordHash:
-        hashPassword(password),
-
+      passwordHash: hashPassword(password),
       preferredLanguage,
-
       originCountry,
       municipalityId,
       profileImage,
 
-      /*
-       * Security:
-       * These values NEVER come from req.body.
-       */
+      // V1: no email/phone verification. Accounts are active immediately.
       platformRole: "user",
       status: "active",
 
@@ -266,7 +263,6 @@ export const registerUser = async (
     res.status(201).json({
       message:
         "User registered successfully",
-
       user: publicUser(user),
     });
   } catch (error: any) {
@@ -302,30 +298,10 @@ export const getUsers = async (
     const filter = q
       ? {
           $or: [
-            {
-              fullName: {
-                $regex: q,
-                $options: "i",
-              },
-            },
-            {
-              displayName: {
-                $regex: q,
-                $options: "i",
-              },
-            },
-            {
-              email: {
-                $regex: q,
-                $options: "i",
-              },
-            },
-            {
-              phone: {
-                $regex: q,
-                $options: "i",
-              },
-            },
+            { fullName: { $regex: q, $options: "i" } },
+            { displayName: { $regex: q, $options: "i" } },
+            { email: { $regex: q, $options: "i" } },
+            { phone: { $regex: q, $options: "i" } },
           ],
         }
       : {};
@@ -335,11 +311,9 @@ export const getUsers = async (
         "municipalityId",
         "name slug territory"
       )
-      .sort({
-        createdAt: -1,
-      });
+      .sort({ createdAt: -1 });
 
-    res.status(200).json(users);
+    res.status(200).json(users.map(publicUser));
   } catch (error: any) {
     res.status(500).json({
       message: "Failed to fetch users",
@@ -358,9 +332,7 @@ export const getUserById = async (
   res: Response
 ): Promise<void> => {
   try {
-    if (
-      !Types.ObjectId.isValid(req.params.id)
-    ) {
+    if (!Types.ObjectId.isValid(req.params.id)) {
       res.status(400).json({
         message: "Invalid user id",
       });
@@ -402,9 +374,7 @@ export const updateUser = async (
   res: Response
 ): Promise<void> => {
   try {
-    if (
-      !Types.ObjectId.isValid(req.params.id)
-    ) {
+    if (!Types.ObjectId.isValid(req.params.id)) {
       res.status(400).json({
         message: "Invalid user id",
       });
@@ -413,17 +383,9 @@ export const updateUser = async (
 
     const data: Record<string, any> = {};
 
-    /* -----------------------------------------------------
-       Fields that user can update
-       ----------------------------------------------------- */
-
-    if (
-      req.body.displayName !== undefined
-    ) {
+    if (req.body.displayName !== undefined) {
       const displayName =
-        normalizeOptionalString(
-          req.body.displayName
-        );
+        normalizeOptionalString(req.body.displayName);
 
       if (
         !displayName ||
@@ -440,52 +402,30 @@ export const updateUser = async (
       data.displayName = displayName;
     }
 
-    if (
-      req.body.fullName !== undefined
-    ) {
+    if (req.body.fullName !== undefined) {
       data.fullName =
-        normalizeOptionalString(
-          req.body.fullName
-        );
+        normalizeOptionalString(req.body.fullName);
     }
 
     if (req.body.phone !== undefined) {
       data.phone =
-        normalizeOptionalString(
-          req.body.phone
-        );
+        normalizeOptionalString(req.body.phone);
     }
 
-    if (
-      req.body.originCountry !== undefined
-    ) {
+    if (req.body.originCountry !== undefined) {
       data.originCountry =
-        normalizeOptionalString(
-          req.body.originCountry
-        );
+        normalizeOptionalString(req.body.originCountry);
     }
 
-    if (
-      req.body.profileImage !== undefined
-    ) {
+    if (req.body.profileImage !== undefined) {
       data.profileImage =
-        normalizeOptionalString(
-          req.body.profileImage
-        );
+        normalizeOptionalString(req.body.profileImage);
     }
-
-    /* -----------------------------------------------------
-       Email
-       ----------------------------------------------------- */
 
     if (req.body.email !== undefined) {
-      const email =
-        normalizeEmail(req.body.email);
+      const email = normalizeEmail(req.body.email);
 
-      if (
-        !email ||
-        !EMAIL_REGEX.test(email)
-      ) {
+      if (!email || !EMAIL_REGEX.test(email)) {
         res.status(400).json({
           message: "Invalid email format",
         });
@@ -495,9 +435,7 @@ export const updateUser = async (
       const existingUser =
         await User.findOne({
           email,
-          _id: {
-            $ne: req.params.id,
-          },
+          _id: { $ne: req.params.id },
         }).select("_id");
 
       if (existingUser) {
@@ -510,10 +448,6 @@ export const updateUser = async (
 
       data.email = email;
     }
-
-    /* -----------------------------------------------------
-       Preferred language
-       ----------------------------------------------------- */
 
     if (
       req.body.preferredLanguage !==
@@ -535,48 +469,31 @@ export const updateUser = async (
         req.body.preferredLanguage;
     }
 
-    /* -----------------------------------------------------
-       Municipality
-       ----------------------------------------------------- */
-
-    if (
-      req.body.municipalityId !==
-      undefined
-    ) {
-      if (
-        req.body.municipalityId === null ||
-        req.body.municipalityId === ""
-      ) {
-        data.municipalityId = null;
-      } else {
-        if (
-          typeof req.body
-            .municipalityId !== "string" ||
-          !Types.ObjectId.isValid(
-            req.body.municipalityId
-          )
-        ) {
+    if (req.body.municipalityId !== undefined) {
+      try {
+        data.municipalityId = await resolveMunicipalityId(
+          req.body.municipalityId
+        );
+      } catch (error: any) {
+        if (error.message === "INVALID_MUNICIPALITY_ID") {
           res.status(400).json({
-            message:
-              "Invalid municipalityId",
+            message: "Invalid municipalityId",
           });
           return;
         }
 
-        data.municipalityId =
-          new Types.ObjectId(
-            req.body.municipalityId
-          );
+        if (error.message === "MUNICIPALITY_NOT_FOUND") {
+          res.status(400).json({
+            message: "Municipality does not exist",
+          });
+          return;
+        }
+
+        throw error;
       }
     }
 
-    /* -----------------------------------------------------
-       Admin-only fields
-       ----------------------------------------------------- */
-
-    if (
-      req.auth?.platformRole === "admin"
-    ) {
+    if (req.auth?.platformRole === "admin") {
       if (
         req.body.platformRole !==
         undefined
@@ -603,9 +520,7 @@ export const updateUser = async (
           req.body.platformRole;
       }
 
-      if (
-        req.body.status !== undefined
-      ) {
+      if (req.body.status !== undefined) {
         const allowedStatuses = [
           "active",
           "inactive",
@@ -630,16 +545,10 @@ export const updateUser = async (
       }
     }
 
-    /* -----------------------------------------------------
-       Update
-       ----------------------------------------------------- */
-
     const user =
       await User.findByIdAndUpdate(
         req.params.id,
-        {
-          $set: data,
-        },
+        { $set: data },
         {
           new: true,
           runValidators: true,
@@ -656,10 +565,26 @@ export const updateUser = async (
       return;
     }
 
+    if (
+      req.auth?.platformRole === "admin" &&
+      (data.status === "inactive" || data.status === "blocked")
+    ) {
+      await AuthSession.updateMany(
+        {
+          userId: user._id,
+          revokedAt: null,
+        },
+        {
+          $set: {
+            revokedAt: new Date(),
+          },
+        }
+      );
+    }
+
     res.status(200).json({
       message:
         "User updated successfully",
-
       user: publicUser(user),
     });
   } catch (error: any) {
@@ -687,19 +612,13 @@ export const deleteUser = async (
   res: Response
 ): Promise<void> => {
   try {
-    if (
-      !Types.ObjectId.isValid(req.params.id)
-    ) {
+    if (!Types.ObjectId.isValid(req.params.id)) {
       res.status(400).json({
         message: "Invalid user id",
       });
       return;
     }
 
-    /*
-     * V1 uses soft delete.
-     * The database record is preserved.
-     */
     const user =
       await User.findByIdAndUpdate(
         req.params.id,
@@ -721,10 +640,6 @@ export const deleteUser = async (
       return;
     }
 
-    /*
-     * Revoke every active session
-     * after account deactivation.
-     */
     await AuthSession.updateMany(
       {
         userId: user._id,
@@ -745,7 +660,6 @@ export const deleteUser = async (
     res.status(500).json({
       message:
         "Failed to deactivate user",
-
       error: error.message,
     });
   }

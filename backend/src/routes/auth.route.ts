@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import {
+  changePassword,
   getCurrentUser,
   login,
   logout,
@@ -26,6 +27,12 @@ router.get(
   "/me",
   requireAuth,
   getCurrentUser
+);
+
+router.put(
+  "/password",
+  requireAuth,
+  changePassword
 );
 
 export default router;

@@ -1,72 +1,32 @@
 import { AUTH_TOKEN_KEY, http } from "./api";
 
-export type UserRole =
-  | "community_user"
-  | "organization_manager"
-  | "admin"
-  | "super_admin";
-
 export type PlatformRole = "user" | "moderator" | "admin";
-export type AccountType = "individual" | "organization_account";
 export type UserStatus = "active" | "inactive" | "pending" | "blocked";
+export type PreferredLanguage = "es" | "eu" | "ar" | "en";
 
-export type OrganizationRef = {
+export type MunicipalityRef = {
   _id: string;
   name: string;
-  type: string;
-  slug: string;
-  status: string;
-  verified: boolean;
-};
-
-export type IdentityDocumentInput = {
-  fileName: string;
-  mimeType: string;
-  size: number;
-  dataUrl: string;
+  slug?: string;
+  territory?: string;
 };
 
 export type User = {
   _id: string;
-  accountType?: AccountType;
-  platformRole?: PlatformRole;
-  role?: UserRole;
+  displayName: string;
   fullName?: string;
-  displayName?: string;
   email: string;
   phone?: string;
-  phoneVerified?: boolean;
-  preferredLanguage?: string;
+  preferredLanguage: PreferredLanguage;
   originCountry?: string;
-  nativeLanguage?: string;
-  municipalityId?: string | null;
-  municipality?: string;
+  municipalityId?: string | MunicipalityRef | null;
   profileImage?: string;
-  identityDocument?: Partial<IdentityDocumentInput> & { uploadedAt?: string };
-  legalConsentAccepted?: boolean;
-  legalConsentAt?: string;
-  organizationId?: string | OrganizationRef | null;
+  platformRole: PlatformRole;
   status: UserStatus;
-  isVerified?: boolean;
+  legalConsentAccepted: boolean;
+  legalConsentAt?: string;
   createdAt?: string;
   updatedAt?: string;
-};
-
-export type CreateUserInput = {
-  accountType?: AccountType;
-  fullName: string;
-  displayName?: string;
-  email: string;
-  phone?: string;
-  password?: string;
-  preferredLanguage?: string;
-  originCountry?: string;
-  nativeLanguage?: string;
-  municipalityId?: string | null;
-  municipality?: string;
-  profileImage?: string;
-  identityDocument?: IdentityDocumentInput;
-  legalConsentAccepted?: boolean;
 };
 
 export type RegisterUserInput = {
@@ -75,11 +35,24 @@ export type RegisterUserInput = {
   email: string;
   password: string;
   phone?: string;
-  preferredLanguage?: "es" | "eu" | "ar" | "en";
+  preferredLanguage?: PreferredLanguage;
   originCountry?: string;
   municipalityId?: string | null;
   profileImage?: string;
   legalConsentAccepted: true;
+};
+
+export type UpdateUserInput = {
+  displayName?: string;
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  preferredLanguage?: PreferredLanguage;
+  originCountry?: string;
+  municipalityId?: string | null;
+  profileImage?: string;
+  platformRole?: PlatformRole;
+  status?: UserStatus;
 };
 
 export type RegisterUserResult = {
@@ -87,7 +60,13 @@ export type RegisterUserResult = {
   user: User;
 };
 
+export type UpdateUserResult = {
+  message: string;
+  user: User;
+};
+
 export type LoginResult = {
+  message: string;
   user: User;
   token: string;
   expiresAt: string;
@@ -105,13 +84,6 @@ export const usersService = {
   async list(q?: string) {
     const query = q ? `?q=${encodeURIComponent(q)}` : "";
     return http<User[]>(`/users${query}`);
-  },
-
-  async create(data: CreateUserInput) {
-    return http<User>("/users", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
   },
 
   async register(data: RegisterUserInput) {
@@ -169,6 +141,18 @@ export const usersService = {
     }
   },
 
+  async changePassword(data: {
+    currentPassword: string;
+    newPassword: string;
+  }) {
+    const result = await http<{ message: string }>("/auth/password", {
+      method: "PUT",
+      body: JSON.stringify(data),
+    });
+    this.clearLocalSession();
+    return result;
+  },
+
   onCurrentUserChange(listener: () => void) {
     window.addEventListener(CURRENT_USER_EVENT, listener);
     window.addEventListener("storage", listener);
@@ -182,14 +166,17 @@ export const usersService = {
     return http<User>(`/users/${id}`);
   },
 
-  async update(id: string, data: Partial<CreateUserInput>) {
-    return http<User>(`/users/${id}`, {
+  async update(id: string, data: UpdateUserInput) {
+    const result = await http<UpdateUserResult>(`/users/${id}`, {
       method: "PUT",
       body: JSON.stringify(data),
     });
+    return result.user;
   },
 
   async remove(id: string) {
-    return http<{ message: string }>(`/users/${id}`, { method: "DELETE" });
+    return http<{ message: string }>(`/users/${id}`, {
+      method: "DELETE",
+    });
   },
 };

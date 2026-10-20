@@ -16,6 +16,7 @@
     "migrate:database": "ts-node src/migrations/migrateDatabaseRedesign.ts",
     "migrate:database:apply": "ts-node src/migrations/migrateDatabaseRedesign.ts --apply",
     "seed:municipal-demo": "ts-node src/seedMunicipalDemo.ts",
+    "seed:test-user": "ts-node src/seedTestUser.ts",
     "start:municipal-demo": "node dist/seedMunicipalDemo.js && node dist/index.js"
   },
   "dependencies": {

@@ -10,10 +10,17 @@ import { createAuthSession } from "../services/auth.service";
    ========================================================= */
 
 const PASSWORD_PREFIX = "scrypt";
+const MIN_PASSWORD_LENGTH = 8;
 
 /* =========================================================
    Helpers
    ========================================================= */
+
+function hashPassword(password: string): string {
+  const salt = crypto.randomBytes(16).toString("hex");
+  const hash = crypto.scryptSync(password, salt, 64).toString("hex");
+  return `${PASSWORD_PREFIX}:${salt}:${hash}`;
+}
 
 function verifyPassword(
   password: string,
@@ -270,6 +277,89 @@ export const getCurrentUser = async (
 
       error:
         error.message,
+    });
+  }
+};
+
+/* =========================================================
+   CHANGE PASSWORD
+   PUT /api/auth/password
+   ========================================================= */
+
+export const changePassword = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    if (!req.auth?.userId) {
+      res.status(401).json({
+        message: "Authentication is required",
+      });
+      return;
+    }
+
+    const currentPassword =
+      typeof req.body.currentPassword === "string"
+        ? req.body.currentPassword
+        : "";
+
+    const newPassword =
+      typeof req.body.newPassword === "string"
+        ? req.body.newPassword
+        : "";
+
+    if (!currentPassword || !newPassword) {
+      res.status(400).json({
+        message: "Current password and new password are required",
+      });
+      return;
+    }
+
+    if (newPassword.length < MIN_PASSWORD_LENGTH) {
+      res.status(400).json({
+        message: `New password must be at least ${MIN_PASSWORD_LENGTH} characters`,
+      });
+      return;
+    }
+
+    if (currentPassword === newPassword) {
+      res.status(400).json({
+        message: "New password must be different from current password",
+      });
+      return;
+    }
+
+    const user = await User.findById(req.auth.userId).select("+passwordHash");
+
+    if (!user || !verifyPassword(currentPassword, user.passwordHash)) {
+      res.status(401).json({
+        message: "Current password is incorrect",
+      });
+      return;
+    }
+
+    user.passwordHash = hashPassword(newPassword);
+    await user.save();
+
+    await AuthSession.updateMany(
+      {
+        userId: user._id,
+        revokedAt: null,
+      },
+      {
+        $set: {
+          revokedAt: new Date(),
+        },
+      }
+    );
+
+    res.status(200).json({
+      message: "Password changed successfully. Please sign in again.",
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      message: "Failed to change password",
+      error: error.message,
     });
   }
 };

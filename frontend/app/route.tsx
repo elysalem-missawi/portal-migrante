@@ -101,7 +101,14 @@ const router = createBrowserRouter([
       { path: "sobre", element: <Sobre /> },
       { path: "contacto", element: <Contacto /> },
       { path: "condiciones", element: <LegalTermsPage /> },
-      { path: "users", element: <Users /> },
+      {
+        path: "users",
+        element: (
+          <ProtectedPlatformStaffRoute>
+            <Users />
+          </ProtectedPlatformStaffRoute>
+        ),
+      },
       { path: "users/new", element: <NewUser /> },
       { path: "users/login", element: <LoginUser /> },
       { path: "login", element: <LoginUser /> },
