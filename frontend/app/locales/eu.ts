@@ -276,7 +276,7 @@ export const eu: Dict = {
   services_intro: "Arakatu informazio-kategoria nagusiak eta konektatu eskuragarri dauden baliabideekin.",
   services_card_description: "Informazio argia, harremanetarako bide erabilgarriak eta baliabide fidagarriak.",
   services_title_1: "Nola lagun",
-  services_title_2: "lagun zaitzakegu gaur?",                                   // ✅ صُحّح
+  services_title_2: "zaitzakegu gaur?",                                   // ✅ صُحّح
   services_description: "Zerbitzuak eta baliabideak zure eguneroko beharren arabera antolatzen ditugu.",
   service_desc_municipalities: "Kontsultatu Euskadiko udalerrien informazioa.",
   service_desc_charities: "Aurkitu laguntza-elkarteak eta gizarte-erakundeak lurraldean.",
