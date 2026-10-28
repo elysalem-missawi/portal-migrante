@@ -44,6 +44,7 @@ export const es: Dict = {
   back: "← Volver",
   nav_entities: "Entidades",
   nav_home: "Inicio",
+  nav_needs: "Necesidades",
   nav_services: "Servicios",
   nav_ads: "Anuncios",
   nav_observatory: "Observatorio",
@@ -614,4 +615,74 @@ modalIntro: "Comparte algo que pueda ser útil para otras personas.",
   users_role_user: "Usuario",
   users_role_moderator: "Moderador",
   users_role_admin: "Administrador",
+    // ───── NEEDS ─────
+  needs_eyebrow: "Portal Migrante",
+  needs_title: "¿Qué necesitas?",
+  needs_intro:
+    "Elige el ámbito que mejor representa tu necesidad. Te ayudaremos a encontrar información, servicios y entidades relacionadas.",
+  needs_loading: "Cargando necesidades...",
+  needs_error_title: "No se pudieron cargar las necesidades",
+  needs_error_text:
+    "Comprueba la conexión con el servidor e inténtalo de nuevo.",
+  needs_empty: "No hay necesidades disponibles actualmente.",
+  needs_view_options: "Ver opciones",
+
+  // ───── NEED DETAIL ─────
+  need_detail_breadcrumb: "Necesidades",
+  need_detail_loading: "Cargando necesidad...",
+  need_detail_error_title: "No se pudo cargar la información",
+  need_detail_error_text:
+    "Comprueba la conexión con el servidor e inténtalo de nuevo.",
+  need_detail_not_found:
+    "La necesidad no existe o ya no está disponible.",
+  need_detail_intro:
+    "Puedes continuar desde esta necesidad hacia información, recursos, servicios, comunidad o apoyo.",
+
+  need_detail_journey_title: "Recorrido de orientación",
+  need_detail_journey_text:
+    "Portal Migrante organiza el recorrido desde tu necesidad, sin obligarte a saber de antemano qué organismo debes buscar.",
+
+  need_detail_info_title: "Información y orientación",
+  need_detail_info_text:
+    "Consulta información clara, guías y recursos relacionados con esta necesidad.",
+  need_detail_info_action: "Ver información",
+
+  need_detail_services_title: "Servicios y entidades",
+  need_detail_services_text:
+    "Encuentra servicios, asociaciones e instituciones que pueden ofrecer recursos relacionados.",
+  need_detail_services_action: "Buscar servicios",
+
+  need_detail_community_title: "Preguntar a la comunidad",
+  need_detail_community_text:
+    "Consulta experiencias, preguntas y aportaciones de otras personas.",
+  need_detail_community_action: "Ir a la comunidad",
+
+  need_detail_support_title: "Necesito apoyo",
+  need_detail_support_text:
+    "Si la información y los recursos no son suficientes, podrás solicitar apoyo.",
+  need_detail_support_action: "Solicitar apoyo",
+
+  need_detail_back: "Volver a necesidades",
+  need_detail_pending: "Conexión específica próximamente",
+  need_detail_guides_title: "Guías paso a paso",
+need_detail_guides_text:
+  "Sigue orientaciones prácticas organizadas en pasos sencillos.",
+need_detail_resources_title: "Recursos útiles",
+need_detail_resources_text:
+  "Accede a recursos y páginas externas relacionadas con esta necesidad.",
+need_detail_open_resource: "Abrir recurso",
+
+  // ───── SUPPORT REQUESTS ─────
+  support_my_title: "Mis solicitudes de apoyo",
+  support_my_intro: "Consulta las solicitudes que has enviado y sigue su estado.",
+  support_new_request: "Nueva solicitud",
+  support_status_all: "Todas",
+  support_status_open: "Abierta",
+  support_status_in_review: "En revisión",
+  support_status_in_progress: "En proceso",
+  support_status_resolved: "Resuelta",
+  support_status_closed: "Cerrada",
+  support_contact_platform: "A través de la plataforma",
+  support_contact_email: "Correo electrónico",
+  support_contact_phone: "Teléfono",
 };

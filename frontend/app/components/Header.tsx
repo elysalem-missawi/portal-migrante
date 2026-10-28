@@ -55,6 +55,10 @@ export default function Header() {
       label: t("nav_home"),
     },
     {
+      to: "/necesidades",
+      label: t("nav_needs"),
+    },
+    {
       to: "/servicios",
       label: t("nav_services"),
     },
@@ -497,6 +501,27 @@ export default function Header() {
                     {t("profile")}
                   </Link>
 
+                  {/* My support requests */}
+
+                  <Link
+                    to="/support/my"
+                    onClick={closeMenus}
+                    className="
+                      flex
+                      items-center
+                      rounded-xl
+                      px-3
+                      py-2.5
+                      text-sm
+                      text-slate-700
+                      transition
+                      hover:bg-slate-50
+                      hover:text-emerald-700
+                    "
+                  >
+                    {t("support_my_title")}
+                  </Link>
+
                   {/* Moderation */}
 
                   {isModerator && (
@@ -881,6 +906,28 @@ export default function Header() {
                 "
               >
                 {t("profile")}
+              </Link>
+
+              {/* My support requests */}
+
+              <Link
+                to="/support/my"
+                onClick={closeMenus}
+                className="
+                  flex
+                  min-h-11
+                  items-center
+                  rounded-xl
+                  px-3
+                  py-2.5
+                  text-sm
+                  text-slate-700
+                  transition
+                  hover:bg-slate-50
+                  hover:text-emerald-700
+                "
+              >
+                {t("support_my_title")}
               </Link>
 
               {/* Moderation */}

@@ -46,6 +46,7 @@ export const eu: Dict = {
   back: "← Atzera",
   nav_entities: "Erakundeak",
   nav_home: "Hasiera",
+  nav_needs: "Beharrak",
   nav_services: "Zerbitzuak",
   nav_ads: "Iragarkiak",
   nav_observatory: "Behatokia",
@@ -606,4 +607,74 @@ modalIntro: "Partekatu beste batzuentzat erabilgarria izan daitekeen zerbait.",
   users_role_user: "Erabiltzailea",
   users_role_moderator: "Moderatzailea",
   users_role_admin: "Administratzailea",
+    // ───── NEEDS ─────
+  needs_eyebrow: "Portal Migrante",
+  needs_title: "Zer behar duzu?",
+  needs_intro:
+    "Aukeratu zure beharra hobekien adierazten duen arloa. Informazio, zerbitzu eta erakunde egokiak aurkitzen lagunduko dizugu.",
+  needs_loading: "Beharrak kargatzen...",
+  needs_error_title: "Ezin izan dira beharrak kargatu",
+  needs_error_text:
+    "Egiaztatu zerbitzariaren konexioa eta saiatu berriro.",
+  needs_empty: "Une honetan ez dago beharrik erabilgarri.",
+  needs_view_options: "Ikusi aukerak",
+
+  // ───── NEED DETAIL ─────
+  need_detail_breadcrumb: "Beharrak",
+  need_detail_loading: "Beharra kargatzen...",
+  need_detail_error_title: "Ezin izan da informazioa kargatu",
+  need_detail_error_text:
+    "Egiaztatu zerbitzariaren konexioa eta saiatu berriro.",
+  need_detail_not_found:
+    "Behar hori ez dago edo jada ez dago erabilgarri.",
+  need_detail_intro:
+    "Behar honetatik informaziora, baliabideetara, zerbitzuetara, komunitatera edo laguntzara jo dezakezu.",
+
+  need_detail_journey_title: "Orientazio-ibilbidea",
+  need_detail_journey_text:
+    "Portal Migrantek beharretik abiatuta antolatzen du ibilbidea, aurretik erakunde arduraduna ezagutu beharrik gabe.",
+
+  need_detail_info_title: "Informazioa eta orientazioa",
+  need_detail_info_text:
+    "Ikusi behar honekin lotutako informazio argia, gidak eta baliabideak.",
+  need_detail_info_action: "Ikusi informazioa",
+
+  need_detail_services_title: "Zerbitzuak eta erakundeak",
+  need_detail_services_text:
+    "Bilatu behar honekin lotutako zerbitzuak, elkarteak eta erakundeak.",
+  need_detail_services_action: "Bilatu zerbitzuak",
+
+  need_detail_community_title: "Galdetu komunitateari",
+  need_detail_community_text:
+    "Ikusi beste pertsona batzuen esperientziak, galderak eta ekarpenak.",
+  need_detail_community_action: "Joan komunitatera",
+
+  need_detail_support_title: "Laguntza behar dut",
+  need_detail_support_text:
+    "Informazioa eta baliabideak nahikoak ez badira, laguntza eskatu ahal izango duzu.",
+  need_detail_support_action: "Eskatu laguntza",
+
+  need_detail_back: "Itzuli beharretara",
+  need_detail_pending: "Zuzeneko lotura hurrengo urratsean",
+  need_detail_guides_title: "Urratsez urratseko gidak",
+need_detail_guides_text:
+  "Jarraitu urrats sinpleetan antolatutako orientazio praktikoa.",
+need_detail_resources_title: "Baliabide erabilgarriak",
+need_detail_resources_text:
+  "Sartu behar honekin lotutako kanpoko baliabide eta orrietara.",
+need_detail_open_resource: "Ireki baliabidea",
+
+  // ───── SUPPORT REQUESTS ─────
+  support_my_title: "Nire laguntza-eskaerak",
+  support_my_intro: "Berrikusi bidali dituzun laguntza-eskaerak eta jarraitu haien egoera.",
+  support_new_request: "Laguntza-eskaera berria",
+  support_status_all: "Guztiak",
+  support_status_open: "Irekita",
+  support_status_in_review: "Berrikuspenean",
+  support_status_in_progress: "Prozesuan",
+  support_status_resolved: "Ebatzita",
+  support_status_closed: "Itxita",
+  support_contact_platform: "Plataformaren bidez",
+  support_contact_email: "Posta elektronikoa",
+  support_contact_phone: "Telefonoa",
 };

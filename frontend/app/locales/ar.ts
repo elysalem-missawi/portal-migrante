@@ -46,6 +46,7 @@ export const ar: Dict = {
   back: "← العودة",
   nav_entities: "الجهات",
   nav_home: "الرئيسية",
+  nav_needs: "الاحتياجات",
   nav_services: "الخدمات",
   nav_ads: "الإعلانات",
   nav_observatory: "المرصد",
@@ -620,4 +621,74 @@ modalIntro: "شارك شيئاً قد يكون مفيداً للآخرين.",
   users_role_user: "مستخدم",
   users_role_moderator: "مشرف",
   users_role_admin: "مدير",
+    // ───── NEEDS ─────
+  needs_eyebrow: "Portal Migrante",
+  needs_title: "ما الذي تحتاج إليه؟",
+  needs_intro:
+    "اختر المجال الذي يعبّر بشكل أفضل عن حاجتك. سنساعدك في الوصول إلى المعلومات والخدمات والجهات المناسبة.",
+  needs_loading: "جارٍ تحميل الاحتياجات...",
+  needs_error_title: "تعذر تحميل الاحتياجات",
+  needs_error_text:
+    "تحقق من الاتصال بالخادم وحاول مرة أخرى.",
+  needs_empty: "لا توجد احتياجات متاحة حاليًا.",
+  needs_view_options: "عرض الخيارات",
+
+  // ───── NEED DETAIL ─────
+  need_detail_breadcrumb: "الاحتياجات",
+  need_detail_loading: "جارٍ تحميل الحاجة...",
+  need_detail_error_title: "تعذر تحميل المعلومات",
+  need_detail_error_text:
+    "تحقق من الاتصال بالخادم وحاول مرة أخرى.",
+  need_detail_not_found:
+    "هذه الحاجة غير موجودة أو لم تعد متاحة.",
+  need_detail_intro:
+    "يمكنك الانطلاق من هذه الحاجة للوصول إلى المعلومات والموارد والخدمات والمجتمع أو طلب الدعم.",
+
+  need_detail_journey_title: "مسار التوجيه",
+  need_detail_journey_text:
+    "تنظم Portal Migrante المسار انطلاقًا من حاجتك، دون أن تضطر إلى معرفة الجهة المختصة مسبقًا.",
+
+  need_detail_info_title: "المعلومات والتوجيه",
+  need_detail_info_text:
+    "اطلع على معلومات واضحة وأدلة وموارد مرتبطة بهذه الحاجة.",
+  need_detail_info_action: "عرض المعلومات",
+
+  need_detail_services_title: "الخدمات والجهات",
+  need_detail_services_text:
+    "ابحث عن خدمات وجمعيات ومؤسسات يمكنها تقديم موارد مرتبطة بهذه الحاجة.",
+  need_detail_services_action: "البحث عن الخدمات",
+
+  need_detail_community_title: "سؤال المجتمع",
+  need_detail_community_text:
+    "اطلع على تجارب وأسئلة ومساهمات أشخاص آخرين.",
+  need_detail_community_action: "الذهاب إلى المجتمع",
+
+  need_detail_support_title: "أحتاج إلى دعم",
+  need_detail_support_text:
+    "إذا لم تكن المعلومات والموارد كافية، يمكنك طلب الدعم.",
+  need_detail_support_action: "طلب الدعم",
+
+  need_detail_back: "العودة إلى الاحتياجات",
+  need_detail_pending: "سيتم ربط هذا القسم بشكل مباشر قريبًا",
+  need_detail_guides_title: "أدلة خطوة بخطوة",
+need_detail_guides_text:
+  "اتبع إرشادات عملية منظمة في خطوات بسيطة.",
+need_detail_resources_title: "موارد مفيدة",
+need_detail_resources_text:
+  "الوصول إلى موارد وصفحات خارجية مرتبطة بهذه الحاجة.",
+need_detail_open_resource: "فتح المورد",
+
+  // ───── SUPPORT REQUESTS ─────
+  support_my_title: "طلبات الدعم الخاصة بي",
+  support_my_intro: "راجع طلبات الدعم التي أرسلتها وتابع حالتها.",
+  support_new_request: "طلب دعم جديد",
+  support_status_all: "الكل",
+  support_status_open: "مفتوح",
+  support_status_in_review: "قيد المراجعة",
+  support_status_in_progress: "قيد المعالجة",
+  support_status_resolved: "تم الحل",
+  support_status_closed: "مغلق",
+  support_contact_platform: "عبر المنصة",
+  support_contact_email: "البريد الإلكتروني",
+  support_contact_phone: "الهاتف",
 };
