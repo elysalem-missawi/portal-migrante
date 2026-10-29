@@ -1285,7 +1285,7 @@ export default function UserProfilePage() {
                 )}
               </h2>
 
-              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
                 {currentUser.platformRole ===
                   "admin" && (
                   <Link
@@ -1316,6 +1316,34 @@ export default function UserProfilePage() {
                     </span>
                   </Link>
                 )}
+
+                <Link
+                  to="/support/my"
+                  className="rounded-2xl border border-violet-100 bg-white p-3.5 no-underline shadow-sm transition hover:border-violet-200 hover:bg-violet-50/40"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-50 text-violet-700">
+                    🤲
+                  </div>
+
+                  <h3 className="mt-3 text-sm font-black text-slate-900">
+                    {t(
+                      "support_my_title"
+                    )}
+                  </h3>
+
+                  <p className="mt-1 text-xs leading-5 text-slate-500">
+                    {t(
+                      "support_my_intro"
+                    )}
+                  </p>
+
+                  <span className="mt-2 inline-flex text-xs font-bold text-violet-700">
+                    {t(
+                      "profile_open"
+                    )}{" "}
+                    →
+                  </span>
+                </Link>
 
                 <Link
                   to="/foro"

@@ -17,7 +17,10 @@
     "migrate:database:apply": "ts-node src/migrations/migrateDatabaseRedesign.ts --apply",
     "seed:municipal-demo": "ts-node src/seedMunicipalDemo.ts",
     "seed:test-user": "ts-node src/seedTestUser.ts",
-    "start:municipal-demo": "node dist/seedMunicipalDemo.js && node dist/index.js"
+    "start:municipal-demo": "node dist/seedMunicipalDemo.js && node dist/index.js",
+    "seed:needs": "ts-node src/seedNeeds.ts",
+    "seed:content-items": "ts-node src/seedContentItems.ts",
+    "seed:housing-service": "ts-node src/seedHousingService.ts"
   },
   "dependencies": {
     "compression": "^1.8.1",

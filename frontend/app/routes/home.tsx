@@ -186,7 +186,7 @@ export default function Home() {
       icon: "people" as IconName,
       title: t("home_actor_people_title"),
       description: t("home_actor_people_short"),
-      to: "/servicios",
+      to: "/necesidades",
       color: "bg-emerald-50 text-emerald-700",
       outline: "border-emerald-200 group-hover:border-emerald-400",
     },
@@ -209,10 +209,26 @@ export default function Home() {
   ];
 
   const quickNeeds = [
-    { icon: "scale" as IconName, title: t("home_quick_info") },
-    { icon: "pin" as IconName, title: t("home_quick_resources") },
-    { icon: "network" as IconName, title: t("home_quick_community") },
-    { icon: "heart" as IconName, title: t("home_quick_support") },
+    {
+      icon: "scale" as IconName,
+      title: t("home_quick_info"),
+      to: "/necesidades",
+    },
+    {
+      icon: "pin" as IconName,
+      title: t("home_quick_resources"),
+      to: "/servicios",
+    },
+    {
+      icon: "network" as IconName,
+      title: t("home_quick_community"),
+      to: "/foro",
+    },
+    {
+      icon: "heart" as IconName,
+      title: t("home_quick_support"),
+      to: "/necesidades",
+    },
   ];
 
   const services = [
@@ -306,7 +322,7 @@ export default function Home() {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Link
-                to="/servicios"
+                to="/necesidades"
                 className="inline-flex items-center justify-center rounded-xl bg-emerald-500 px-7 py-3.5 font-semibold text-white shadow-xl shadow-black/10 transition hover:bg-emerald-400"
               >
                 {t("home_dt_explore")}
@@ -325,13 +341,14 @@ export default function Home() {
 
             <div className="mt-9 grid max-w-4xl gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
               {quickNeeds.map((item) => (
-                <div
+                <Link
                   key={item.title}
-                  className="flex items-center gap-3 rounded-xl border border-white/15 bg-slate-950/25 px-3 py-3 backdrop-blur-sm"
+                  to={item.to}
+                  className="flex items-center gap-3 rounded-xl border border-white/15 bg-slate-950/25 px-3 py-3 backdrop-blur-sm transition hover:border-emerald-300/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
                 >
                   <Icon name={item.icon} className="h-5 w-5 text-emerald-300" />
                   <span className="font-medium text-slate-100">{item.title}</span>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
